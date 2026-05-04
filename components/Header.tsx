@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import type { GlobalContent } from '@/types/content';
@@ -20,7 +20,13 @@ const Header = ({ content }: HeaderProps) => {
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout, isAdmin } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
   const navLinks = content.navigation;
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
@@ -135,7 +141,7 @@ const Header = ({ content }: HeaderProps) => {
                 )}
                 <div className="border-t border-sand-200 my-1" />
                 <button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="flex items-center gap-2 px-4 py-2.5 text-sm text-charcoal hover:bg-navy-50 transition-colors w-full text-left"
                 >
                   <LogOut size={16} /> {headerLabels.logoutLabel}
@@ -235,7 +241,7 @@ const Header = ({ content }: HeaderProps) => {
                   <MobileNavLink to="/admin" index={navLinks.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
                 )}
                 <button
-                  onClick={() => { logout(); setIsMenuOpen(false); }}
+                  onClick={() => { setIsMenuOpen(false); handleLogout(); }}
                   className="mt-4 rounded-full border-2 border-navy-500 text-navy-600 px-10 py-3 text-lg font-heading font-semibold hover:bg-navy-50 transition-all duration-300 ease-out-expo w-[80%] text-center"
                   style={{
                     opacity: 0,

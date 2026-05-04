@@ -15,6 +15,17 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Legacy alias from the Vite app — /payment was a placeholder that
+      // pointed at the inquiry questionnaire. Preserve so old links don't 404.
+      {
+        source: '/payment',
+        destination: '/upitnik',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
