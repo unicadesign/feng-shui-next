@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Quote } from 'lucide-react';
 import { scrollReveal, viewportOnce } from '@/lib/animations';
+import CmsImage from '@/components/CmsImage';
 
 interface TransformationStoryProps {
   beforeImage: string;
@@ -35,7 +36,7 @@ const TransformationStory: React.FC<TransformationStoryProps> = ({
       <div className="rounded-xl bg-cream-50 p-6 md:p-8">
         <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 ${reverse ? 'md:direction-rtl' : ''}`}>
           <div className={`relative rounded-xl overflow-hidden ${reverse ? 'md:order-2' : ''}`}>
-            <img
+            <CmsImage
               src={beforeImage}
               alt="Pre transformacije"
               className="w-full h-64 md:h-80 object-cover"
@@ -47,7 +48,7 @@ const TransformationStory: React.FC<TransformationStoryProps> = ({
           </div>
 
           <div className={`relative rounded-xl overflow-hidden ${reverse ? 'md:order-1' : ''}`}>
-            <img
+            <CmsImage
               src={afterImage}
               alt="Posle transformacije"
               className="w-full h-64 md:h-80 object-cover"

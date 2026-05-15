@@ -26,6 +26,7 @@ import Section from '@/components/Section';
 import SectionTitle from '@/components/SectionTitle';
 import Button from '@/components/Button';
 import CTASection from '@/components/CTASection';
+import CmsImage from '@/components/CmsImage';
 import type { SchoolContent as SchoolContentType } from '@/types/content';
 
 interface SchoolContentProps {
@@ -88,7 +89,7 @@ const SchoolContent = ({ content: c }: SchoolContentProps) => {
                   key={index}
                   className={`rounded-2xl overflow-hidden shadow-card relative group ${index % 2 !== 0 ? 'mt-6' : ''}`}
                 >
-                  <img
+                  <CmsImage
                     src={img.url}
                     alt={img.alt}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -145,7 +146,7 @@ const SchoolContent = ({ content: c }: SchoolContentProps) => {
                 key={index}
                 className={`rounded-2xl overflow-hidden shadow-card relative group ${index % 2 !== 0 ? 'mt-6' : ''}`}
               >
-                <img
+                <CmsImage
                   src={img.url}
                   alt={img.alt}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -444,7 +445,7 @@ const CurriculumMonth = ({
         </div>
 
         <div className={`relative ${isReversed ? 'md:order-1' : ''}`}>
-          <img
+          <CmsImage
             src={imageUrl}
             alt={imageAlt}
             className="w-full h-full rounded-2xl shadow-warm object-cover min-h-[300px]"

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { Course } from '@/types';
 import Button from '@/components/Button';
+import CmsImage from '@/components/CmsImage';
 
 interface AvailableCourseCardProps {
   course: Course;
@@ -35,7 +36,7 @@ const AvailableCourseCard: React.FC<AvailableCourseCardProps> = ({ course }) => 
     >
       <div className="rounded-xl bg-cream-50 p-6 h-full flex flex-col">
         <div className="relative mb-4">
-          <img
+          <CmsImage
             src={course.imageUrl}
             alt={course.title}
             className="w-full h-44 object-cover rounded-xl"
