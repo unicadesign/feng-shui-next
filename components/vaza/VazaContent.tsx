@@ -8,6 +8,7 @@ import Section from '@/components/Section';
 import SectionTitle from '@/components/SectionTitle';
 import Button from '@/components/Button';
 import CTASection from '@/components/CTASection';
+import CmsImage from '@/components/CmsImage';
 import type { VazaContent as VazaContentType } from '@/types/content';
 
 interface VazaContentProps {
@@ -61,7 +62,7 @@ const VazaContent = ({ content: c }: VazaContentProps) => {
               transition={{ duration: 0.8, ease: [0.32, 0.72, 0, 1], delay: 0.2 }}
             >
               <div className="rounded-2xl overflow-hidden shadow-warm">
-                <img
+                <CmsImage
                   src={c.hero.image}
                   alt={c.hero.imageAlt}
                   className="w-full h-full object-cover"
@@ -119,7 +120,7 @@ const VazaContent = ({ content: c }: VazaContentProps) => {
             viewport={viewportOnce}
           >
             <div className="rounded-2xl overflow-hidden shadow-warm">
-              <img
+              <CmsImage
                 src={c.introduction.image}
                 alt={c.introduction.imageAlt}
                 className="w-full h-full object-cover"
@@ -154,7 +155,7 @@ const VazaContent = ({ content: c }: VazaContentProps) => {
             viewport={viewportOnce}
           >
             <div className="rounded-2xl overflow-hidden shadow-warm">
-              <img
+              <CmsImage
                 src={c.howItWorks.image}
                 alt={c.howItWorks.imageAlt}
                 className="w-full h-full object-cover"
@@ -322,7 +323,7 @@ const VazaContent = ({ content: c }: VazaContentProps) => {
                 className={`rounded-2xl overflow-hidden shadow-warm ${index % 2 !== 0 ? 'mt-6' : ''}`}
                 variants={staggerItem}
               >
-                <img
+                <CmsImage
                   src={img.url}
                   alt={img.alt}
                   className="w-full h-full object-cover"
@@ -438,7 +439,7 @@ const ProductCard = ({
       )}
 
       <div className="h-48 overflow-hidden">
-        <img
+        <CmsImage
           src={image}
           alt={imageAlt}
           className="w-full h-full object-cover"

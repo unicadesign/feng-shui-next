@@ -21,6 +21,7 @@ import SocialProofBar from '@/components/SocialProofBar';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import ServiceCard from '@/components/home/ServiceCard';
 import TestimonialCard from '@/components/home/TestimonialCard';
+import CmsImage from '@/components/CmsImage';
 import type { HomeContent as HomeContentType } from '@/types/content';
 
 interface HomeContentProps {
@@ -64,7 +65,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
             </div>
           }
         >
-          <img
+          <CmsImage
             src={c.hero.backgroundImage}
             alt="Feng Shui harmonizovan prostor"
             className="mx-auto rounded-2xl object-cover h-full w-full object-center"
@@ -143,7 +144,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
             viewport={viewportOnce}
           >
             <div className="rounded-2xl overflow-hidden shadow-warm">
-              <img
+              <CmsImage
                 src={c.introduction.image}
                 alt="Dragana Jović — Feng Shui konsultant"
                 className="w-full h-auto object-cover aspect-[4/5]"
@@ -365,7 +366,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
                   </Button>
                 </div>
                 <div className="rounded-xl overflow-hidden">
-                  <img
+                  <CmsImage
                     src={c.services[0].image}
                     alt="Feng Shui consultation"
                     className="w-full h-64 object-cover"

@@ -8,6 +8,7 @@ import Section from '@/components/Section';
 import SectionTitle from '@/components/SectionTitle';
 import CTASection from '@/components/CTASection';
 import TransformationStory from '@/components/TransformationStory';
+import CmsImage from '@/components/CmsImage';
 import type { GalleryContent as GalleryContentType } from '@/types/content';
 
 interface GalleryContentProps {
@@ -95,7 +96,7 @@ const GalleryContent = ({ content: c }: GalleryContentProps) => {
                   item.span === 'wide' ? 'col-span-2' : ''
                 } ${item.span === 'tall' ? 'row-span-2' : ''}`}
               >
-                <img
+                <CmsImage
                   src={item.imageUrl}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out-expo group-hover:scale-105"

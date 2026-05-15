@@ -23,6 +23,7 @@ import Section from '@/components/Section';
 import SectionTitle from '@/components/SectionTitle';
 import Button from '@/components/Button';
 import CTASection from '@/components/CTASection';
+import CmsImage from '@/components/CmsImage';
 import type { ServicesContent as ServicesContentType } from '@/types/content';
 
 interface ServicesContentProps {
@@ -941,7 +942,7 @@ const ImageWithFadeIn = ({
 
   return (
     <div ref={ref} className="w-full h-full">
-      <img
+      <CmsImage
         src={src}
         alt={alt}
         loading="lazy"

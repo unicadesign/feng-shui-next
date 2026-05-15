@@ -16,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useCourses } from '@/hooks/useCourses';
 import { useEnrollments } from '@/hooks/useEnrollments';
 import Button from '@/components/Button';
+import CmsImage from '@/components/CmsImage';
 import LessonList from '@/components/course/LessonList';
 import ZoomCallBadge from '@/components/course/ZoomCallBadge';
 import type { ZoomOption } from '@/types';
@@ -254,7 +255,7 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
               </div>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-warm">
-              <img
+              <CmsImage
                 src={course.imageUrl}
                 alt={course.title}
                 className="w-full h-64 md:h-80 object-cover"

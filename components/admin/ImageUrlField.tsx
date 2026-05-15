@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { ImageIcon, Upload, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ImageIcon, Upload, Loader2, CheckCircle, AlertCircle, Move, RotateCcw } from 'lucide-react';
 import { compressAndUploadImage, formatBytes } from '@/lib/imageUpload';
+import { parseImageUrl, parseFocalPoint, withFocalPoint, type FocalPoint } from '@/lib/imagePosition';
 
 interface ImageUrlFieldProps {
   label: string;
@@ -23,10 +24,23 @@ const ImageUrlField: React.FC<ImageUrlFieldProps> = ({
   placeholder = 'https://example.com/slika.jpg',
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<UploadStats | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [dragPoint, setDragPoint] = useState<FocalPoint | null>(null);
+  const [naturalSize, setNaturalSize] = useState<{ w: number; h: number } | null>(null);
+
+  const parsed = parseImageUrl(value);
+  const storedPoint = parseFocalPoint(value);
+  const currentPoint = dragPoint ?? storedPoint;
+  const hasImage = parsed.src.trim().length > 0;
+
+  useEffect(() => {
+    setNaturalSize(null);
+  }, [parsed.src]);
 
   const inputClasses =
     'w-full rounded-xl border border-sand-300 bg-white px-4 py-3 text-sm font-body text-charcoal placeholder:text-charcoal-500/50 focus:border-navy-500 focus:outline-none focus:ring-1 focus:ring-navy-500 transition-colors';
@@ -68,6 +82,56 @@ const ImageUrlField: React.FC<ImageUrlFieldProps> = ({
     const file = e.dataTransfer.files?.[0];
     if (file) handleFile(file);
   };
+
+  const getOverflow = () => {
+    if (!previewRef.current || !naturalSize) return { x: 0, y: 0 };
+    const { width: cw, height: ch } = previewRef.current.getBoundingClientRect();
+    if (!cw || !ch) return { x: 0, y: 0 };
+    const scale = Math.max(cw / naturalSize.w, ch / naturalSize.h);
+    return {
+      x: Math.max(0, naturalSize.w * scale - cw),
+      y: Math.max(0, naturalSize.h * scale - ch),
+    };
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (!hasImage || !naturalSize) return;
+    e.preventDefault();
+    const overflow = getOverflow();
+    if (overflow.x === 0 && overflow.y === 0) return;
+    const start = { x: e.clientX, y: e.clientY, point: currentPoint };
+
+    const move = (ev: PointerEvent) => {
+      const dx = ev.clientX - start.x;
+      const dy = ev.clientY - start.y;
+      const nx = overflow.x > 0 ? clamp(start.point.x - (dx / overflow.x) * 100, 0, 100) : 50;
+      const ny = overflow.y > 0 ? clamp(start.point.y - (dy / overflow.y) * 100, 0, 100) : 50;
+      setDragPoint({ x: nx, y: ny });
+    };
+
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      setDragPoint((latest) => {
+        if (latest) onChange(withFocalPoint(parsed.src, latest));
+        return null;
+      });
+    };
+
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+  };
+
+  const handleResetPosition = () => {
+    setDragPoint(null);
+    onChange(withFocalPoint(parsed.src, null));
+  };
+
+  const overflow = getOverflow();
+  const draggable = hasImage && naturalSize && (overflow.x > 0 || overflow.y > 0);
+  const positionChanged = currentPoint.x !== 50 || currentPoint.y !== 50;
 
   const savedPercent = stats
     ? Math.max(
@@ -152,15 +216,53 @@ const ImageUrlField: React.FC<ImageUrlFieldProps> = ({
       </div>
 
       <div className="mt-3">
-        {value.trim() ? (
-          <img
-            src={value}
-            alt={label}
-            className="h-[200px] w-full rounded-xl object-cover border border-sand-200"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = 'none';
-            }}
-          />
+        {hasImage ? (
+          <>
+            <div
+              ref={previewRef}
+              onPointerDown={handlePointerDown}
+              className={`relative h-[200px] w-full overflow-hidden rounded-xl border border-sand-200 select-none ${draggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
+            >
+              <img
+                ref={imgRef}
+                src={parsed.src}
+                alt={label}
+                onLoad={(e) => {
+                  const img = e.currentTarget;
+                  setNaturalSize({ w: img.naturalWidth, h: img.naturalHeight });
+                }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+                draggable={false}
+                className="h-full w-full object-cover pointer-events-none"
+                style={{ objectPosition: `${currentPoint.x}% ${currentPoint.y}%` }}
+              />
+              {draggable && (
+                <div className="pointer-events-none absolute bottom-2 left-2 flex items-center gap-1.5 rounded-full bg-charcoal/70 px-2.5 py-1 text-xs font-body text-cream-50 backdrop-blur-sm">
+                  <Move className="w-3 h-3" />
+                  <span>Pomerite za izrez</span>
+                </div>
+              )}
+            </div>
+            {draggable && (
+              <div className="mt-2 flex items-center justify-between text-xs font-body text-charcoal-500">
+                <span>
+                  Pozicija: {Math.round(currentPoint.x)}% × {Math.round(currentPoint.y)}%
+                </span>
+                {positionChanged && (
+                  <button
+                    type="button"
+                    onClick={handleResetPosition}
+                    className="flex items-center gap-1 text-navy-500 hover:text-navy-700"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    Centriraj
+                  </button>
+                )}
+              </div>
+            )}
+          </>
         ) : (
           <div className="h-[200px] w-full rounded-xl border-2 border-dashed border-sand-300 bg-sand-100/50 flex flex-col items-center justify-center gap-2">
             <ImageIcon className="w-10 h-10 text-charcoal-500/30" />
@@ -171,5 +273,9 @@ const ImageUrlField: React.FC<ImageUrlFieldProps> = ({
     </div>
   );
 };
+
+function clamp(n: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, n));
+}
 
 export default ImageUrlField;
