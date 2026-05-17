@@ -1077,13 +1077,7 @@ export const defaultContent: SiteContent = {
       },
     },
     navigation: [
-      { to: '/services', label: 'Usluge', children: [
-        { to: '/services', label: 'Konsultacije' },
-        { to: '/school', label: 'Škola' },
-        { to: '/vaza-izobilja', label: 'Vaza Izobilja' },
-      ]},
-      { to: '/vodic', label: 'Besplatni vodič' },
-      { to: '/galerija', label: 'Galerija' },
+      { to: '/school', label: 'Škola' },
       { to: '/about', label: 'O meni' },
       { to: '/upitnik', label: 'Kontakt' },
     ],

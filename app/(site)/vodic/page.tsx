@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getContent } from '@/lib/content';
+import { getUser } from '@/lib/auth';
 import VodicContent from '@/components/guide/VodicContent';
 
 export const metadata: Metadata = {
@@ -9,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function VodicPage() {
+  const user = await getUser();
+  if (!user || user.role !== 'admin') redirect('/');
   const guide = await getContent('guide');
   return <VodicContent content={guide} />;
 }

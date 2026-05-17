@@ -30,7 +30,7 @@ const SocialProofBar = () => {
       <div className="max-w-[1400px] mx-auto px-6 flex justify-center gap-12 md:gap-20">
         <CounterItem number="1000+" label="Projekata" />
         <CounterItem number="25+" label="Godina iskustva" />
-        <CounterItem number="250+" label="Radionica" />
+        <CounterItem number="180+" label="Radionica" />
       </div>
     </motion.div>
   );

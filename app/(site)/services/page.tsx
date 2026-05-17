@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 import { getContent } from '@/lib/content';
+import { getUser } from '@/lib/auth';
 import ServicesContent from '@/components/services/ServicesContent';
 
 export const metadata: Metadata = {
@@ -9,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
+  const user = await getUser();
+  if (!user || user.role !== 'admin') redirect('/');
   const services = await getContent('services');
   return <ServicesContent content={services} />;
 }
