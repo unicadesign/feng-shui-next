@@ -37,7 +37,7 @@ const Header = ({ content }: HeaderProps) => {
     }));
   const navLinks = filteredNav.some((link) => link.to === '/school')
     ? filteredNav
-    : [{ to: '/school', label: 'Škola' }, ...filteredNav];
+    : [{ to: '/school', label: 'Škola', children: undefined }, ...filteredNav];
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
