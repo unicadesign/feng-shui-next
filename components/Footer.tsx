@@ -46,9 +46,17 @@ interface FooterProps {
   content: GlobalContent;
 }
 
+const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
+
 const Footer = ({ content }: FooterProps) => {
   const siteConfig = content.siteConfig;
   const footer = content.footer;
+  const filteredExploreLinks = footer.exploreLinks.filter(
+    (link) => !HIDDEN_ROUTES.includes(link.to),
+  );
+  const exploreLinks = filteredExploreLinks.some((link) => link.to === '/school')
+    ? filteredExploreLinks
+    : [{ to: '/school', label: 'Feng Shui Škola' }, ...filteredExploreLinks];
 
   return (
     <>
@@ -95,7 +103,7 @@ const Footer = ({ content }: FooterProps) => {
                 {footer.exploreHeading}
               </h3>
               <ul className="space-y-1">
-                {footer.exploreLinks.map((link) => (
+                {exploreLinks.map((link) => (
                   <li key={link.to}>
                     <Link href={link.to} className="text-sand-300 hover:text-navy-400 transition-colors duration-300 text-sm py-1.5 block">
                       {link.label}

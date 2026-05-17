@@ -1092,11 +1092,8 @@ export const defaultContent: SiteContent = {
       tagline: 'Harmonizacija domova, srca i energije kroz bezvremenu mudrost Feng Shui. Pratite nas za nedeljne savete o protoku energije, ritualima i usklađenom životu.',
       exploreHeading: 'Istražite',
       exploreLinks: [
-        { to: '/services', label: 'Usluge' },
         { to: '/school', label: 'Feng Shui Škola' },
         { to: '/vaza-izobilja', label: 'Vaza Izobilja' },
-        { to: '/vodic', label: 'Besplatni vodič' },
-        { to: '/galerija', label: 'Galerija' },
         { to: '/about', label: 'O meni' },
         { to: '/upitnik', label: 'Kontakt' },
       ],

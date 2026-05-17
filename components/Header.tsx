@@ -29,12 +29,15 @@ const Header = ({ content }: HeaderProps) => {
     await logout();
     router.push('/');
   };
-  const navLinks = content.navigation
+  const filteredNav = content.navigation
     .filter((link) => !HIDDEN_ROUTES.includes(link.to))
     .map((link) => ({
       ...link,
       children: link.children?.filter((child) => !HIDDEN_ROUTES.includes(child.to)),
     }));
+  const navLinks = filteredNav.some((link) => link.to === '/school')
+    ? filteredNav
+    : [{ to: '/school', label: 'Škola' }, ...filteredNav];
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
