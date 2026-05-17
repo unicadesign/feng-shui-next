@@ -28,6 +28,9 @@ interface HomeContentProps {
   content: HomeContentType;
 }
 
+const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
+const isHidden = (link: string | undefined) => !!link && HIDDEN_ROUTES.includes(link);
+
 const HomeContent = ({ content: c }: HomeContentProps) => {
   return (
     <div>
@@ -58,7 +61,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
                 <Button to={c.hero.primaryButton.link} variant="primary" size="lg" microcopy={c.hero.primaryMicrocopy}>
                   {c.hero.primaryButton.text}
                 </Button>
-                <Button to={c.hero.secondaryButton.link} variant="outline" size="lg">
+                <Button to={c.hero.secondaryButton.link} variant="outline" size="lg" disabled={isHidden(c.hero.secondaryButton.link)}>
                   {c.hero.secondaryButton.text}
                 </Button>
               </div>
