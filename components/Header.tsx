@@ -11,6 +11,8 @@ interface HeaderProps {
   content: GlobalContent;
 }
 
+const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
+
 const Header = ({ content }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,7 +29,12 @@ const Header = ({ content }: HeaderProps) => {
     await logout();
     router.push('/');
   };
-  const navLinks = content.navigation;
+  const navLinks = content.navigation
+    .filter((link) => !HIDDEN_ROUTES.includes(link.to))
+    .map((link) => ({
+      ...link,
+      children: link.children?.filter((child) => !HIDDEN_ROUTES.includes(child.to)),
+    }));
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 

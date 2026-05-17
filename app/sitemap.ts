@@ -5,11 +5,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ptplan.rs';
 const publicRoutes = [
   '',
   'about',
-  'services',
   'school',
-  'galerija',
   'vaza-izobilja',
-  'vodic',
   'upitnik',
 ];
 

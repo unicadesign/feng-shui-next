@@ -361,7 +361,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
                   <p className="text-sm text-charcoal-500 leading-relaxed mb-5">
                     {c.services[0].description}
                   </p>
-                  <Button to={c.services[0].linkTo} variant="ghost" size="sm">
+                  <Button to={c.services[0].linkTo} variant="ghost" size="sm" disabled>
                     {c.services[0].buttonText} <ArrowRight size={16} className="ml-1" />
                   </Button>
                 </div>
@@ -394,6 +394,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
               description={c.services[2].description}
               linkTo={c.services[2].linkTo}
               buttonText={c.services[2].buttonText}
+              disabled
             />
           </motion.div>
         </motion.div>
@@ -531,7 +532,7 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
                 <p className="text-charcoal-500 font-body leading-relaxed mb-6 max-w-[55ch]">
                   {c.freeGuide.description}
                 </p>
-                <Button to={c.freeGuide.buttonLink} variant="primary" size="lg">
+                <Button to={c.freeGuide.buttonLink} variant="primary" size="lg" disabled>
                   {c.freeGuide.buttonText}
                 </Button>
               </div>
