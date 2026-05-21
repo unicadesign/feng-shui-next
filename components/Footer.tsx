@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Phone, MapPin, MessageSquare } from 'lucide-react';
 import type { GlobalContent } from '@/types/content';
 
@@ -72,7 +73,10 @@ const Footer = ({ content }: FooterProps) => {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
             <div className="md:col-span-2">
-              <span className="text-2xl font-heading font-bold text-cream-50">{siteConfig.siteName}</span>
+              <span className="flex items-center gap-3">
+                <Image src="/logo/logo-transparent.png" alt={siteConfig.siteName} width={40} height={40} className="h-10 w-10 object-contain" />
+                <span className="text-2xl font-heading font-bold text-cream-50">Dragana Jović</span>
+              </span>
               <p className="text-sand-300 text-sm leading-relaxed mt-3 max-w-[40ch]">
                 {footer.tagline}
               </p>

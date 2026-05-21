@@ -63,7 +63,7 @@ const AdminContentGlobal: React.FC = () => {
                   setForm({ ...form, siteConfig: { ...form.siteConfig, siteName: e.target.value } })
                 }
                 className={inputClasses}
-                placeholder="ptPLAN"
+                placeholder="Dragana Jović"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

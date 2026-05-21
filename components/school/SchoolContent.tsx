@@ -19,6 +19,8 @@ import {
   Shield,
   Moon,
   Leaf,
+  Home as HomeIcon,
+  School as SchoolIcon,
   type LucideIcon,
 } from 'lucide-react';
 import { scrollReveal, staggerContainer, staggerItem, viewportOnce } from '@/lib/animations';
@@ -27,6 +29,7 @@ import SectionTitle from '@/components/SectionTitle';
 import Button from '@/components/Button';
 import CTASection from '@/components/CTASection';
 import CmsImage from '@/components/CmsImage';
+import TestimonialCard from '@/components/home/TestimonialCard';
 import type { SchoolContent as SchoolContentType } from '@/types/content';
 
 interface SchoolContentProps {
@@ -141,7 +144,7 @@ const SchoolContent = ({ content: c }: SchoolContentProps) => {
           </motion.div>
 
           <motion.div className="grid grid-cols-2 gap-4" variants={staggerItem}>
-            {c.hero.images.map((img, index) => (
+            {c.overview.images.map((img, index) => (
               <div
                 key={index}
                 className={`rounded-2xl overflow-hidden shadow-card relative group ${index % 2 !== 0 ? 'mt-6' : ''}`}
@@ -319,16 +322,28 @@ const SchoolContent = ({ content: c }: SchoolContentProps) => {
           />
         </motion.div>
 
-        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 -mx-6 px-6">
-          {c.testimonials.items.map((item, index) => (
-            <TestimonialCard
-              key={index}
-              quote={item.quote}
-              author={item.author}
-              location={item.location}
-            />
-          ))}
-        </div>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+        >
+          {c.testimonials.items.map((item, index) => {
+            const icons = [<HomeIcon key="h" size={12} />, <SchoolIcon key="s" size={12} />, <Users key="u" size={12} />];
+            return (
+              <motion.div key={index} variants={staggerItem}>
+                <TestimonialCard
+                  quote={item.quote}
+                  author={item.author}
+                  location={item.location}
+                  service={item.service}
+                  icon={icons[index] || <HomeIcon size={12} />}
+                />
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </Section>
 
       {/* CTA */}
@@ -552,44 +567,6 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
         </div>
       )}
     </motion.div>
-  );
-};
-
-const TestimonialCard = ({
-  quote,
-  author,
-  location,
-}: {
-  quote: string;
-  author: string;
-  location: string;
-}) => {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-
-  return (
-    <div
-      ref={ref}
-      className={`min-w-[320px] snap-start flex-shrink-0 rounded-2xl bg-cream-100 p-1.5 transition-all duration-700 transform ${
-        inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`}
-    >
-      <div className="rounded-xl bg-cream-50 p-6 h-full flex flex-col">
-        <div className="text-gold-500 mb-4 text-3xl">&ldquo;</div>
-        <p className="text-charcoal-500 mb-6 italic flex-grow">{quote}</p>
-        <div className="flex items-center mt-auto">
-          <div className="w-10 h-10 rounded-full bg-navy-50 flex items-center justify-center text-navy-600 font-medium">
-            {author.charAt(0)}
-          </div>
-          <div className="ml-3">
-            <p className="font-medium text-charcoal">{author}</p>
-            <p className="text-sm text-charcoal-500">{location}</p>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 };
 

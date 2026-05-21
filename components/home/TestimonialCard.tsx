@@ -17,12 +17,14 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 }) => {
   return (
     <div className="rounded-2xl bg-cream-50 p-6 md:p-8 shadow-card h-full">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-50 text-navy-600 px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium">
-          {icon}
-          <span>{service}</span>
-        </span>
-      </div>
+      {service && (
+        <div className="flex items-center gap-2 mb-4">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-navy-50 text-navy-600 px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-medium">
+            {icon}
+            <span>{service}</span>
+          </span>
+        </div>
+      )}
 
       <span className="text-5xl font-heading text-gold-400 opacity-40 leading-none block mb-2">
         &ldquo;

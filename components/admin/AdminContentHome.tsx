@@ -496,6 +496,78 @@ const AdminContentHome: React.FC = () => {
           </div>
         </ContentSection>
 
+        {/* ═══ NEWSLETTER ═══ */}
+        <ContentSection title="Newsletter">
+          <div className="space-y-4">
+            <div>
+              <label className={labelClasses}>Naslov</label>
+              <input type="text" value={form.newsletter.title} onChange={(e) => u('newsletter', { title: e.target.value })} className={inputClasses} />
+            </div>
+            <div>
+              <label className={labelClasses}>Podnaslov</label>
+              <textarea value={form.newsletter.subtitle} onChange={(e) => u('newsletter', { subtitle: e.target.value })} className={textareaClasses} />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>Placeholder (email polje)</label>
+                <input type="text" value={form.newsletter.placeholder} onChange={(e) => u('newsletter', { placeholder: e.target.value })} className={inputClasses} />
+              </div>
+              <div>
+                <label className={labelClasses}>Tekst dugmeta</label>
+                <input type="text" value={form.newsletter.buttonText} onChange={(e) => u('newsletter', { buttonText: e.target.value })} className={inputClasses} />
+              </div>
+            </div>
+            <div>
+              <label className={labelClasses}>Poruka uspeha</label>
+              <input type="text" value={form.newsletter.successMessage} onChange={(e) => u('newsletter', { successMessage: e.target.value })} className={inputClasses} />
+            </div>
+          </div>
+        </ContentSection>
+
+        {/* ═══ WEBINAR CTA ═══ */}
+        <ContentSection title="Vebinar (CTA)">
+          <div className="space-y-4">
+            <label className="flex items-center gap-3 rounded-xl border border-sand-300 bg-white px-4 py-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.webinarSection.enabled}
+                onChange={(e) => u('webinarSection', { enabled: e.target.checked })}
+                className="w-5 h-5 rounded accent-navy-500"
+              />
+              <span className="text-sm font-body text-charcoal">
+                <span className="font-semibold">Prikaži vebinar sekciju na početnoj</span>
+                <span className="block text-charcoal-500 text-xs">Uključite samo kada je vebinar aktivan za prijave.</span>
+              </span>
+            </label>
+            <div>
+              <label className={labelClasses}>Bedž tekst</label>
+              <input type="text" value={form.webinarSection.badge} onChange={(e) => u('webinarSection', { badge: e.target.value })} className={inputClasses} />
+            </div>
+            <div>
+              <label className={labelClasses}>Naslov</label>
+              <input type="text" value={form.webinarSection.title} onChange={(e) => u('webinarSection', { title: e.target.value })} className={inputClasses} />
+            </div>
+            <div>
+              <label className={labelClasses}>Podnaslov</label>
+              <textarea value={form.webinarSection.subtitle} onChange={(e) => u('webinarSection', { subtitle: e.target.value })} className={textareaClasses} />
+            </div>
+            <div>
+              <label className={labelClasses}>Termin (datum/vreme — opciono)</label>
+              <input type="text" value={form.webinarSection.dateText} onChange={(e) => u('webinarSection', { dateText: e.target.value })} className={inputClasses} placeholder="npr. 15. jun 2026. u 19h" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={labelClasses}>Tekst dugmeta</label>
+                <input type="text" value={form.webinarSection.buttonText} onChange={(e) => u('webinarSection', { buttonText: e.target.value })} className={inputClasses} />
+              </div>
+              <div>
+                <label className={labelClasses}>Poruka uspeha</label>
+                <input type="text" value={form.webinarSection.successMessage} onChange={(e) => u('webinarSection', { successMessage: e.target.value })} className={inputClasses} />
+              </div>
+            </div>
+          </div>
+        </ContentSection>
+
         {/* ═══ CTA ═══ */}
         <ContentSection title="Poziv na akciju (CTA)">
           <div className="space-y-4">

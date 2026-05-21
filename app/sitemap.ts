@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://ptplan.rs';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://draganajovic.com';
 
 const publicRoutes = [
   '',
