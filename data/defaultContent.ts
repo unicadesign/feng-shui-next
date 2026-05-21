@@ -3,8 +3,9 @@ import { SiteContent } from '../types/content';
 export const defaultContent: SiteContent = {
   home: {
     hero: {
-      badge: 'Feng Shui konsalting i edukacija',
-      title: 'Mir - jasnoća - protok. Vaš dom može sve to da vam pruži.',
+      titleTop: 'Uređenje prostora',
+      titleMain: 'Feng Shui',
+      titleBottom: 'Put ka miru i radosti',
       subtitle: 'Oko 1000 osoba je osetilo promenu u odnosima, napretku i svakodnevnom miru uz pomoć naše Feng Shui konsultacije. Vaš dom je sledeći.',
       primaryButton: { text: 'Zakažite besplatan razgovor', link: '/upitnik' },
       primaryMicrocopy: 'Besplatno. Bez obaveze.',
