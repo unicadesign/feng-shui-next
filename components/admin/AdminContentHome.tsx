@@ -61,12 +61,16 @@ const AdminContentHome: React.FC = () => {
         <ContentSection title="Hero sekcija">
           <div className="space-y-4">
             <div>
-              <label className={labelClasses}>Bedž tekst</label>
-              <input type="text" value={form.hero.badge} onChange={(e) => u('hero', { badge: e.target.value })} className={inputClasses} />
+              <label className={labelClasses}>Naslov — gornja linija</label>
+              <input type="text" value={form.hero.titleTop} onChange={(e) => u('hero', { titleTop: e.target.value })} className={inputClasses} placeholder="npr. Uređenje prostora" />
             </div>
             <div>
-              <label className={labelClasses}>Naslov</label>
-              <input type="text" value={form.hero.title} onChange={(e) => u('hero', { title: e.target.value })} className={inputClasses} />
+              <label className={labelClasses}>Naslov — glavna reč (velika)</label>
+              <input type="text" value={form.hero.titleMain} onChange={(e) => u('hero', { titleMain: e.target.value })} className={inputClasses} placeholder="npr. Feng Shui" />
+            </div>
+            <div>
+              <label className={labelClasses}>Naslov — donja linija</label>
+              <input type="text" value={form.hero.titleBottom} onChange={(e) => u('hero', { titleBottom: e.target.value })} className={inputClasses} placeholder="npr. Put ka miru i radosti" />
             </div>
             <div>
               <label className={labelClasses}>Podnaslov</label>

@@ -27,8 +27,9 @@ export interface CTAContent {
 // --- HOME PAGE ---
 export interface HomeContent {
   hero: {
-    badge: string;
-    title: string;
+    titleTop: string;
+    titleMain: string;
+    titleBottom: string;
     subtitle: string;
     primaryButton: ButtonContent;
     primaryMicrocopy: string;
