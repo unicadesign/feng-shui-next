@@ -12,11 +12,11 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: {
-    default: "ptPLAN - Feng Shui Konsalting & Škola",
-    template: "%s | ptPLAN",
+    default: "Dragana Jović - Feng Shui Konsalting & Škola",
+    template: "%s | Dragana Jović",
   },
   description:
-    "ptPLAN nudi premium Feng Shui konsalting usluge i 4-mesečnu online Feng Shui školu za transformaciju vašeg prostora i unapređenje života.",
+    "Dragana Jović nudi premium Feng Shui konsalting usluge i 4-mesečnu online Feng Shui školu za transformaciju vašeg prostora i unapređenje života.",
 };
 
 export default function RootLayout({

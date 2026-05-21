@@ -27,7 +27,7 @@ export const defaultContent: SiteContent = {
       badge: 'Vaš vodič',
       title: 'Znam kako se to oseća — Feng Shui je rešenje za to.',
       subtitle: 'Većina žena koje dođu kod mene osećaju isto — uspešne su, rade na sebi, ali nešto u prostoru ih koči. Kao da dom tiho radi protiv njih.',
-      bodyParagraph: 'Ja sam Dragana Jović. Kroz 25 godina i preko 1000 projekata razvila sam ptPLAN metodu koja spaja klasični Feng Shui sa radiestezijom i holističkim dizajnom. Rezultat? Domovi u kojima se jasnoća, protok i harmonija osete od prvog dana.',
+      bodyParagraph: 'Ja sam Dragana Jović. Kroz 25 godina i preko 1000 projekata razvila sam sopstvenu autorsku metodu koja spaja klasični Feng Shui sa radiestezijom i holističkim dizajnom. Rezultat? Domovi u kojima se jasnoća, protok i harmonija osete od prvog dana.',
       authorityBadges: [
         '25+ godina iskustva',
         '1000+ transformacija',
@@ -145,6 +145,22 @@ export const defaultContent: SiteContent = {
       buttonText: 'Preuzmite besplatni vodič',
       buttonLink: '/vodic',
     },
+    newsletter: {
+      title: 'Pridružite se našem newsletter-u',
+      subtitle: 'Povremeni saveti o protoku energije, ritualima i usklađenom životu kroz Feng Shui — direktno u vaš inbox.',
+      placeholder: 'Vaš email',
+      buttonText: 'Prijavite se',
+      successMessage: 'Hvala! Uspešno ste se prijavili.',
+    },
+    webinarSection: {
+      enabled: false,
+      badge: 'Besplatan vebinar',
+      title: 'Prijavite se za besplatan Feng Shui vebinar',
+      subtitle: 'Otkrijte kako energija prostora oblikuje vaš svakodnevni život — i prve korake ka harmonizaciji doma.',
+      dateText: '',
+      buttonText: 'Prijavi se',
+      successMessage: 'Hvala! Vaša prijava je primljena. Detalje šaljemo na email.',
+    },
     cta: {
       badge: 'Spremni ste?',
       title: 'Vaš prostor govori. Da li ste spremni da ga čujete?',
@@ -165,14 +181,14 @@ export const defaultContent: SiteContent = {
       heading: 'Zašto radim ovo — i šta to znači za vas',
       paragraphs: [
         'Moj put je počeo daleko od Feng Shui — na Tehničko-metalurškom fakultetu u Beogradu. Ali ta osnova u strukturi i nauci dala mi je nešto dragoceno: sposobnost da vidim prostor ne samo kao estetiku, već kao sistem koji utiče na sve oko sebe.',
-        'Intenzivne studije na Mastery Academy of Chinese Metaphysics otvorile su mi potpuno novu dimenziju. Shvatila sam da drevna mudrost nije suprotna nauci — već njen dopuna. To me je inspirisalo da kreiram ptPLAN metodologiju, prilagođenu energetskim potrebama našeg regiona i naših domova.',
+        'Intenzivne studije na Mastery Academy of Chinese Metaphysics otvorile su mi potpuno novu dimenziju. Shvatila sam da drevna mudrost nije suprotna nauci — već njen dopuna. To me je inspirisalo da kreiram sopstvenu metodologiju, prilagođenu energetskim potrebama našeg regiona i naših domova.',
         'Danas, nakon 25 godina i više od 1000 projekata, moja praksa spaja tradicionalni Feng Shui sa radiestezijom, kristalnom terapijom, svetom geometrijom i holističkim dizajnom. Ali ono što me zaista pokreće nije tehnika — već trenutak kada klijentnica kaže: \'Konačno se osećam kao kod kuće u sopstvenom domu.\'',
       ],
       image: 'https://picsum.photos/seed/dragana-jovic/800/1000',
       credentials: [
         'Tehničko-metalurški fakultet, Beograd — temelj u nauci i strukturi',
         'Mastery Academy of Chinese Metaphysics — međunarodno priznata obuka',
-        'Kreator ptPLAN metode — prilagođena našem regionu',
+        'Kreator autorske Feng Shui metode — prilagođene našem regionu',
         'TV i medijski nastupi — prepoznata stručnost',
         'Holistička Akademija Maya — kontinuirano usavršavanje',
       ],
@@ -235,7 +251,7 @@ export const defaultContent: SiteContent = {
         },
         {
           year: '2020',
-          title: 'Osnivanje ptPLAN škole',
+          title: 'Osnivanje škole',
           description: 'Pokretanje imerzivnog programa obuke zasnovanog na mojoj originalnoj metodologiji, ispunjavajući misiju deljenja ovog transformativnog znanja sa novom generacijom praktičara.',
         },
       ],
@@ -540,11 +556,33 @@ export const defaultContent: SiteContent = {
         'Dizajnirajte svoj život dizajniranjem svog prostora',
         'Naučite da čitate energiju kao mapu',
         'Izgradite sopstvenu Feng Shui osnovu',
-        'Vođeno Draganinom ptPLAN metodom',
+        'Vođeno Draganinom autorskom metodom',
         'Vođenje uživo, snimljeni moduli i podrška studentima',
       ],
       buttonText: 'Započnite svoju transformaciju',
       buttonLink: '/upitnik',
+      images: [
+        {
+          url: 'https://picsum.photos/seed/school-overview-space/400/300',
+          alt: 'Harmonizovan prostor posle transformacije',
+          caption: 'Rezultat rada studenata',
+        },
+        {
+          url: 'https://picsum.photos/seed/school-overview-energy/400/300',
+          alt: 'Mapa energije prostora',
+          caption: 'Čitanje energetske mape',
+        },
+        {
+          url: 'https://picsum.photos/seed/school-overview-practice/400/300',
+          alt: 'Praktičan rad na prostoru',
+          caption: 'Praktična primena principa',
+        },
+        {
+          url: 'https://picsum.photos/seed/school-overview-mentoring/400/300',
+          alt: 'Mentorstvo uživo',
+          caption: 'Vođenje i podrška',
+        },
+      ],
     },
     benefits: {
       eyebrow: 'Zašto mi',
@@ -567,7 +605,7 @@ export const defaultContent: SiteContent = {
     },
     curriculum: {
       eyebrow: 'Kurikulum',
-      title: 'Vaše četvoromesečno putovanje kroz ptPLAN metodu',
+      title: 'Vaše četvoromesečno putovanje kroz autorsku metodu',
       subtitle: 'Strukturiran, transformativan put koji vas vodi kroz drevnu mudrost Feng Shui sa modernom, praktičnom primenom.',
       months: [
         {
@@ -726,7 +764,7 @@ export const defaultContent: SiteContent = {
           ],
         },
       ],
-      graduationNote: 'Završite svoje putovanje posebnom ceremonijom diplomiranja i primite zvanični ptPLAN Feng Shui sertifikat.',
+      graduationNote: 'Završite svoje putovanje posebnom ceremonijom diplomiranja i primite zvanični Feng Shui sertifikat.',
       weekLabel: 'Nedelja',
       qaNote: 'Uključena sesija pitanja i odgovora uživo',
     },
@@ -1066,7 +1104,7 @@ export const defaultContent: SiteContent = {
 
   global: {
     siteConfig: {
-      siteName: 'ptPLAN',
+      siteName: 'Dragana Jović',
       phone: '+381 63 380 098',
       email: 'ptplan.rs@gmail.com',
       whatsapp: '38163380098',
@@ -1088,7 +1126,7 @@ export const defaultContent: SiteContent = {
       logoutLabel: 'Odjava',
     },
     footer: {
-      socialProofText: 'Preko 500 klijenata · 6+ godina iskustva · 100+ uspešnih transformacija prostora',
+      socialProofText: 'Preko 1000 uspešnih transformacija prostora, 25+ godina iskustva, 180+ održanih radionica',
       tagline: 'Harmonizacija domova, srca i energije kroz bezvremenu mudrost Feng Shui. Pratite nas za nedeljne savete o protoku energije, ritualima i usklađenom životu.',
       exploreHeading: 'Istražite',
       exploreLinks: [
@@ -1101,7 +1139,7 @@ export const defaultContent: SiteContent = {
       whatsappLinkText: 'WhatsApp za brz odgovor',
       consultationButtonText: 'Zakažite Konsultaciju',
       consultationButtonLink: '/upitnik',
-      copyrightText: '© 2025 ptPLAN. Dizajnirano sa balansom.',
+      copyrightText: '© 2025 Dragana Jović. Dizajnirano sa balansom.',
     },
   },
 

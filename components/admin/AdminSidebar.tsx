@@ -17,9 +17,12 @@ import {
   Gift,
   Settings,
   Inbox,
+  Mail,
+  Video,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInquiries } from '@/hooks/useInquiries';
+import { useWebinar } from '@/hooks/useWebinar';
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -28,7 +31,9 @@ interface AdminSidebarProps {
 
 const navItems = [
   { label: 'Kontrolna tabla', icon: LayoutDashboard, path: '/admin' },
-  { label: 'Upiti', icon: Inbox, path: '/admin/inquiries', showBadge: true },
+  { label: 'Upiti', icon: Inbox, path: '/admin/inquiries', badge: 'inquiries' as const },
+  { label: 'Vebinar prijave', icon: Video, path: '/admin/webinar', badge: 'webinar' as const },
+  { label: 'Newsletter', icon: Mail, path: '/admin/newsletter' },
   { label: 'Kursevi', icon: BookOpen, path: '/admin/courses' },
   { label: 'Korisnici', icon: Users, path: '/admin/users' },
   { label: 'Upisi', icon: GraduationCap, path: '/admin/enrollments' },
@@ -48,6 +53,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
   const router = useRouter();
   const { logout } = useAuth();
   const { unreadCount } = useInquiries();
+  const { newCount: webinarNewCount } = useWebinar();
 
   const isActive = (path: string) => {
     if (path === '/admin') return pathname === '/admin';
@@ -78,7 +84,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
       >
         <div className="flex items-center justify-between px-6 py-6">
           <Link href="/admin" className="font-heading text-xl text-cream-50 tracking-wide">
-            ptPLAN Admin
+            Dragana Jović
           </Link>
           <button
             onClick={onClose}
@@ -92,7 +98,9 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
-            const badge = item.showBadge && unreadCount > 0;
+            const badgeCount =
+              item.badge === 'inquiries' ? unreadCount : item.badge === 'webinar' ? webinarNewCount : 0;
+            const badge = badgeCount > 0;
             return (
               <Link
                 key={item.path}
@@ -111,7 +119,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
                 <span className="flex-1">{item.label}</span>
                 {badge && (
                   <span className="flex-shrink-0 min-w-[20px] h-5 rounded-full bg-gold-500 text-white text-[10px] font-bold flex items-center justify-center px-1.5">
-                    {unreadCount}
+                    {badgeCount}
                   </span>
                 )}
               </Link>

@@ -168,6 +168,26 @@ const AdminContentSchool: React.FC = () => {
                   <input type="text" className={inputClasses} value={form.overview.buttonLink} onChange={(e) => update('overview', { ...form.overview, buttonLink: e.target.value })} />
                 </div>
               </div>
+
+              <ArrayFieldEditor
+                label="Pregled — slike"
+                items={form.overview.images}
+                addItem={() => ({ url: '', alt: '', caption: '' })}
+                onChange={(images) => update('overview', { ...form.overview, images })}
+                renderItem={(img, _i, updateImg) => (
+                  <div className="space-y-3">
+                    <ImageUrlField label="URL slike" value={img.url} onChange={(v) => updateImg({ ...img, url: v })} />
+                    <div>
+                      <label className={labelClasses}>Alt tekst</label>
+                      <input type="text" className={inputClasses} value={img.alt} onChange={(e) => updateImg({ ...img, alt: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className={labelClasses}>Natpis</label>
+                      <input type="text" className={inputClasses} value={img.caption} onChange={(e) => updateImg({ ...img, caption: e.target.value })} />
+                    </div>
+                  </div>
+                )}
+              />
             </div>
           </ContentSection>
 

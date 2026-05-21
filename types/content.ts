@@ -109,6 +109,22 @@ export interface HomeContent {
     buttonText: string;
     buttonLink: string;
   };
+  newsletter: {
+    title: string;
+    subtitle: string;
+    placeholder: string;
+    buttonText: string;
+    successMessage: string;
+  };
+  webinarSection: {
+    enabled: boolean;
+    badge: string;
+    title: string;
+    subtitle: string;
+    dateText: string;
+    buttonText: string;
+    successMessage: string;
+  };
   cta: {
     badge: string;
     title: string;
@@ -252,6 +268,7 @@ export interface SchoolContent {
     features: string[];
     buttonText: string;
     buttonLink: string;
+    images: Array<{ url: string; alt: string; caption: string }>;
   };
   benefits: {
     eyebrow: string;

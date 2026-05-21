@@ -552,7 +552,7 @@ const UpitnikContent = () => {
             Sve informacije koje podelite sa nama ostaju strogo poverljive. Vaše podatke koristimo isključivo u svrhu pružanja personalizovanog iskustva i neće biti deljeni sa trećim licima.
           </p>
           <p className="text-charcoal-500 font-body">
-            Za sva pitanja o privatnosti, kontaktirajte nas putem emaila <a href="mailto:privacy@ptplan.com" className="text-navy-600 hover:underline">privacy@ptplan.com</a>
+            Za sva pitanja o privatnosti, kontaktirajte nas putem emaila <a href="mailto:ptplan.rs@gmail.com" className="text-navy-600 hover:underline">ptplan.rs@gmail.com</a>
           </p>
         </motion.div>
       </Section>

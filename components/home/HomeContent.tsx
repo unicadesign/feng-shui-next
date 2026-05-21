@@ -21,6 +21,8 @@ import SocialProofBar from '@/components/SocialProofBar';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
 import ServiceCard from '@/components/home/ServiceCard';
 import TestimonialCard from '@/components/home/TestimonialCard';
+import NewsletterSignup from '@/components/home/NewsletterSignup';
+import WebinarCTA from '@/components/home/WebinarCTA';
 import CmsImage from '@/components/CmsImage';
 import type { HomeContent as HomeContentType } from '@/types/content';
 
@@ -79,6 +81,9 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
 
       {/* SECTION 2: SOCIAL PROOF BAR */}
       <SocialProofBar />
+
+      {/* SECTION 2.5: WEBINAR CTA (toggleable) */}
+      {c.webinarSection.enabled && <WebinarCTA content={c.webinarSection} />}
 
       {/* SECTION 3: PROBLEM */}
       <Section background="cream">
@@ -197,6 +202,9 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
           </motion.div>
         </div>
       </Section>
+
+      {/* SECTION 4.5: NEWSLETTER */}
+      <NewsletterSignup content={c.newsletter} />
 
       {/* SECTION 5: BLOCKQUOTE */}
       <motion.section

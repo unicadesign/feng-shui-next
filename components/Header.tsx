@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -92,7 +93,10 @@ const Header = ({ content }: HeaderProps) => {
         }`}
       >
         <Link href="/">
-          <span className="text-lg font-heading font-bold text-charcoal px-3">{siteName}</span>
+          <span className="flex items-center gap-2 px-3">
+            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+          </span>
         </Link>
 
         {navLinks.map((link) => (
@@ -177,7 +181,10 @@ const Header = ({ content }: HeaderProps) => {
         }`}
       >
         <Link href="/">
-          <span className="text-lg font-heading font-bold text-charcoal px-3">{siteName}</span>
+          <span className="flex items-center gap-2 px-3">
+            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+          </span>
         </Link>
 
         <div className="flex items-center gap-2">
