@@ -122,7 +122,10 @@ export interface HomeContent {
     badge: string;
     title: string;
     subtitle: string;
-    dateText: string;
+    // Local datetime string (datetime-local input format: "YYYY-MM-DDTHH:mm").
+    // Empty when not set. Drives both the displayed date and the countdown,
+    // and when "now" passes this time the section auto-hides.
+    startsAt: string;
     buttonText: string;
     successMessage: string;
   };

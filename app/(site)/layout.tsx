@@ -15,7 +15,7 @@ export default async function SiteLayout({
 
   return (
     <>
-      <Header content={global} />
+      <Header content={global} webinar={home.webinarSection} />
       {children}
       <Footer content={global} />
       <WebinarPopup content={home.webinarSection} />

@@ -6,15 +6,17 @@ import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import type { GlobalContent } from '@/types/content';
+import WebinarNavbarBar from '@/components/WebinarNavbarBar';
+import type { GlobalContent, HomeContent } from '@/types/content';
 
 interface HeaderProps {
   content: GlobalContent;
+  webinar?: HomeContent['webinarSection'];
 }
 
 const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
 
-const Header = ({ content }: HeaderProps) => {
+const Header = ({ content, webinar }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -85,8 +87,9 @@ const Header = ({ content }: HeaderProps) => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pt-5">
+      <div className="flex flex-col items-center w-full px-4 md:w-auto md:px-0">
       <nav
-        className={`hidden md:flex items-center gap-1 rounded-full px-3 py-2 border transition-all duration-300 ease-out-expo ${
+        className={`hidden md:flex relative z-10 items-center gap-1 rounded-full px-3 py-2 border transition-all duration-300 ease-out-expo ${
           isScrolled
             ? 'bg-cream-50/95 border-sand-200/50 shadow-lifted'
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
@@ -174,7 +177,7 @@ const Header = ({ content }: HeaderProps) => {
       </nav>
 
       <div
-        className={`md:hidden flex items-center justify-between rounded-full px-3 py-2 border mx-4 w-full transition-all duration-300 ease-out-expo ${
+        className={`md:hidden relative z-10 flex items-center justify-between rounded-full px-3 py-2 border w-full transition-all duration-300 ease-out-expo ${
           isScrolled
             ? 'bg-cream-50/95 border-sand-200/50 shadow-lifted'
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
@@ -202,6 +205,9 @@ const Header = ({ content }: HeaderProps) => {
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
+      </div>
+
+      {webinar && <WebinarNavbarBar content={webinar} />}
       </div>
 
       {isMenuOpen && (

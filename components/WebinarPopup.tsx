@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { CalendarCheck, X } from 'lucide-react';
+import { formatWebinarDate, isWebinarLive } from '@/lib/webinarDate';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
 import type { HomeContent } from '@/types/content';
 
@@ -9,20 +10,32 @@ interface Props {
   content: HomeContent['webinarSection'];
 }
 
-// Keyed by the webinar's date/title so a new webinar resets dismissals.
 const sessionKey = (c: HomeContent['webinarSection']) =>
-  `webinar_popup_dismissed:${c.dateText || c.title}`;
+  `webinar_popup_dismissed:${c.startsAt || c.title}`;
 const registeredKey = (c: HomeContent['webinarSection']) =>
-  `webinar_registered:${c.dateText || c.title}`;
+  `webinar_registered:${c.startsAt || c.title}`;
 
 const SHOW_DELAY_MS = 3000;
 
 const WebinarPopup: React.FC<Props> = ({ content }) => {
   const [visible, setVisible] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
+  // Re-evaluate "live" every 30s so we hide the popup the second the webinar
+  // starts, even if the user is sitting on the page.
+  const [now, setNow] = useState<number | null>(null);
 
   useEffect(() => {
-    if (!content.enabled) return;
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    if (now === null) return;
+    if (!isWebinarLive(content, now)) {
+      setVisible(false);
+      return;
+    }
     try {
       if (sessionStorage.getItem(sessionKey(content)) === '1') return;
       if (localStorage.getItem(registeredKey(content)) === '1') return;
@@ -31,7 +44,9 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
     }
     const t = window.setTimeout(() => setVisible(true), SHOW_DELAY_MS);
     return () => window.clearTimeout(t);
-  }, [content]);
+    // Only run once the live check passes after mount; the interval handles auto-hide.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [content, now !== null]);
 
   const dismiss = useCallback(() => {
     try {
@@ -42,7 +57,6 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
     setVisible(false);
   }, [content]);
 
-  // Esc + body scroll lock while popup is visible (registration modal manages its own).
   useEffect(() => {
     if (!visible || showRegistration) return;
     const onKey = (e: KeyboardEvent) => {
@@ -57,11 +71,10 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
     };
   }, [visible, showRegistration, dismiss]);
 
-  if (!content.enabled) return null;
+  if (now === null) return null;
+  if (!isWebinarLive(content, now)) return null;
 
   const openRegistration = () => {
-    // Mark dismissed even if the user closes the registration modal without
-    // submitting — we don't want the popup to nag them again this session.
     try {
       sessionStorage.setItem(sessionKey(content), '1');
     } catch {
@@ -78,6 +91,8 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
       /* ignore */
     }
   };
+
+  const formattedDate = formatWebinarDate(content.startsAt);
 
   return (
     <>
@@ -108,9 +123,9 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
               {content.title}
             </h2>
             <p className="text-charcoal-500 font-body leading-relaxed">{content.subtitle}</p>
-            {content.dateText && (
+            {formattedDate && (
               <p className="mt-4 inline-flex items-center gap-2 text-navy-600 font-heading font-semibold">
-                <CalendarCheck size={18} /> {content.dateText}
+                <CalendarCheck size={18} /> {formattedDate}
               </p>
             )}
 
