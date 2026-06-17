@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CalendarCheck, CheckCircle } from 'lucide-react';
 import { scrollReveal, viewportOnce } from '@/lib/animations';
+import { formatWebinarDate, isWebinarLive } from '@/lib/webinarDate';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
 import type { HomeContent } from '@/types/content';
 
@@ -11,14 +12,23 @@ interface WebinarCTAProps {
   content: HomeContent['webinarSection'];
 }
 
-// One registration flag per webinar instance, keyed by its date/title so a new
-// webinar (new date) shows the CTA again to returning visitors.
-const registeredKey = (content: HomeContent['webinarSection']) =>
-  `webinar_registered:${content.dateText || content.title}`;
+// One registration flag per webinar instance, keyed by start time / title so a
+// new webinar (new startsAt) shows the CTA again to returning visitors.
+const registeredKey = (c: HomeContent['webinarSection']) =>
+  `webinar_registered:${c.startsAt || c.title}`;
 
 const WebinarCTA: React.FC<WebinarCTAProps> = ({ content }) => {
   const [open, setOpen] = useState(false);
   const [registered, setRegistered] = useState(false);
+  // Track "now" so we hide automatically the moment the webinar starts,
+  // without a refresh. null during SSR / before mount avoids hydration drift.
+  const [now, setNow] = useState<number | null>(null);
+
+  useEffect(() => {
+    setNow(Date.now());
+    const id = window.setInterval(() => setNow(Date.now()), 30_000);
+    return () => window.clearInterval(id);
+  }, []);
 
   useEffect(() => {
     try {
@@ -28,7 +38,11 @@ const WebinarCTA: React.FC<WebinarCTAProps> = ({ content }) => {
     }
   }, [content]);
 
-  if (!content.enabled) return null;
+  // During SSR / pre-mount the section renders based on enabled alone
+  // (`now === null` keeps server + first client render in sync). After mount,
+  // the full live check takes over and hides the section if startsAt passed.
+  const live = now === null ? content.enabled : isWebinarLive(content, now);
+  if (!live) return null;
 
   const handleSuccess = () => {
     try {
@@ -38,6 +52,8 @@ const WebinarCTA: React.FC<WebinarCTAProps> = ({ content }) => {
     }
     setRegistered(true);
   };
+
+  const formattedDate = formatWebinarDate(content.startsAt);
 
   return (
     <section className="bg-navy-50 py-20 md:py-28">
@@ -57,9 +73,9 @@ const WebinarCTA: React.FC<WebinarCTAProps> = ({ content }) => {
         <p className="text-charcoal-500 font-body leading-relaxed max-w-[55ch] mx-auto">
           {content.subtitle}
         </p>
-        {content.dateText && (
+        {formattedDate && (
           <p className="mt-4 inline-flex items-center gap-2 text-navy-600 font-heading font-semibold">
-            <CalendarCheck size={18} /> {content.dateText}
+            <CalendarCheck size={18} /> {formattedDate}
           </p>
         )}
 

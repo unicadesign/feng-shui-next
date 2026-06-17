@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CalendarCheck, CheckCircle, Loader2, X } from 'lucide-react';
+import { formatWebinarDate } from '@/lib/webinarDate';
 import type { HomeContent } from '@/types/content';
 
 interface Props {
@@ -13,8 +14,6 @@ interface Props {
 
 const initialForm = {
   full_name: '',
-  birth_date: '',
-  city: '',
   email: '',
   phone: '',
   note: '',
@@ -41,7 +40,6 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
     };
   }, [open, onClose]);
 
-  // Reset form state whenever the modal closes (so a re-open starts fresh).
   useEffect(() => {
     if (!open) {
       setStatus('idle');
@@ -64,7 +62,7 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
       const res = await fetch('/api/webinar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, date_text: content.dateText }),
+        body: JSON.stringify({ ...form, starts_at: content.startsAt }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -74,8 +72,6 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
       }
       setStatus('success');
       setForm(initialForm);
-      // Notify parent so it can persist "registered" state,
-      // then auto-close after a brief success view.
       onSuccess();
       setTimeout(() => {
         onClose();
@@ -85,6 +81,8 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
       setStatus('error');
     }
   };
+
+  const formattedDate = formatWebinarDate(content.startsAt);
 
   return (
     <div
@@ -115,9 +113,9 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
           <>
             <div className="mb-6 pr-8">
               <h3 className="text-xl font-heading font-semibold text-charcoal">{content.title}</h3>
-              {content.dateText && (
+              {formattedDate && (
                 <p className="mt-1 inline-flex items-center gap-2 text-navy-600 text-sm font-heading font-semibold">
-                  <CalendarCheck size={16} /> {content.dateText}
+                  <CalendarCheck size={16} /> {formattedDate}
                 </p>
               )}
             </div>
@@ -125,14 +123,6 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
               <div>
                 <label className={labelClasses}>Ime i prezime</label>
                 <input type="text" required value={form.full_name} onChange={(e) => set('full_name', e.target.value)} placeholder="Unesite ovde" className={inputClasses} autoFocus />
-              </div>
-              <div>
-                <label className={labelClasses}>Datum rođenja</label>
-                <input type="date" value={form.birth_date} onChange={(e) => set('birth_date', e.target.value)} className={inputClasses} />
-              </div>
-              <div>
-                <label className={labelClasses}>Mesto stanovanja</label>
-                <input type="text" value={form.city} onChange={(e) => set('city', e.target.value)} placeholder="Grad" className={inputClasses} />
               </div>
               <div>
                 <label className={labelClasses}>Email</label>

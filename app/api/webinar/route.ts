@@ -14,11 +14,9 @@ export async function POST(request: Request) {
 
   const fullName = String(body.full_name ?? '').trim();
   const email = String(body.email ?? '').trim().toLowerCase();
-  const birthDate = body.birth_date ? String(body.birth_date) : null;
-  const city = body.city ? String(body.city).trim() : null;
   const phone = body.phone ? String(body.phone).trim() : null;
   const note = body.note ? String(body.note).trim() : null;
-  const dateText = body.date_text ? String(body.date_text) : undefined;
+  const startsAt = body.starts_at ? String(body.starts_at) : undefined;
 
   if (!fullName) {
     return NextResponse.json({ error: 'Unesite ime i prezime.' }, { status: 400 });
@@ -27,9 +25,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unesite ispravnu email adresu.' }, { status: 400 });
   }
 
+  // birth_date and city columns are kept nullable in the DB for historical
+  // rows; the public form no longer collects them.
   const supabase = await createClient();
   const { error } = await supabase.from('webinar_registrations').insert([
-    { full_name: fullName, birth_date: birthDate, city, email, phone, note },
+    { full_name: fullName, email, phone, note },
   ]);
 
   if (error) {
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   }
 
   // Email failure must not fail the registration.
-  await sendWebinarConfirmation(email, { fullName, dateText });
+  await sendWebinarConfirmation(email, { fullName, startsAt });
 
   return NextResponse.json({ success: true });
 }

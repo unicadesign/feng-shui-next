@@ -556,8 +556,16 @@ const AdminContentHome: React.FC = () => {
               <textarea value={form.webinarSection.subtitle} onChange={(e) => u('webinarSection', { subtitle: e.target.value })} className={textareaClasses} />
             </div>
             <div>
-              <label className={labelClasses}>Termin (datum/vreme — opciono)</label>
-              <input type="text" value={form.webinarSection.dateText} onChange={(e) => u('webinarSection', { dateText: e.target.value })} className={inputClasses} placeholder="npr. 15. jun 2026. u 19h" />
+              <label className={labelClasses}>Termin (datum i vreme)</label>
+              <input
+                type="datetime-local"
+                value={form.webinarSection.startsAt}
+                onChange={(e) => u('webinarSection', { startsAt: e.target.value })}
+                className={inputClasses}
+              />
+              <p className="mt-1.5 text-xs font-body text-charcoal-500">
+                Datum se prikazuje na sajtu i koristi za odbrojavanje. Kada ovaj trenutak prođe, vebinar sekcija (i popup, i navbar traka) se automatski sakriva svim posetiocima.
+              </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>

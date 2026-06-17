@@ -42,12 +42,26 @@ export function newsletterWelcome(): { subject: string; html: string } {
 
 export interface WebinarConfirmationData {
   fullName: string;
-  dateText?: string;
+  startsAt?: string;
 }
 
 export function webinarConfirmation(data: WebinarConfirmationData): { subject: string; html: string } {
-  const when = data.dateText
-    ? `<p style="margin:0 0 14px;line-height:1.6;"><strong>Termin:</strong> ${data.dateText}</p>`
+  // Inlined to avoid pulling client/server boundary types into the email template.
+  const formatted = (() => {
+    if (!data.startsAt) return '';
+    const d = new Date(data.startsAt);
+    if (Number.isNaN(d.getTime())) return '';
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const day = pad(d.getDate());
+    const month = pad(d.getMonth() + 1);
+    const year = d.getFullYear();
+    const h = d.getHours();
+    const m = d.getMinutes();
+    const time = m === 0 ? `${h}h` : `${pad(h)}:${pad(m)}h`;
+    return `${day}.${month}.${year} u ${time}`;
+  })();
+  const when = formatted
+    ? `<p style="margin:0 0 14px;line-height:1.6;"><strong>Termin:</strong> ${formatted}</p>`
     : '';
   return {
     subject: 'Potvrda prijave na besplatan vebinar',
