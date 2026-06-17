@@ -46,15 +46,15 @@ const HomeContent = ({ content: c }: HomeContentProps) => {
         />
         <ContainerScroll
           titleComponent={
-            <div className="flex flex-col items-center pt-[160px] md:pt-[100px]">
+            <div className="flex flex-col items-center pt-[360px] md:pt-[100px]">
               <h1 className="flex flex-col w-full max-w-3xl mx-auto leading-[0.95] text-charcoal">
-                <span className="self-start font-heading font-light text-2xl md:text-4xl tracking-tight">
+                <span className="self-start ml-[30px] md:ml-0 font-heading font-light text-2xl md:text-4xl tracking-tight">
                   {c.hero.titleTop}
                 </span>
                 <span className="text-center font-heading font-bold text-6xl md:text-7xl lg:text-8xl tracking-tight">
                   {c.hero.titleMain}
                 </span>
-                <span className="self-end font-heading font-light text-2xl md:text-3xl tracking-tight">
+                <span className="self-end mr-[30px] md:mr-0 font-heading font-light text-2xl md:text-3xl tracking-tight">
                   {c.hero.titleBottom}
                 </span>
               </h1>

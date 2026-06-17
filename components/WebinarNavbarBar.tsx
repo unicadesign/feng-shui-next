@@ -44,24 +44,30 @@ const WebinarNavbarBar: React.FC<Props> = ({ content }) => {
     }
   };
 
+  // Sits directly below the navbar pill (no overlap) — the navbar's
+  // translucent background made any hidden top edge bleed through, so the
+  // bar's top now starts at the navbar's bottom with a small visual gap.
+  const label = cd ? 'VEBINAR POČINJE ZA' : 'PRIJAVI SE NA BESPLATAN VEBINAR';
   return (
     <>
       <button
         onClick={() => setOpen(true)}
         aria-label="Prijavite se za besplatan vebinar"
         className="
-          relative z-0 -mt-4
+          mt-1
           inline-flex items-center justify-center gap-2
           rounded-full bg-navy-500 text-cream-50
-          px-5 sm:px-7 pt-5 pb-2
-          text-xs sm:text-sm font-heading font-medium
+          px-5 sm:px-7 py-2
+          text-[11px] sm:text-xs font-heading font-semibold
+          uppercase tracking-[0.15em]
           shadow-soft hover:bg-navy-600 transition-colors
           max-w-[calc(100%-2rem)]
         "
       >
         <CalendarCheck size={14} className="flex-shrink-0" />
         <span className="truncate">
-          Besplatan Feng Shui vebinar{cd && <> · <span className="font-semibold tabular-nums">{cd}</span></>}
+          {label}
+          {cd && <> · <span className="font-bold tabular-nums normal-case tracking-normal">{cd}</span></>}
         </span>
       </button>
 
