@@ -567,6 +567,20 @@ const AdminContentHome: React.FC = () => {
                 Datum se prikazuje na sajtu i koristi za odbrojavanje. Kada ovaj trenutak prođe, vebinar sekcija (i popup, i navbar traka) se automatski sakriva svim posetiocima.
               </p>
             </div>
+            <div>
+              <label className={labelClasses}>Zoom link (obavezno)</label>
+              <input
+                type="url"
+                required
+                value={form.webinarSection.zoomLink}
+                onChange={(e) => u('webinarSection', { zoomLink: e.target.value })}
+                className={inputClasses}
+                placeholder="https://us06web.zoom.us/j/..."
+              />
+              <p className="mt-1.5 text-xs font-body text-charcoal-500">
+                Link se šalje učesnicima u potvrdi mejla. Nije vidljiv na sajtu.
+              </p>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className={labelClasses}>Tekst dugmeta</label>

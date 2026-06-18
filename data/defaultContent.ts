@@ -159,6 +159,7 @@ export const defaultContent: SiteContent = {
       title: 'Prijavite se za besplatan Feng Shui vebinar',
       subtitle: 'Otkrijte kako energija prostora oblikuje vaš svakodnevni život — i prve korake ka harmonizaciji doma.',
       startsAt: '',
+      zoomLink: '',
       buttonText: 'Prijavi se',
       successMessage: 'Hvala! Vaša prijava je primljena. Detalje šaljemo na email.',
     },

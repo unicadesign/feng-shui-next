@@ -126,6 +126,9 @@ export interface HomeContent {
     // Empty when not set. Drives both the displayed date and the countdown,
     // and when "now" passes this time the section auto-hides.
     startsAt: string;
+    // Zoom (or other) access link sent in the confirmation email only.
+    // Not displayed anywhere on the public site.
+    zoomLink: string;
     buttonText: string;
     successMessage: string;
   };

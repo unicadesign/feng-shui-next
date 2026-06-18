@@ -59,10 +59,12 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
     setStatus('loading');
     setError('');
     try {
+      // No need to send starts_at / zoom link — the API route reads those
+      // from the source-of-truth CMS row server-side.
       const res = await fetch('/api/webinar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, starts_at: content.startsAt }),
+        body: JSON.stringify(form),
       });
       const data = await res.json();
       if (!res.ok) {
