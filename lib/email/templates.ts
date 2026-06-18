@@ -29,13 +29,20 @@ function shell(title: string, bodyHtml: string): string {
 </html>`;
 }
 
+// Minimal HTML escape for user-provided strings inserted into the templates.
+function esc(s: string): string {
+  return s.replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string),
+  );
+}
+
 export function newsletterWelcome(): { subject: string; html: string } {
   return {
     subject: 'Dobrodošli — Dragana Jović Feng Shui',
     html: shell(
       'Hvala na prijavi!',
       `<p style="margin:0 0 14px;line-height:1.6;">Uspešno ste se prijavili na naš newsletter. Povremeno ćete dobijati savete o protoku energije, ritualima i usklađenom životu kroz Feng Shui.</p>
-       <p style="margin:0;line-height:1.6;">Toplo,<br>Dragana</p>`,
+       <p style="margin:0;line-height:1.6;">Srdačno,<br>Dragana</p>`,
     ),
   };
 }
@@ -43,6 +50,7 @@ export function newsletterWelcome(): { subject: string; html: string } {
 export interface WebinarConfirmationData {
   fullName: string;
   startsAt?: string;
+  zoomLink?: string;
 }
 
 export function webinarConfirmation(data: WebinarConfirmationData): { subject: string; html: string } {
@@ -63,14 +71,24 @@ export function webinarConfirmation(data: WebinarConfirmationData): { subject: s
   const when = formatted
     ? `<p style="margin:0 0 14px;line-height:1.6;"><strong>Termin:</strong> ${formatted}</p>`
     : '';
+  const link = (data.zoomLink || '').trim();
+  const access = link
+    ? `<p style="margin:0 0 14px;line-height:1.6;">Pristupite vebinaru klikom na dugme ispod. Ako dugme ne radi, kopirajte link ispod njega i otvorite ga u pretraživaču.</p>
+       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 14px;">
+         <tr><td style="border-radius:9999px;background:${ACCENT};">
+           <a href="${esc(link)}" target="_blank" rel="noopener" style="display:inline-block;padding:12px 28px;color:#fffdf9;text-decoration:none;font-weight:600;font-size:14px;border-radius:9999px;">Pristupite vebinaru</a>
+         </td></tr>
+       </table>
+       <p style="margin:0 0 14px;line-height:1.6;word-break:break-all;font-size:12px;color:#6b6258;"><a href="${esc(link)}" target="_blank" rel="noopener" style="color:#6b6258;">${esc(link)}</a></p>`
+    : '';
   return {
     subject: 'Potvrda prijave na besplatan vebinar',
     html: shell(
       'Vaša prijava je primljena',
-      `<p style="margin:0 0 14px;line-height:1.6;">Zdravo ${data.fullName},</p>
-       <p style="margin:0 0 14px;line-height:1.6;">Hvala što ste se prijavili za naš besplatan vebinar. Vaše mesto je rezervisano.</p>
+      `<p style="margin:0 0 14px;line-height:1.6;">Zdravo ${esc(data.fullName)},</p>
+       <p style="margin:0 0 14px;line-height:1.6;">Hvala što ste se prijavili za besplatan Feng Shui vebinar. Vaše mesto je rezervisano.</p>
        ${when}
-       <p style="margin:0 0 14px;line-height:1.6;">Detalje o pristupu poslaćemo vam na ovaj email pre početka.</p>
+       ${access}
        <p style="margin:0;line-height:1.6;">Vidimo se uskoro,<br>Dragana</p>`,
     ),
   };
