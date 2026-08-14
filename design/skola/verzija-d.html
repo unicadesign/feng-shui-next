@@ -26,6 +26,12 @@
   --gold-500:#b8952f; --gold-400:#c8a84e; --gold-200:#f2d98a; --gold-50:#fdf8eb;
   --cream-200:#F5F0E6; --cream-300:#EDE5D5; --cream-50:#FDFBF7;
 
+  /* Jaka boja — jedna sekcija (upis). Prigušena cigla izvedena iz
+     tople strane palete, da stoji uz zlatnu a ne da viče.
+     Kontrast sa belim tekstom 5.5:1 (AA). Zlatno dugme na njoj pada
+     na 2.4:1, zato je CTA na toj sekciji beo. */
+  --strong:#9A5744; --strong-dark:#7E4636;
+
   --r-card:24px; --r-photo:28px; --r-sm:20px; --pill:999px;
   --sh-photo:0 24px 60px rgba(38,60,89,.18);
   --sh-card:0 18px 44px rgba(38,60,89,.2);
@@ -133,6 +139,56 @@ section{padding:56px 0}
 .band h2,.band h3{color:#fff}
 .band .lead,.band p{color:var(--navy-300)}
 .band .body{color:var(--navy-300)}
+
+/* --- KRUGOVI: obrazac 3a „Krugovi u orbiti" iz Claude Design projekta.
+   Tanke zlatne orbite, asimetričan ritam, foto + kolor overlay,
+   kurzivni zlatni eyebrow, verzal naslov sa razmakom 1.5px.
+   Mobilno: vodoravni snap-scroll jer 4 kruga jedan ispod drugog
+   pojedu pola ekrana. --- */
+.orbits{display:flex;gap:32px;overflow-x:auto;padding:44px 4px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.orbits::-webkit-scrollbar{display:none}
+.orb{flex:none;scroll-snap-align:center;width:230px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.orb .disc{position:relative;width:230px;height:230px;flex:none}
+.orb .ring{position:absolute;inset:-14px;border:1px solid var(--gold-200);border-radius:50%}
+.orb .ring2{position:absolute;inset:-30px;border:1px dashed rgba(200,168,78,.4);border-radius:50%}
+.orb .inner{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;box-shadow:var(--sh-card)}
+.orb .inner .ph{min-height:0}
+.orb .tint{position:absolute;inset:0}
+.orb .t-navy{background:rgba(38,60,89,.82)}
+.orb .t-gold{background:rgba(184,149,47,.84)}
+.orb .t-mid{background:rgba(53,103,138,.82)}
+.orb .t-deep{background:rgba(22,42,66,.84)}
+.orb .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px;text-align:center}
+.orb .lbl .it{font-size:14px;margin:0}
+.orb .lbl b{font-size:17px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#fff;line-height:1.3}
+.orb .cap{font-size:14.5px;line-height:1.5;color:var(--charcoal-500);text-align:center}
+@media(min-width:700px){
+  .orbits{overflow:visible;flex-wrap:wrap;justify-content:center;gap:40px 32px}
+  .orb,.orb .disc{width:250px}.orb .disc{height:250px}
+  .orb .lbl b{font-size:19px}
+}
+@media(min-width:1024px){
+  .orbits{flex-wrap:nowrap;gap:36px;align-items:flex-start;justify-content:center;padding:56px 4px 16px}
+  .orb{width:auto}
+  .orb .disc{width:250px;height:250px}
+  /* asimetričan ritam — drugi krug veći i izdignut, kao u 3a */
+  .orb:nth-child(1){margin-top:34px}
+  .orb:nth-child(2) .disc{width:290px;height:290px}
+  .orb:nth-child(3){margin-top:20px}
+  .orb:nth-child(4){margin-top:52px}
+  .orb:nth-child(2) .lbl b{font-size:21px}
+  .orb .cap{max-width:250px}
+  .orb:nth-child(2) .cap{max-width:290px}
+}
+
+/* --- jaka boja: jedna sekcija --- */
+.strong{background:var(--strong);color:#fff}
+.strong h2,.strong h3{color:#fff}
+.strong p,.strong .lead{color:rgba(255,255,255,.88)}
+.strong .ticks li{color:rgba(255,255,255,.92)}
+.strong .ticks li::before{background:var(--gold-200)}
+.strong .it{color:var(--gold-200)}
+.strong .todo{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45);color:rgba(255,255,255,.9)}
 
 /* --- lista sa zlatnim tačkama --- */
 .ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
@@ -261,11 +317,51 @@ body.clean .blok::before{display:none}
       <span class="eyebrow">Feng shui online program</span>
       <h2>Plan za 8 nedelja obuke</h2>
     </div>
-    <div class="grid g-4">
-      <div class="card sm"><span class="n">01</span><h3>Osnovne postavke</h3><p>Kako da feng shui funkcioniše na pravi način</p></div>
-      <div class="card sm"><span class="n">02</span><h3>Blokade u prostoru</h3><p>Kako ih pronaći i šta nam govore</p></div>
-      <div class="card sm"><span class="n">03</span><h3>Delovi prostora</h3><p>I kako da rade za našu korist</p></div>
-      <div class="card sm"><span class="n">04</span><h3>Aktivacija</h3><p>Kako da pokrenete uzlaznu spiralu</p></div>
+    <div class="orbits">
+      <div class="orb">
+        <div class="disc">
+          <span class="ring"></span>
+          <div class="inner">
+            <div class="ph">Foto: prostor / svetlo</div>
+            <span class="tint t-navy"></span>
+            <span class="lbl"><span class="it on-dark">prvi deo</span><b>Osnovne postavke</b></span>
+          </div>
+        </div>
+        <p class="cap">Kako da feng shui funkcioniše na pravi način</p>
+      </div>
+      <div class="orb">
+        <div class="disc">
+          <span class="ring"></span><span class="ring2"></span>
+          <div class="inner">
+            <div class="ph">Foto: tlocrt / kompas</div>
+            <span class="tint t-gold"></span>
+            <span class="lbl"><span class="it" style="color:var(--gold-50)">drugi deo</span><b>Blokade u prostoru</b></span>
+          </div>
+        </div>
+        <p class="cap">Kako ih pronaći i šta nam govore</p>
+      </div>
+      <div class="orb">
+        <div class="disc">
+          <span class="ring"></span>
+          <div class="inner">
+            <div class="ph">Foto: enterijer doma</div>
+            <span class="tint t-mid"></span>
+            <span class="lbl"><span class="it on-dark">treći deo</span><b>Delovi prostora</b></span>
+          </div>
+        </div>
+        <p class="cap">I kako da rade za našu korist</p>
+      </div>
+      <div class="orb">
+        <div class="disc">
+          <span class="ring"></span>
+          <div class="inner">
+            <div class="ph">Foto: dnevna soba</div>
+            <span class="tint t-deep"></span>
+            <span class="lbl"><span class="it on-dark">četvrti deo</span><b>Aktivacija</b></span>
+          </div>
+        </div>
+        <p class="cap">Kako da pokrenete uzlaznu spiralu</p>
+      </div>
     </div>
     <p class="lead narrow" style="text-align:center;max-width:720px">Obuka je podeljena na četiri dela i svaki se nadovezuje na prethodni. Krećete od toga kako energija ulazi i kreće se kroz prostor, učite da prepoznate gde zastaje, pa tek onda kako se bira korekcija — da menjate ono što ima efekta, a ne sve odjednom.</p>
     <div style="text-align:center"><a class="btn btn-navy btn-block" href="#prijava">Pokaži mi kako moj prostor utiče na moj život</a></div>
@@ -441,28 +537,27 @@ body.clean .blok::before{display:none}
 </section>
 
 <!-- BLOK 11 — UPIS / CENA -->
-<section class="blok" id="upis" data-blok="BLOK 11">
-  <div class="wrap">
-    <div class="card navy" style="padding:32px;gap:28px">
-      <div class="grid g-2" style="width:100%;align-items:center;gap:32px">
-        <div class="stack g20">
-          <span class="it on-dark">upis je otvoren</span>
-          <h2>Feng shui online program — 8 nedelja</h2>
-          <ul class="ticks">
-            <li>8 nedelja lekcija, dostupnih tokom celog trajanja kursa</li>
-            <li>Konsultacije uživo sa Draganom</li>
-            <li>Praktični zadaci i vežbe nakon svake lekcije</li>
-            <li>Grupa za podršku polaznica</li>
-          </ul>
-        </div>
-        <div style="background:rgba(255,255,255,.07);border:1px solid rgba(242,217,138,.35);border-radius:var(--r-card);padding:28px;display:flex;flex-direction:column;gap:16px;align-items:flex-start">
-          <div style="display:flex;align-items:baseline;gap:6px"><b style="font-size:48px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1">[cena]</b><span style="font-size:24px;color:var(--gold-200)">€</span></div>
-          <p style="color:var(--navy-300);font-size:15.5px">Upis se zatvara <strong style="color:#fff">[datum]</strong></p>
-          <a class="btn btn-gold btn-block" href="#prijava-dole">Rezervišite mesto</a>
-        </div>
+<section class="blok strong" id="upis" data-blok="BLOK 11">
+  <div class="wrap stack g40">
+    <div class="grid g-2" style="align-items:center;gap:32px">
+      <div class="stack g20">
+        <span class="it">upis je otvoren</span>
+        <h2>Feng shui online program — 8 nedelja</h2>
+        <ul class="ticks">
+          <li>8 nedelja lekcija, dostupnih tokom celog trajanja kursa</li>
+          <li>Konsultacije uživo sa Draganom</li>
+          <li>Praktični zadaci i vežbe nakon svake lekcije</li>
+          <li>Grupa za podršku polaznica</li>
+        </ul>
       </div>
-      <div class="todo" style="width:100%"><b>Podaci — Dragana</b>Cena i datumi su <strong>nepotvrđeni</strong>. U dokumentu stoji 285 € i „upis se zatvara 11. oktobra 2026." — ali to je iz AI mockupa, ne od klijenta. Na sastanku je rečeno samo „kurs kreće u oktobru".</div>
+      <div style="background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.28);border-radius:var(--r-card);padding:28px;display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+        <div style="display:flex;align-items:baseline;gap:6px"><b style="font-size:48px;font-weight:600;letter-spacing:-2px;color:#fff;line-height:1">[cena]</b><span style="font-size:24px;color:var(--gold-200)">€</span></div>
+        <p style="font-size:15.5px">Upis se zatvara <strong style="color:#fff">[datum]</strong></p>
+        <a class="btn btn-white btn-block" href="#prijava-dole">Rezervišite mesto</a>
+      </div>
     </div>
+    <div class="todo"><b>Podaci — Dragana</b>Cena i datumi su <strong>nepotvrđeni</strong>. U dokumentu stoji 285 € i „upis se zatvara 11. oktobra 2026." — ali to je iz AI mockupa, ne od klijenta. Na sastanku je rečeno samo „kurs kreće u oktobru".</div>
+    <div class="todo"><b>Jedina jaka boja na stranici</b>Prigušena cigla <code style="background:rgba(255,255,255,.15);padding:1px 5px;border-radius:4px">#9A5744</code> — izvedena iz tople strane palete da stoji uz zlatnu. Kontrast sa belim tekstom 5.5:1 (AA). Zlatno dugme na njoj pada na 2.4:1, zato je CTA ovde beo, a ne zlatan.</div>
   </div>
 </section>
 
