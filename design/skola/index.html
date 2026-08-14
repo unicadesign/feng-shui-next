@@ -51,16 +51,16 @@ code{background:var(--cream-200);padding:.1rem .35rem;border-radius:4px;font-siz
       <b>Verzija A</b>
       <small>„Direktna prodaja" — najbliža referenci, CTA posle skoro svake sekcije, sekcija u jakoj boji, lepljiva traka na mobilnom.</small>
     </a>
-    <span class="v soon">
-      <span class="tag wip">U izradi</span>
+    <a class="v" href="./verzija-b.html">
+      <span class="tag ok">Spremno</span>
       <b>Verzija B</b>
-      <small>„Poverenje pre ponude" — mirnija, premium; Dragana i dokaz u prvom planu, ponuda tek kada je poverenje izgrađeno.</small>
-    </span>
-    <span class="v soon">
-      <span class="tag wip">U izradi</span>
+      <small>„Poverenje pre ponude" — mirna i editorial; tanke linije, numerisan indeks, jedna tamna sekcija (ponuda). Tiha dugmad.</small>
+    </a>
+    <a class="v" href="./verzija-c.html">
+      <span class="tag ok">Spremno</span>
       <b>Verzija C</b>
-      <small>„Mobilna kartica" — sekcije kao pune kartice preko celog ekrana, najkraći put od Instagrama do prijave.</small>
-    </span>
+      <small>„Mobilna kartica" — svaka sekcija je puna kartica u svojoj boji, krupna tipografija, krugovi za skok-navigaciju, cena u lepljivoj traci.</small>
+    </a>
   </div>
 
   <div class="note">
@@ -68,26 +68,30 @@ code{background:var(--cream-200);padding:.1rem .35rem;border-radius:4px;font-siz
   </div>
 
   <h2>Status teksta po blokovima</h2>
-  <p class="sub" style="margin-bottom:1rem">Iz analize 26 slika u klijentovom dokumentu — šta je stvarno njihov tekst, a šta je mašinski prevod sa reference ili AI mockup. Ovo je ujedno i spisak za Zoku.</p>
+  <p class="sub" style="margin-bottom:1rem">Iz analize 26 slika u klijentovom dokumentu. Praznine su popunjene <strong>Draganinim postojećim tekstom sa aktuelnog sajta</strong>, ne izmišljenim copy-jem — svako takvo mesto ima žutu napomenu u dizajnu. Nigde nije ubačen mašinski prevod sa Joey Yap stranice ni tekst iz AI mockupa.</p>
 
   <table>
-    <thead><tr><th>Blok</th><th>Status</th><th>Šta nedostaje</th></tr></thead>
+    <thead><tr><th>Blok</th><th>Izvor teksta</th><th>Šta još treba</th></tr></thead>
     <tbody>
-      <tr><td><strong>1</strong> Hero</td><td><span class="s full">potpun</span></td><td>—</td></tr>
-      <tr><td><strong>2</strong> Uvodni tekst</td><td><span class="s full">potpun</span></td><td>—</td></tr>
-      <tr><td><strong>3</strong> Program (4 dela)</td><td><span class="s full">potpun</span></td><td>Sažetak ispod kartica (2–3 rečenice)</td></tr>
-      <tr><td><strong>4</strong> Citat + prijava</td><td><span class="s full">potpun</span></td><td>—</td></tr>
-      <tr><td><strong>5</strong> Zašto prostor utiče</td><td><span class="s part">samo naslov</span></td><td>Uvod o Chi-ju + provera 5 pain pointova</td></tr>
-      <tr><td><strong>6</strong> Za koga je kurs</td><td><span class="s part">samo naslov</span></td><td>Lista „Ako…" — 5–6 stavki</td></tr>
-      <tr><td><strong>7</strong> Šta ćete naučiti</td><td><span class="s part">samo naslov</span></td><td>4–5 kartica: naslov + rečenica, pisano kao ishod</td></tr>
-      <tr><td><strong>8</strong> Kako izgleda kurs</td><td><span class="s part">jedna rečenica</span></td><td>Potvrda formata: Zoom pozivi, veličina grupe</td></tr>
-      <tr><td><strong>9</strong> Utisci polaznika</td><td><span class="s none">ništa</span></td><td>Naslov + 3 utiska. Klijent pita u kojoj formi bez videa</td></tr>
-      <tr><td><strong>10</strong> O meni</td><td><span class="s none">ništa</span></td><td>Biografija + treći podatak za red sa brojkama</td></tr>
-      <tr><td><strong>11</strong> Upis / cena</td><td><span class="s none">ništa</span></td><td>Cena, datum početka, zatvaranje upisa, broj mesta</td></tr>
-      <tr><td><strong>12</strong> FAQ</td><td><span class="s none">ništa</span></td><td>Odgovori na 4+ pitanja</td></tr>
-      <tr><td><strong>13</strong> Prijava + footer</td><td><span class="s none">ništa</span></td><td>Email, telefon, Instagram za footer</td></tr>
+      <tr><td><strong>1</strong> Hero</td><td><span class="s full">klijent</span></td><td>—</td></tr>
+      <tr><td><strong>2</strong> Uvodni tekst</td><td><span class="s full">klijent</span></td><td>—</td></tr>
+      <tr><td><strong>3</strong> Program (4 dela)</td><td><span class="s full">klijent</span> + sažetak</td><td>Zoka da potvrdi sažetak</td></tr>
+      <tr><td><strong>4</strong> Citat + prijava</td><td><span class="s full">klijent</span></td><td>—</td></tr>
+      <tr><td><strong>5</strong> Zašto prostor utiče</td><td><span class="s part">naslov klijent + sajt</span></td><td>Potvrda da pain pointovi sa početne rade i za kurs</td></tr>
+      <tr><td><strong>6</strong> Za koga je kurs</td><td><span class="s part">naslov klijent + sajt</span></td><td>Zoka da doradi tonom iz Instagram objava</td></tr>
+      <tr><td><strong>7</strong> Šta ćete naučiti</td><td><span class="s part">naslov klijent + kurikulum</span></td><td>Dragana: da li se to uči u dvomesečnoj verziji</td></tr>
+      <tr><td><strong>8</strong> Kako izgleda kurs</td><td><span class="s part">rečenica klijent + sajt</span></td><td>Trajanje sesija, veličina grupe</td></tr>
+      <tr><td><strong>9</strong> Utisci polaznika</td><td><span class="s part">sa sajta</span></td><td>Smeju li utisci iz 4-mesečnog programa uz 2-mesečni</td></tr>
+      <tr><td><strong>10</strong> O meni</td><td><span class="s part">sa sajta</span></td><td>Broj polaznica škole (jači od „180+ radionica")</td></tr>
+      <tr><td><strong>11</strong> Upis / cena</td><td><span class="s none">nema</span></td><td><strong>Cena, datum početka, zatvaranje upisa, broj mesta</strong></td></tr>
+      <tr><td><strong>12</strong> FAQ</td><td><span class="s part">sa sajta</span></td><td>Pristup materijalima, način plaćanja</td></tr>
+      <tr><td><strong>13</strong> Prijava + footer</td><td><span class="s none">nema</span></td><td>Email, telefon, Instagram</td></tr>
     </tbody>
   </table>
+
+  <div class="note" style="margin-top:1.5rem">
+    <strong>Sukob koji treba razrešiti.</strong> Postojeća škola na sajtu je <strong>četvoromesečna</strong> (16 lekcija, grupa do 15), a novi kurs je <strong>dvomesečni / 8 nedelja</strong>. Svuda gde je tekst preuzet sa sajta izbacio sam konkretne brojeve iz četvoromesečnog programa da se ne bi provukli kao tačni. Treba znati: da li je ovo isti proizvod u kraćem formatu, ili dva odvojena.
+  </div>
 
   <div class="note" style="margin-top:1.5rem">
     <strong>Nerazrešeno pre implementacije.</strong> Dugmad u herou početne: mail traži „Zakaži besplatnu konsultaciju" + „Prijavi se na kurs", a slika 18 u dokumentu (markirana u Canvi) pokazuje „Saznajte više o školi" + „Zakažite besplatnu konsultaciju" + „Zakažite poziv". Treba potvrditi koje važi.

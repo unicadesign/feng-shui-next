@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feng Shui Škola — Verzija B „Poverenje pre ponude"</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--font);background:var(--cream-50);color:var(--text);
+  font-size:var(--t-body);line-height:1.75;padding-bottom:var(--sticky-h);
+}
+@media (min-width:900px){body{padding-bottom:0}}
+p{margin:0}
+h1,h2,h3{margin:0;line-height:1.15;letter-spacing:-.6px;text-wrap:balance}
+h1,h2{font-weight:300}
+h3{font-weight:500}
+
+.wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 var(--gutter)}
+.narrow{max-width:660px;margin-inline:auto}
+section{padding:clamp(3.75rem,11vw,7.5rem) 0}
+.stack{display:flex;flex-direction:column}
+.g8{gap:.5rem}.g12{gap:.75rem}.g16{gap:1rem}.g24{gap:1.5rem}.g36{gap:2.25rem}
+
+/* --- numerisana oznaka sekcije: mirna hijerarhija umesto badževa --- */
+.marker{display:flex;align-items:center;gap:.85rem;margin-bottom:1.5rem}
+.marker i{font-style:normal;font-size:var(--t-eyebrow);font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-500)}
+.marker::before{content:"";width:36px;height:1px;background:var(--gold-400);flex:none}
+
+h2{font-size:clamp(1.75rem,5.4vw,3rem)}
+.display{font-size:clamp(2.1rem,7.6vw,4.25rem);font-weight:200;letter-spacing:-1.5px}
+.lead{font-size:var(--t-lead);color:var(--charcoal-500);line-height:1.7}
+.hr{height:1px;background:var(--cream-300);border:0;margin:0}
+
+/* --- dugmad: tiha, ne viču --- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;text-align:center;gap:.5rem;
+  font-family:var(--font);font-size:.98rem;font-weight:500;line-height:1.25;
+  padding:1rem 1.9rem;border-radius:var(--pill);text-decoration:none;cursor:pointer;border:0;
+  min-height:52px;transition:background .2s,color .2s,border-color .2s;
+}
+.btn-solid{background:var(--navy-700);color:#fff}
+.btn-solid:hover{background:var(--navy-800)}
+.btn-quiet{background:transparent;color:var(--navy-700);border:1px solid var(--navy-400)}
+.btn-quiet:hover{background:var(--navy-50);border-color:var(--navy-600)}
+.btn-gold{background:var(--gold-400);color:#1a1a1a;font-weight:600}
+.btn-gold:hover{background:var(--gold-200)}
+.btn-block{display:flex;width:100%}
+@media (min-width:640px){.btn-block{width:auto;display:inline-flex}}
+.microcopy{font-size:var(--t-small);color:var(--charcoal-400);margin-top:.6rem}
+
+/* --- navbar --- */
+.nav{position:sticky;top:0;z-index:40;background:rgba(253,251,247,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--cream-300)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:1rem;max-width:1080px;margin:0 auto;padding:.85rem var(--gutter)}
+.logo{font-weight:400;font-size:1rem;letter-spacing:.02em}
+.logo b{font-weight:600}
+.nav .btn{padding:.55rem 1.15rem;font-size:.85rem;min-height:40px}
+.nav-links{display:none}
+@media (min-width:900px){
+  .nav-links{display:flex;gap:2.1rem}
+  .nav-links a{color:var(--charcoal-500);text-decoration:none;font-size:.92rem}
+  .nav-links a:hover{color:var(--navy-700)}
+}
+
+/* --- hero: fotografija nosi, tekst diše --- */
+.hero{padding:0;background:var(--cream-100)}
+.hero-photo{aspect-ratio:1/1;background:var(--cream-300);position:relative}
+.hero-body{padding:clamp(2.25rem,7vw,4rem) var(--gutter) clamp(3rem,8vw,5rem)}
+@media (min-width:900px){
+  .hero-in{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;min-height:660px}
+  .hero-photo{aspect-ratio:auto;height:100%}
+  .hero-body{display:flex;flex-direction:column;justify-content:center;padding:4rem clamp(2rem,4vw,4rem) 4rem;max-width:600px}
+}
+
+/* --- mreže --- */
+.grid{display:grid;gap:1.5rem;grid-template-columns:1fr}
+@media (min-width:700px){.grid-2{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.grid-3{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(4,1fr)}}
+
+/* --- program kao numerisan indeks, ne kartice --- */
+.index{border-top:1px solid var(--cream-300)}
+.idx{display:grid;grid-template-columns:auto 1fr;gap:1rem 1.35rem;padding:1.6rem 0;border-bottom:1px solid var(--cream-300);align-items:start}
+.idx .n{font-size:1.65rem;font-weight:200;color:var(--gold-400);line-height:1;letter-spacing:-1px}
+.idx h3{font-size:1.2rem}
+.idx p{color:var(--charcoal-500);font-size:.98rem;margin-top:.3rem}
+@media (min-width:700px){.idx{grid-template-columns:auto 1fr 1.4fr;align-items:baseline}.idx p{margin-top:0}}
+
+/* --- lista sa tankim linijama --- */
+.lines{list-style:none;margin:0;padding:0;border-top:1px solid var(--cream-300)}
+.lines li{padding:1.05rem 0 1.05rem 1.6rem;border-bottom:1px solid var(--cream-300);position:relative;color:var(--charcoal-600)}
+.lines li::before{content:"";position:absolute;left:0;top:1.55rem;width:6px;height:6px;border-radius:50%;background:var(--gold-400)}
+
+/* --- citat: krupan, tih --- */
+.pull{font-size:clamp(1.3rem,4.4vw,2.05rem);font-weight:300;line-height:1.4;letter-spacing:-.5px}
+.pull-mark{font-size:3rem;color:var(--gold-400);line-height:.5;display:block;margin-bottom:1rem;font-weight:400}
+
+/* --- jedina tamna sekcija: ponuda --- */
+.offer{background:var(--navy-800);color:#fff}
+.offer h2{color:#fff}
+.offer .lead{color:var(--navy-300)}
+.offer .lines{border-color:rgba(166,221,237,.22)}
+.offer .lines li{border-color:rgba(166,221,237,.22);color:var(--navy-100)}
+.pricebox{border:1px solid rgba(242,217,138,.4);border-radius:var(--radius);padding:1.75rem;background:rgba(255,255,255,.04)}
+.price{display:flex;align-items:baseline;gap:.35rem;font-weight:300;letter-spacing:-2px}
+.price b{font-size:clamp(2.6rem,10vw,3.75rem);font-weight:300}
+.price i{font-style:normal;font-size:1.4rem;color:var(--gold-200)}
+
+/* --- utisci --- */
+.tst{border-left:1px solid var(--gold-400);padding:.25rem 0 .25rem 1.4rem}
+.tst .res{font-size:1.15rem;font-weight:500;letter-spacing:-.3px;margin-bottom:.5rem}
+.tst q{display:block;color:var(--charcoal-500);font-style:italic;quotes:"„" "\""}
+.tst .who{font-size:.85rem;color:var(--charcoal-400);margin-top:.7rem}
+
+/* --- brojke --- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center;padding:2rem 0;border-top:1px solid var(--cream-300);border-bottom:1px solid var(--cream-300)}
+.stats b{display:block;font-size:clamp(1.5rem,5.5vw,2.25rem);font-weight:300;color:var(--navy-700);letter-spacing:-1px}
+.stats span{font-size:var(--t-small);letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal-400)}
+
+/* --- forma --- */
+.formcard{background:#fff;border:1px solid var(--cream-300);border-radius:var(--radius);padding:1.75rem}
+.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1.1rem}
+.field label{font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--charcoal-400)}
+.field input,.field select{
+  font-family:var(--font);font-size:1rem;padding:.85rem 0;min-height:48px;
+  border:0;border-bottom:1px solid var(--cream-300);background:transparent;color:var(--text);
+}
+.field input:focus,.field select:focus{outline:0;border-bottom-color:var(--navy-600)}
+.privacy{font-size:var(--t-small);color:var(--charcoal-400);margin-top:.9rem}
+
+/* --- FAQ --- */
+.faq{border-top:1px solid var(--cream-300)}
+.faq details{border-bottom:1px solid var(--cream-300)}
+.faq summary{cursor:pointer;list-style:none;padding:1.3rem 2rem 1.3rem 0;position:relative;font-weight:500;font-size:1.05rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:.25rem;top:1.15rem;font-size:1.4rem;font-weight:200;color:var(--gold-500)}
+.faq details[open] summary::after{content:"−"}
+.faq p{padding:0 0 1.3rem;color:var(--charcoal-500)}
+
+footer{background:var(--cream-100);border-top:1px solid var(--cream-300);padding:2.5rem 0;font-size:.88rem;color:var(--charcoal-400)}
+footer a{color:var(--navy-700)}
+
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(253,251,247,.97);backdrop-filter:blur(10px);border-top:1px solid var(--cream-300);padding:.6rem var(--gutter);display:flex}
+.sticky .btn{flex:1;padding:.8rem 1rem}
+@media (min-width:900px){.sticky{display:none}}
+
+.ph{background:var(--cream-200);border:1px solid var(--cream-300);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--charcoal-400);font-size:.82rem;padding:1rem;min-height:200px;border-radius:var(--radius)}
+
+.todo{border:1px dashed var(--gold-400);background:var(--gold-50);border-radius:var(--radius-sm);padding:1.1rem 1.2rem;color:var(--charcoal-600);font-size:.9rem;line-height:1.6}
+.todo b{display:inline-block;background:var(--gold-400);color:#1a1a1a;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:.22rem .55rem;border-radius:4px;margin-bottom:.5rem}
+.offer .todo{background:rgba(255,255,255,.07);border-color:rgba(242,217,138,.5);color:rgba(255,255,255,.85)}
+body.clean .todo{display:none}
+
+.blok{position:relative}
+.blok::before{content:attr(data-blok);position:absolute;top:.4rem;left:.4rem;z-index:5;background:#1a1a1a;color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.1em;padding:.2rem .45rem;border-radius:4px;opacity:.5;pointer-events:none}
+body.clean .blok::before{display:none}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-in">
+    <div class="logo"><b>Dragana Jović</b> · Feng Shui</div>
+    <div class="nav-links">
+      <a href="#program">Program</a><a href="#o-meni">O meni</a><a href="#utisci">Utisci</a><a href="#upis">Upis</a>
+    </div>
+    <a class="btn btn-quiet" href="#prijava">Prijavi se</a>
+  </div>
+</nav>
+
+<!-- BLOK 1 — HERO -->
+<header class="hero blok" data-blok="BLOK 1">
+  <div class="hero-in">
+    <div class="hero-photo"><div class="ph" style="height:100%;border:0;border-radius:0;min-height:0">Foto: Dragana Jović<br>(slika 2 ili 19 iz dokumenta)</div></div>
+    <div class="hero-body stack g24">
+      <div class="marker"><i>Online program</i></div>
+      <h1 class="display">NOVI dvomesečni feng shui kurs sa Draganom Jović</h1>
+      <p class="lead">ONLINE PROGRAM dostupan uvek i na svakom mestu</p>
+      <div class="stack g8" style="align-items:flex-start">
+        <a class="btn btn-solid btn-block" href="#prijava">Pokaži mi kako moj prostor utiče na moj život</a>
+        <span class="microcopy">Besplatno i bez obaveze · odgovor u roku od 24h</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- BLOK 2 — UVOD -->
+<section class="blok" data-blok="BLOK 2">
+  <div class="wrap narrow stack g24">
+    <h2>Vi i vaše okruženje ste u stalnoj interakciji i međusobnom uticaju</h2>
+    <p class="lead">Tokom ove dvomesečne obuke Dragana Jović će vam pokazati kako da identifikujete oblasti u vašem prostoru koje vam možda crpe energiju i prave blokade za vaše bogatstvo, odnose i zdravlje.</p>
+    <p class="lead">Feng shui vam pomaže da otkrijete da li vaš prostor podržava vaš napredak ili vam život čini težim.</p>
+  </div>
+</section>
+
+<!-- BLOK 3 — PROGRAM -->
+<section class="blok" id="program" data-blok="BLOK 3" style="background:var(--cream-100)">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Feng shui online program</i></div>
+      <h2>Plan za 8 nedelja obuke</h2>
+    </div>
+    <div class="index narrow" style="width:100%">
+      <div class="idx"><span class="n">01</span><h3>Osnovne postavke</h3><p>Kako da feng shui funkcioniše na pravi način</p></div>
+      <div class="idx"><span class="n">02</span><h3>Blokade u prostoru</h3><p>Kako ih pronaći i šta nam govore</p></div>
+      <div class="idx"><span class="n">03</span><h3>Delovi prostora</h3><p>I kako da rade za našu korist</p></div>
+      <div class="idx"><span class="n">04</span><h3>Aktivacija</h3><p>Kako da pokrenete uzlaznu spiralu</p></div>
+    </div>
+    <p class="lead narrow">Obuka je podeljena na četiri dela i svaki se nadovezuje na prethodni. Krećete od toga kako energija ulazi i kreće se kroz prostor, učite da prepoznate gde zastaje, pa tek onda kako se bira korekcija — da menjate ono što ima efekta, a ne sve odjednom.</p>
+    <div class="todo narrow"><b>Provera — Zoka</b>Sažetak je napisan na osnovu klijentovih naslova za četiri dela; u dokumentu je na tom mestu bio mašinski prevod sa reference.</div>
+  </div>
+</section>
+
+<!-- BLOK 4 — CITAT + PRIJAVA -->
+<section class="blok" id="prijava" data-blok="BLOK 4">
+  <div class="wrap stack g36">
+    <blockquote class="pull narrow" style="margin:0"><span class="pull-mark">„</span>Nije potrebno da sve u vašem domu promenite, ali morate da znate šta ugrožava vašu energiju i kako da to precizno promenite</blockquote>
+    <hr class="hr">
+    <div class="grid grid-2" style="align-items:start">
+      <div class="stack g16">
+        <h3 style="font-size:1.35rem">Program se održava online.</h3>
+        <p class="lead">Broj mesta je ograničen kako bi svaki od učesnika dobio punu pažnju i konkretna rešenja za svoj prostor</p>
+      </div>
+      <form class="formcard" onsubmit="return false">
+        <div class="marker" style="margin-bottom:1.1rem"><i>Prijava</i></div>
+        <div class="field"><label for="b-email">Email adresa</label><input id="b-email" type="email" placeholder="vas@email.com" required></div>
+        <div class="field"><label for="b-tel">Broj telefona</label><input id="b-tel" type="tel" placeholder="06x xxx xxxx"></div>
+        <div class="field"><label for="b-cilj">Šta vam je trenutno najvažnije</label>
+          <select id="b-cilj">
+            <option value="">Izaberite…</option>
+            <option>Mir i bolji san u domu</option>
+            <option>Napredak u poslu i prihodima</option>
+            <option>Odnosi u porodici</option>
+            <option>Zdravlje</option>
+            <option>Želim sama da naučim feng shui</option>
+            <option>Još uvek ne znam</option>
+          </select>
+        </div>
+        <button class="btn btn-solid btn-block" type="submit">prijavi se za besplatne konsultacije</button>
+        <p class="privacy">Vaši podaci se koriste isključivo za kontakt oko kursa.</p>
+      </form>
+    </div>
+    <div class="todo"><b>Napomena za implementaciju</b>Na slici 6 dokumenta preko forme piše <strong>„Markov upitnik sa sajta"</strong> — ovde ide postojeći upitnik. Polja su skraćena po dogovoru sa sastanka; u produkciji se otvara kao modal.</div>
+  </div>
+</section>
+
+<!-- BLOK 5 — ZAŠTO PROSTOR UTIČE -->
+<section class="blok" data-blok="BLOK 5" style="background:var(--cream-100)">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Zašto prostor utiče na vas</i></div>
+      <h2>Vaš prostor ima energetsku mapu</h2>
+    </div>
+    <p class="lead narrow">Feng Shui je za dom ono što je akupunktura za telo — otkriva blokade koje ne vidite i vraća prirodan protok energije. Kada energija dobro teče, prostor podržava san, fokus i odnose. Kada zastane, prvo se oseti, a tek onda razume.</p>
+    <ul class="lines narrow" style="width:100%">
+      <li>Dođete kući nakon napornog dana — a umesto mira, osetite težinu.</li>
+      <li>Nered se vraća bez obzira koliko čistite. Fokus vam stalno beži.</li>
+      <li>Osećate da nešto u prostoru „ne štima" — ali ne umete da objasnite šta.</li>
+      <li>Uspešne ste, radite na sebi — ali dom vas ne podržava. I to se oseća.</li>
+      <li>Soba koju izbegavate, ugao koji odbija — i ne znate zašto.</li>
+    </ul>
+    <p class="pull narrow" style="text-align:center;color:var(--navy-700)">Ne popravljamo dom. Usklađujemo ga sa vama.</p>
+    <div class="todo narrow"><b>Provera — preuzeto sa postojećeg sajta</b>Pain pointovi i završna rečenica su Draganin tekst sa aktuelne početne strane. Peta stavka je dodata radi ritma.</div>
+  </div>
+</section>
+
+<!-- BLOK 6 — ZA KOGA JE -->
+<section class="blok" data-blok="BLOK 6">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Za koga je</i></div>
+      <h2>Feng shui online škola je za vas — ako…</h2>
+    </div>
+    <ul class="lines narrow" style="width:100%">
+      <li>Volite sami da uređujete svoj dom i želite da znate <em>zašto</em> nešto radite, a ne samo šta.</li>
+      <li>Čuli ste za feng shui termine, ali ne znate odakle da počnete sa sopstvenim prostorom.</li>
+      <li>Želite jasan okvir umesto razbacanih saveta sa interneta i „srećnih predmeta".</li>
+      <li>Radite na sebi, ali osećate da vas dom u tome ne prati.</li>
+      <li>Želite korekcije koje se primenjuju bez renoviranja i bez velikih troškova.</li>
+      <li>Selite se, gradite ili renovirate i želite da to odmah uradite kako treba.</li>
+    </ul>
+    <p class="lead narrow">Predznanje nije potrebno. Ponesite tlocrt svog stana, otvoren um i spremnost da svoj prostor vidite drugačije.</p>
+    <div class="todo narrow"><b>Provera — Zoka</b>Klijent je dao samo naslov. Stavke su spoj Draganinog opisa škole sa postojećeg sajta i strukture liste sa reference.</div>
+  </div>
+</section>
+
+<!-- BLOK 7 — ŠTA ĆETE NAUČITI -->
+<section class="blok" data-blok="BLOK 7" style="background:var(--cream-100)">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Ishod</i></div>
+      <h2>Tokom programa ćete naučiti</h2>
+    </div>
+    <div class="index" style="width:100%">
+      <div class="idx"><span class="n">01</span><h3>Da čitate tlocrt</h3><p>Nacrtaćete tlocrt svog doma sa pravcem kompasa i videti kuda energija ulazi i kuda odlazi.</p></div>
+      <div class="idx"><span class="n">02</span><h3>Da prepoznate blokadu</h3><p>Znaćete da razlikujete običan nered od stvarne energetske blokade — i šta vam koja govori.</p></div>
+      <div class="idx"><span class="n">03</span><h3>Da uredite svaku prostoriju</h3><p>Spavaća soba, radni ugao, kuhinja i kupatilo — svaka ima svoju logiku i svoja pravila.</p></div>
+      <div class="idx"><span class="n">04</span><h3>Da aktivirate prostor</h3><p>Izračunaćete svoj lični energetski broj i znati koje korekcije podržavaju baš vaše ciljeve.</p></div>
+    </div>
+    <div class="todo narrow"><b>Provera — Dragana</b>Ishodi su izvedeni mapiranjem četiri dela programa na teme iz kurikuluma postojeće škole. Potvrditi da se to uči i u dvomesečnoj verziji.</div>
+  </div>
+</section>
+
+<!-- BLOK 8 — KAKO IZGLEDA KURS -->
+<section class="blok" data-blok="BLOK 8">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Kako izgleda kurs</i></div>
+      <h2>Osam nedelja, tempo koji možete da pratite uz posao i porodicu</h2>
+    </div>
+    <div class="grid grid-4">
+      <div class="stack g8"><h3 style="font-size:1.1rem">Sesije uživo</h3><p style="color:var(--charcoal-500);font-size:.95rem">Interaktivni časovi sa demonstracijama i pitanjima. Sve se snima, pa ništa ne propuštate.</p></div>
+      <div class="stack g8"><h3 style="font-size:1.1rem">Materijali</h3><p style="color:var(--charcoal-500);font-size:.95rem">Detaljni materijali i vizuelni vodiči kroz onlajn platformu, dostupni celo vreme.</p></div>
+      <div class="stack g8"><h3 style="font-size:1.1rem">Mala grupa</h3><p style="color:var(--charcoal-500);font-size:.95rem">Broj polaznica je namerno ograničen, da svaka dobije prostor i pažnju.</p></div>
+      <div class="stack g8"><h3 style="font-size:1.1rem">Praktični zadaci</h3><p style="color:var(--charcoal-500);font-size:.95rem">Vaš dom je učionica — svaka lekcija se odmah primenjuje, uz povratnu informaciju.</p></div>
+    </div>
+    <p class="pull narrow" style="text-align:center">Feng shui postaje korisniji kada znate šta tražite i zašto je potrebna određena korekcija.</p>
+    <div class="todo narrow"><b>Provera — Dragana</b>Opis formata je sa postojeće stranice škole. Izbačeni su brojevi iz originala („dvočasovni časovi", „ograničeno na 15 studenata") jer se odnose na četvoromesečni program — vratiti tačne za dvomesečni.</div>
+  </div>
+</section>
+
+<!-- BLOK 9 — UTISCI -->
+<section class="blok" id="utisci" data-blok="BLOK 9" style="background:var(--cream-100)">
+  <div class="wrap stack g36">
+    <div class="narrow" style="width:100%">
+      <div class="marker"><i>Utisci polaznika</i></div>
+      <h2>Šta se promenilo kod polaznica</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="tst">
+        <div class="res">Od polaznice do prakse — 12 stalnih klijenata</div>
+        <q>Pre škole sam mislila da Feng Shui znači staviti bambus u ugao. Sada radim konsultacije i već imam 12 stalnih klijenata.</q>
+        <div class="who">Jelena M. · Beograd</div>
+      </div>
+      <div class="tst">
+        <div class="res">Upisao se zbog žene, ostao zbog rezultata</div>
+        <q>Naš dom se transformisao — ali najviše me iznenadilo koliko se promenio moj fokus na poslu. Kancelariju sam uredio po istim principima.</q>
+        <div class="who">Milan D. · Novi Sad</div>
+      </div>
+      <div class="tst">
+        <div class="res">15 godina u dizajnu — i nova dimenzija</div>
+        <q>Mislila sam da znam sve o prostoru. Sada kombinujem dizajn sa Feng Shui principima i klijenti osećaju razliku — čak i skeptici.</q>
+        <div class="who">Svetlana K. · Ljubljana</div>
+      </div>
+    </div>
+    <div class="todo narrow"><b>Odgovor na klijentovo pitanje</b>U dokumentu je ovde prazna bela kutija, a klijent pita u kojoj formi ide testimonial bez videa. Ovako: <strong>ishod kao naslov</strong>, citat kao potvrda, ime i grad. Citati su Draganini sa postojeće stranice škole (četvoromesečni program) — potvrditi da smeju uz dvomesečni kurs.</div>
+  </div>
+</section>
+
+<!-- BLOK 10 — O MENI -->
+<section class="blok" id="o-meni" data-blok="BLOK 10">
+  <div class="wrap stack g36">
+    <div class="grid grid-2" style="align-items:center">
+      <div class="ph" style="aspect-ratio:4/5;min-height:0">Foto: Dragana u prostoru</div>
+      <div class="stack g16">
+        <div class="marker"><i>O meni</i></div>
+        <h2>Dragana Jović</h2>
+        <p>Moj put je počeo daleko od Feng Shui — na Tehničko-metalurškom fakultetu u Beogradu. Ta osnova u strukturi i nauci dala mi je sposobnost da vidim prostor ne samo kao estetiku, već kao sistem koji utiče na sve oko sebe.</p>
+        <p>Intenzivne studije na Mastery Academy of Chinese Metaphysics otvorile su mi novu dimenziju. Drevna mudrost nije suprotna nauci — ona je njena dopuna. To me je navelo da napravim sopstvenu metodologiju, prilagođenu našem regionu i našim domovima.</p>
+        <p>Danas, nakon 25 godina i više od 1000 projekata, ono što me pokreće nije tehnika — već trenutak kada klijentkinja kaže: „Konačno se osećam kao kod kuće u sopstvenom domu."</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>25</b><span>godina iskustva</span></div>
+      <div><b>1000+</b><span>projekata</span></div>
+      <div><b>180+</b><span>održanih radionica</span></div>
+    </div>
+    <div class="todo narrow"><b>Provera — preuzeto sa postojećeg sajta</b>Biografija je sa stranice „O meni", skraćena. Brojke su sa aktuelnog sajta; treća dolazi iz footera. Ako postoji broj dosadašnjih polaznica škole, on je jači na ovom mestu.</div>
+  </div>
+</section>
+
+<!-- BLOK 11 — UPIS / CENA -->
+<section class="blok offer" id="upis" data-blok="BLOK 11">
+  <div class="wrap stack g36">
+    <div class="grid grid-2" style="align-items:center">
+      <div class="stack g24">
+        <div class="marker"><i style="color:var(--gold-200)">Upis</i></div>
+        <h2>Feng shui online program — 8 nedelja</h2>
+        <ul class="lines">
+          <li>8 nedelja lekcija, dostupnih tokom celog trajanja kursa</li>
+          <li>Konsultacije uživo sa Draganom</li>
+          <li>Praktični zadaci i vežbe nakon svake lekcije</li>
+          <li>Grupa za podršku polaznica</li>
+        </ul>
+      </div>
+      <div class="pricebox stack g16">
+        <div class="price"><b>[cena]</b><i>€</i></div>
+        <p class="lead" style="color:var(--navy-300)">Upis se zatvara <strong style="color:#fff">[datum]</strong></p>
+        <a class="btn btn-gold btn-block" href="#prijava-dole">Rezervišite mesto</a>
+      </div>
+    </div>
+    <div class="todo"><b>Podaci — Dragana</b>Cena i datumi su <strong>nepotvrđeni</strong>. U dokumentu stoji 285 € i „upis se zatvara 11. oktobra 2026." — ali to je iz AI mockupa, ne od klijenta. Na sastanku je rečeno samo „kurs kreće u oktobru".</div>
+  </div>
+</section>
+
+<!-- BLOK 12 — FAQ -->
+<section class="blok" data-blok="BLOK 12">
+  <div class="wrap narrow stack g36">
+    <div style="width:100%">
+      <div class="marker"><i>Pitanja</i></div>
+      <h2>Pre nego što se prijavite</h2>
+    </div>
+    <div class="faq" style="width:100%">
+      <details open><summary>Da li mi treba prethodno znanje o feng shui-ju?</summary><p>Nije potrebno. Program počinje od osnova i postepeno gradi naprednije koncepte — pristupačan je potpunim početnicima, a i dalje vredan onima sa nešto iskustva.</p></details>
+      <details><summary>Šta ako propustim sesiju uživo?</summary><p>Sve sesije uživo se snimaju i postaju dostupne u roku od 24 sata. Prisustvo uživo je korisnije zbog pitanja, ali mnogi polaznici uspešno završe program gledajući snimke.</p></details>
+      <details><summary>Koliko vremena treba da izdvojim nedeljno?</summary><p>Računajte na nekoliko sati nedeljno — sesiju, čitanje i praktični zadatak na sopstvenom prostoru. Što se više bavite materijalom, više ćete izvući iz programa.</p></details>
+      <details><summary>Mogu li da primenim ovo ako živim u stanu ili iznajmljenom prostoru?</summary><p>Da. Program pokriva prilagođavanja za sve situacije, uključujući iznajmljene i male prostore. Principi se primenjuju kroz privremena podešavanja koja ne traže građevinske zahvate.</p></details>
+      <details><summary>Koliko dugo imam pristup materijalima?</summary><p>[odgovor — Dragana]</p></details>
+      <details><summary>Kako se vrši plaćanje?</summary><p>[odgovor — Dragana]</p></details>
+    </div>
+    <div class="todo"><b>Provera — preuzeto sa postojećeg sajta</b>Prva četiri odgovora su Draganini, sa FAQ-a postojeće škole; uklonjeni su podaci vezani za četvoromesečni program. Poslednja dva nemaju odgovor ni na postojećem sajtu. Dodati pitanja koja stvarno stižu na Instagramu.</div>
+  </div>
+</section>
+
+<!-- BLOK 13 — PRIJAVA + FOOTER -->
+<section class="blok" id="prijava-dole" data-blok="BLOK 13" style="background:var(--cream-100)">
+  <div class="wrap">
+    <div class="grid grid-2" style="align-items:center">
+      <div class="stack g16">
+        <h2>Mesto se rezerviše prijavom</h2>
+        <p class="lead">Ostavite svoje podatke i javićemo vam se sa detaljima oko uplate i pristupa kursu.</p>
+      </div>
+      <form class="formcard" onsubmit="return false">
+        <div class="field"><label for="c-email">Email adresa</label><input id="c-email" type="email" placeholder="vas@email.com" required></div>
+        <div class="field"><label for="c-tel">Broj telefona</label><input id="c-tel" type="tel" placeholder="06x xxx xxxx"></div>
+        <button class="btn btn-solid btn-block" type="submit">Prijavite se</button>
+        <p class="privacy">Vaši podaci se koriste isključivo za kontakt oko kursa.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap stack g8">
+    <div>© 2026 Dragana Jović — Feng Shui konsalting &amp; škola</div>
+    <div><a href="#">[email]</a> · <a href="#">[telefon]</a> · <a href="#">Instagram</a></div>
+  </div>
+</footer>
+
+<div class="sticky"><a class="btn btn-solid" href="#prijava">Prijavi se na kurs</a></div>
+
+<button id="present">Režim prezentacije</button>
+<style>
+  #present{position:fixed;right:14px;bottom:calc(var(--sticky-h) + 12px);z-index:60;background:#1a1a1a;color:#fff;border:0;cursor:pointer;font-family:var(--font);font-size:.75rem;font-weight:600;padding:.55rem .9rem;border-radius:var(--pill);opacity:.72}
+  #present:hover{opacity:1}
+  @media (min-width:900px){#present{bottom:14px}}
+  body.clean #present{background:var(--gold-500)}
+</style>
+<script>
+  var btn=document.getElementById('present');
+  btn.addEventListener('click',function(){var on=document.body.classList.toggle('clean');btn.textContent=on?'Prikaži napomene':'Režim prezentacije';});
+</script>
+
+</body>
+</html>
