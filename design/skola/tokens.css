@@ -1,0 +1,111 @@
+/* ============================================================
+   DIZAJN TOKENI — Feng Shui Škola (sales stranica)
+   ------------------------------------------------------------
+   Klijent tek treba da pošalje kodove boja (sa sastanka).
+   Kada stignu, menja se SAMO ovaj fajl — sve tri verzije
+   se povlače za njim. Ništa nije hardkodovano u HTML-u.
+   ============================================================ */
+
+:root {
+  /* --- PALETA: trenutni brend (draganajovic.com) --- */
+  --cream-50:  #FDFBF7;
+  --cream-100: #FAF7F0;
+  --cream-200: #F5F0E6;
+  --cream-300: #EDE5D5;
+
+  --charcoal:     #1a1a1a;
+  --charcoal-600: #3d3d3d;
+  --charcoal-500: #555555;
+  --charcoal-400: #777777;
+
+  --navy-50:  #EFF7FC;
+  --navy-100: #D4EAF5;
+  --navy-300: #A6DDED;
+  --navy-400: #6AADCC;
+  --navy-500: #4580A6;
+  --navy-600: #35678A;
+  --navy-700: #263C59;
+  --navy-800: #162A42;
+  --navy-900: #091526;
+
+  --gold-50:  #fdf8eb;
+  --gold-200: #f2d98a;
+  --gold-400: #c8a84e;
+  --gold-500: #b8952f;
+  --gold-600: #9a7a24;
+
+  /* Akcenat za "sekciju u jakoj boji" (sa sastanka).
+     Terakota umesto čiste crvene — hitnost bez vike,
+     i ne tuče se sa zlatnom. */
+  --accent:      #A6432E;
+  --accent-dark: #8A3524;
+  --accent-soft: #F7EBE7;
+
+  /* --- SEMANTIČKI TOKENI (ovo koristi HTML) --- */
+  --bg:            var(--cream-50);
+  --bg-alt:        var(--cream-200);
+  --bg-dark:       var(--navy-800);
+  --bg-strong:     var(--accent);
+
+  --text:          var(--charcoal);
+  --text-muted:    var(--charcoal-500);
+  --text-on-dark:  #ffffff;
+  --text-on-dark-muted: var(--navy-300);
+
+  --brand:         var(--navy-600);
+  --brand-hover:   var(--navy-700);
+  --highlight:     var(--gold-400);
+  --hairline:      var(--cream-300);
+
+  /* --- TIPOGRAFIJA --- */
+  --font: 'Outfit', system-ui, -apple-system, sans-serif;
+
+  /* Fluidne veličine — mobile-first, skaliraju do desktopa.
+     90% saobraćaja je mobilni, pa je mobilna vrednost polazna. */
+  --t-hero:    clamp(2.05rem, 7.5vw, 4rem);
+  --t-h2:      clamp(1.6rem, 5.2vw, 2.75rem);
+  --t-h3:      clamp(1.15rem, 3.4vw, 1.5rem);
+  --t-lead:    clamp(1.02rem, 2.9vw, 1.25rem);
+  --t-body:    clamp(0.95rem, 2.5vw, 1.05rem);
+  --t-small:   0.8125rem;
+  --t-eyebrow: 0.6875rem;
+
+  /* --- RITAM --- */
+  --gutter:      1.25rem;
+  --section-y:   clamp(3.25rem, 9vw, 6rem);
+  --maxw:        1160px;
+  --maxw-narrow: 680px;
+
+  --radius:    18px;
+  --radius-sm: 12px;
+  --pill:      999px;
+
+  --shadow:    0 10px 30px rgba(38, 60, 89, .10);
+  --shadow-lg: 0 22px 50px rgba(38, 60, 89, .16);
+
+  /* Visina lepljive CTA trake na mobilnom — koristi se za
+     padding-bottom body-ja da traka ne pokrije sadržaj. */
+  --sticky-h: 68px;
+}
+
+/* ============================================================
+   ALTERNATIVNA PALETA — drugi predlog obećan na sastanku.
+   Toplija, zemljana; zadržava zlatnu ali menja plavu za
+   šalfiju. Uključuje se sa <body class="paleta-b">.
+   ============================================================ */
+body.paleta-b {
+  --navy-300: #BFCFC2;
+  --navy-400: #8FA894;
+  --navy-500: #6E8A75;
+  --navy-600: #55705C;
+  --navy-700: #3B5241;
+  --navy-800: #2A3B2F;
+
+  --cream-50:  #FCFAF5;
+  --cream-200: #F2EDE1;
+  --cream-300: #E5DCC9;
+
+  --accent:      #B5643C;
+  --accent-dark: #96502F;
+  --accent-soft: #F8EEE7;
+}

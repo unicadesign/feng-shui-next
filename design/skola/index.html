@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feng Shui Škola — predlozi dizajna</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./tokens.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font);background:var(--cream-200);color:var(--text);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+h1{font-size:clamp(1.7rem,5vw,2.4rem);margin:0 0 .4rem;letter-spacing:-.5px}
+h2{font-size:1.25rem;margin:2.5rem 0 .9rem;letter-spacing:-.3px}
+.sub{color:var(--charcoal-500);margin:0 0 2rem}
+.eyebrow{font-size:.6875rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-500)}
+
+.versions{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:720px){.versions{grid-template-columns:repeat(3,1fr)}}
+.v{background:#fff;border:1px solid var(--cream-300);border-radius:14px;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;text-decoration:none;color:inherit;transition:box-shadow .2s,transform .12s}
+.v:hover{box-shadow:0 10px 30px rgba(38,60,89,.12);transform:translateY(-2px)}
+.v.soon{opacity:.5;pointer-events:none}
+.v b{font-size:1.05rem}
+.v small{color:var(--charcoal-500);font-size:.875rem;line-height:1.5}
+.tag{align-self:flex-start;font-size:.625rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.22rem .5rem;border-radius:4px}
+.tag.ok{background:#e7f3ec;color:#2b6b45}
+.tag.wip{background:var(--cream-300);color:var(--charcoal-500)}
+
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;font-size:.9rem;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+th,td{text-align:left;padding:.7rem .85rem;border-bottom:1px solid var(--cream-200);vertical-align:top}
+th{background:var(--cream-100);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--charcoal-500);font-weight:600}
+tr:last-child td{border-bottom:0}
+.s{font-size:.7rem;font-weight:700;padding:.2rem .45rem;border-radius:4px;white-space:nowrap}
+.s.full{background:#e7f3ec;color:#2b6b45}
+.s.part{background:#fdf3e0;color:#8a5a12}
+.s.none{background:#fbeceb;color:#93342a}
+.note{background:#fff;border-left:3px solid var(--gold-400);border-radius:0 12px 12px 0;padding:1rem 1.15rem;margin:1rem 0;font-size:.92rem}
+code{background:var(--cream-200);padding:.1rem .35rem;border-radius:4px;font-size:.85em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="eyebrow">Redesign · draganajovic.com</span>
+  <h1>Feng Shui Škola — predlozi dizajna</h1>
+  <p class="sub">Prodajna stranica za dvomesečni online kurs. Struktura prati 13 blokova iz klijentovog dokumenta. Mobile-first — otvorite na telefonu ili suzite prozor.</p>
+
+  <div class="versions">
+    <a class="v" href="./verzija-a.html">
+      <span class="tag ok">Spremno</span>
+      <b>Verzija A</b>
+      <small>„Direktna prodaja" — najbliža referenci, CTA posle skoro svake sekcije, sekcija u jakoj boji, lepljiva traka na mobilnom.</small>
+    </a>
+    <span class="v soon">
+      <span class="tag wip">U izradi</span>
+      <b>Verzija B</b>
+      <small>„Poverenje pre ponude" — mirnija, premium; Dragana i dokaz u prvom planu, ponuda tek kada je poverenje izgrađeno.</small>
+    </span>
+    <span class="v soon">
+      <span class="tag wip">U izradi</span>
+      <b>Verzija C</b>
+      <small>„Mobilna kartica" — sekcije kao pune kartice preko celog ekrana, najkraći put od Instagrama do prijave.</small>
+    </span>
+  </div>
+
+  <div class="note">
+    <strong>Paleta još nije konačna.</strong> Klijent tek treba da pošalje kodove boja. Sve boje su u <code>tokens.css</code> — kad kodovi stignu, menja se samo taj fajl i sve verzije se povuku za njim. Alternativni predlog (topliji, šalfija umesto plave) se uključuje sa <code>&lt;body class="paleta-b"&gt;</code>.
+  </div>
+
+  <h2>Status teksta po blokovima</h2>
+  <p class="sub" style="margin-bottom:1rem">Iz analize 26 slika u klijentovom dokumentu — šta je stvarno njihov tekst, a šta je mašinski prevod sa reference ili AI mockup. Ovo je ujedno i spisak za Zoku.</p>
+
+  <table>
+    <thead><tr><th>Blok</th><th>Status</th><th>Šta nedostaje</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong> Hero</td><td><span class="s full">potpun</span></td><td>—</td></tr>
+      <tr><td><strong>2</strong> Uvodni tekst</td><td><span class="s full">potpun</span></td><td>—</td></tr>
+      <tr><td><strong>3</strong> Program (4 dela)</td><td><span class="s full">potpun</span></td><td>Sažetak ispod kartica (2–3 rečenice)</td></tr>
+      <tr><td><strong>4</strong> Citat + prijava</td><td><span class="s full">potpun</span></td><td>—</td></tr>
+      <tr><td><strong>5</strong> Zašto prostor utiče</td><td><span class="s part">samo naslov</span></td><td>Uvod o Chi-ju + provera 5 pain pointova</td></tr>
+      <tr><td><strong>6</strong> Za koga je kurs</td><td><span class="s part">samo naslov</span></td><td>Lista „Ako…" — 5–6 stavki</td></tr>
+      <tr><td><strong>7</strong> Šta ćete naučiti</td><td><span class="s part">samo naslov</span></td><td>4–5 kartica: naslov + rečenica, pisano kao ishod</td></tr>
+      <tr><td><strong>8</strong> Kako izgleda kurs</td><td><span class="s part">jedna rečenica</span></td><td>Potvrda formata: Zoom pozivi, veličina grupe</td></tr>
+      <tr><td><strong>9</strong> Utisci polaznika</td><td><span class="s none">ništa</span></td><td>Naslov + 3 utiska. Klijent pita u kojoj formi bez videa</td></tr>
+      <tr><td><strong>10</strong> O meni</td><td><span class="s none">ništa</span></td><td>Biografija + treći podatak za red sa brojkama</td></tr>
+      <tr><td><strong>11</strong> Upis / cena</td><td><span class="s none">ništa</span></td><td>Cena, datum početka, zatvaranje upisa, broj mesta</td></tr>
+      <tr><td><strong>12</strong> FAQ</td><td><span class="s none">ništa</span></td><td>Odgovori na 4+ pitanja</td></tr>
+      <tr><td><strong>13</strong> Prijava + footer</td><td><span class="s none">ništa</span></td><td>Email, telefon, Instagram za footer</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:1.5rem">
+    <strong>Nerazrešeno pre implementacije.</strong> Dugmad u herou početne: mail traži „Zakaži besplatnu konsultaciju" + „Prijavi se na kurs", a slika 18 u dokumentu (markirana u Canvi) pokazuje „Saznajte više o školi" + „Zakažite besplatnu konsultaciju" + „Zakažite poziv". Treba potvrditi koje važi.
+  </div>
+
+</div>
+</body>
+</html>
