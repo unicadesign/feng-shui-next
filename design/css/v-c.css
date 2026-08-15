@@ -1,0 +1,191 @@
+/* Verzija C — dizajn jezik, deljen između stranica
+   (Škola, Početna, O meni). Izvučeno iz skola/verzija-c.html. */
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--font);background:var(--cream-50);color:var(--text);
+  font-size:1.02rem;line-height:1.6;padding-bottom:var(--sticky-h);
+}
+@media (min-width:900px){body{padding-bottom:0}}
+p{margin:0}
+h1,h2,h3{margin:0;line-height:1.08;letter-spacing:-1px;font-weight:700;text-wrap:balance}
+
+/* Svaka sekcija je puna kartica preko celog ekrana — jedna ideja po ekranu.
+   Dizajnirano od palca naviše: krupna tipografija, malo teksta, CTA uvek nadohvat. */
+.card{padding:clamp(2.75rem,9vw,5.5rem) 0;scroll-margin-top:64px}
+.wrap{width:100%;max-width:1040px;margin:0 auto;padding:0 1.35rem}
+.stack{display:flex;flex-direction:column}
+.g8{gap:.5rem}.g12{gap:.75rem}.g16{gap:1rem}.g24{gap:1.5rem}.g32{gap:2rem}
+
+h1{font-size:clamp(2.35rem,9vw,4.5rem);font-weight:800}
+h2{font-size:clamp(1.9rem,7vw,3.25rem)}
+h3{font-size:clamp(1.15rem,4vw,1.4rem);font-weight:600;letter-spacing:-.4px}
+.lead{font-size:clamp(1.05rem,3.4vw,1.3rem);line-height:1.55;color:var(--charcoal-500)}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-500)}
+
+/* --- naizmenične pozadine --- */
+.c-cream{background:var(--cream-50)}
+.c-sand{background:var(--cream-200)}
+.c-navy{background:var(--navy-800);color:#fff}
+.c-navy h2,.c-navy h3{color:#fff}
+.c-navy .lead{color:var(--navy-300)}
+.c-navy .eyebrow{color:var(--gold-200)}
+.c-accent{background:var(--accent);color:#fff}
+.c-accent h2,.c-accent h3{color:#fff}
+.c-accent .lead{color:rgba(255,255,255,.85)}
+.c-accent .eyebrow{color:rgba(255,255,255,.8)}
+
+/* --- dugmad: krupna, palac-friendly --- */
+.btn{
+  display:flex;width:100%;align-items:center;justify-content:center;text-align:center;
+  font-family:var(--font);font-size:1.05rem;font-weight:700;line-height:1.3;
+  padding:1.15rem 1.5rem;border-radius:var(--pill);text-decoration:none;cursor:pointer;border:0;
+  min-height:58px;transition:transform .12s,background .2s;
+}
+.btn:active{transform:scale(.98)}
+@media (min-width:640px){.btn{display:inline-flex;width:auto}}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 10px 26px rgba(166,67,46,.3)}
+.btn-accent:hover{background:var(--accent-dark)}
+.btn-white{background:#fff;color:var(--charcoal)}
+.btn-navy{background:var(--navy-700);color:#fff}
+.btn-gold{background:var(--gold-400);color:#1a1a1a}
+.micro{font-size:.8rem;color:var(--charcoal-400);text-align:center}
+.c-navy .micro,.c-accent .micro{color:rgba(255,255,255,.7)}
+
+/* --- navbar --- */
+.nav{position:sticky;top:0;z-index:40;background:rgba(253,251,247,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--cream-300)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:.75rem;max-width:1040px;margin:0 auto;padding:.7rem 1.35rem}
+.logo{font-weight:700;font-size:.98rem;letter-spacing:-.3px}
+.nav .btn{padding:.55rem 1.1rem;font-size:.85rem;min-height:40px;width:auto;display:inline-flex;box-shadow:none}
+
+/* --- skok-navigacija u krugovima ---
+   Preuzeto iz klijentove slike 21 („nežne boje kao inspiracija") —
+   krugovi kao sidra ka sekcijama, u blagim tonovima. */
+.jump{display:flex;gap:.85rem;overflow-x:auto;padding:.25rem .1rem 1rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;width:88px;text-decoration:none;text-align:center;color:var(--charcoal-600);font-size:.78rem;font-weight:600}
+.jump .dot{
+  width:88px;height:88px;border-radius:50%;background:var(--cream-200);
+  border:1px solid var(--cream-300);display:flex;align-items:center;justify-content:center;
+  margin-bottom:.45rem;font-size:1.5rem;color:var(--gold-400);
+}
+.jump a:hover .dot{background:var(--gold-50);border-color:var(--gold-200)}
+@media (min-width:700px){.jump{justify-content:center;overflow:visible}}
+
+/* --- hero --- */
+.hero{padding:0;background:var(--navy-900);color:#fff;position:relative}
+.hero-photo{aspect-ratio:3/4;position:relative;background:var(--navy-800)}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,21,38,.1) 0%,rgba(9,21,38,.65) 58%,var(--navy-900) 100%)}
+.hero-body{padding:0 1.35rem clamp(2.5rem,8vw,4rem);margin-top:-5rem;position:relative}
+.hero h1{color:#fff}
+@media (min-width:900px){
+  .hero-in{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1040px;margin:0 auto;min-height:640px;padding:3rem 1.35rem}
+  .hero-photo{aspect-ratio:4/5;border-radius:24px;overflow:hidden;order:2}
+  .hero-photo::after{background:linear-gradient(180deg,rgba(9,21,38,.05),rgba(9,21,38,.35))}
+  .hero-body{margin-top:0;padding:0 2.5rem 0 0;order:1}
+}
+
+/* --- veliki brojevi / koraci --- */
+.steps{display:grid;gap:.85rem;grid-template-columns:1fr}
+@media (min-width:640px){.steps{grid-template-columns:1fr 1fr}}
+@media (min-width:1000px){.steps-4{grid-template-columns:repeat(4,1fr)}}
+.step{background:rgba(255,255,255,.07);border:1px solid rgba(166,221,237,.2);border-radius:20px;padding:1.4rem}
+.step .n{font-size:2.4rem;font-weight:800;color:var(--gold-400);line-height:1;letter-spacing:-2px;display:block;margin-bottom:.5rem}
+.step p{color:var(--navy-300);font-size:.95rem;margin-top:.35rem}
+.c-sand .step,.c-cream .step{background:#fff;border-color:var(--cream-300)}
+.c-sand .step p,.c-cream .step p{color:var(--charcoal-500)}
+
+/* --- lista kao krupne stavke --- */
+.big-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+.big-list li{
+  background:#fff;border:1px solid var(--cream-300);border-radius:16px;
+  padding:1.1rem 1.2rem;font-size:1.02rem;line-height:1.45;font-weight:500;
+  display:flex;gap:.8rem;align-items:flex-start;
+}
+.big-list li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--gold-400);margin-top:.55rem}
+.c-navy .big-list li{background:rgba(255,255,255,.07);border-color:rgba(166,221,237,.2);color:#fff}
+
+/* --- utisci --- */
+.tst{background:#fff;border:1px solid var(--cream-300);border-radius:20px;padding:1.5rem}
+.tst .res{font-size:1.3rem;font-weight:700;letter-spacing:-.5px;color:var(--accent);line-height:1.2;margin-bottom:.7rem}
+.tst q{display:block;color:var(--charcoal-500);font-size:.98rem;line-height:1.55;quotes:"„" "\""}
+.tst .who{font-size:.83rem;color:var(--charcoal-400);margin-top:.9rem;font-weight:600}
+
+/* --- brojke --- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;text-align:center}
+.stats div{background:rgba(255,255,255,.08);border-radius:16px;padding:1.1rem .5rem}
+.stats b{display:block;font-size:clamp(1.5rem,6vw,2.3rem);font-weight:800;letter-spacing:-1.5px;color:var(--gold-200)}
+.stats span{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-300)}
+
+/* --- cena --- */
+.pricebox{background:rgba(0,0,0,.22);border-radius:22px;padding:1.6rem;text-align:center}
+.price{font-size:clamp(3rem,13vw,4.5rem);font-weight:800;letter-spacing:-3px;line-height:1}
+
+/* --- forma --- */
+.formcard{background:#fff;border-radius:22px;padding:1.5rem;box-shadow:var(--shadow-lg)}
+.field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.field label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--charcoal-400)}
+.field input,.field select{
+  font-family:var(--font);font-size:1.05rem;padding:.95rem 1rem;min-height:54px;
+  border:1.5px solid var(--cream-300);border-radius:14px;background:var(--cream-50);color:var(--text);
+}
+.field input:focus,.field select:focus{outline:0;border-color:var(--accent)}
+.privacy{font-size:.78rem;color:var(--charcoal-400);text-align:center;margin-top:.8rem}
+
+/* --- FAQ --- */
+.faq details{background:#fff;border:1px solid var(--cream-300);border-radius:16px;margin-bottom:.7rem;overflow:hidden}
+.faq summary{cursor:pointer;list-style:none;padding:1.15rem 3rem 1.15rem 1.2rem;position:relative;font-weight:600;font-size:1.02rem;line-height:1.4}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:1.1rem;top:.95rem;font-size:1.5rem;font-weight:400;color:var(--gold-500)}
+.faq details[open] summary::after{content:"−"}
+.faq p{padding:0 1.2rem 1.2rem;color:var(--charcoal-500);font-size:.97rem}
+
+footer{background:var(--navy-900);color:var(--navy-300);padding:2.25rem 0;font-size:.87rem;text-align:center}
+footer a{color:var(--navy-100)}
+
+/* --- lepljiva traka: uvek vidljiva, i cena i CTA --- */
+.sticky{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.97);
+  backdrop-filter:blur(12px);border-top:1px solid var(--cream-300);
+  padding:.55rem 1.35rem;display:flex;gap:.75rem;align-items:center;
+}
+.sticky .meta{flex:none;line-height:1.15}
+.sticky .meta b{display:block;font-size:.95rem;font-weight:700}
+.sticky .meta span{font-size:.7rem;color:var(--charcoal-400)}
+.sticky .btn{flex:1;padding:.85rem 1rem;font-size:.95rem;min-height:46px}
+@media (min-width:900px){.sticky{display:none}}
+
+.ph{background:var(--cream-200);border:1px solid var(--cream-300);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--charcoal-400);font-size:.82rem;padding:1rem;min-height:200px;border-radius:20px}
+.hero .ph{border:0;border-radius:0;height:100%;min-height:0;background:var(--navy-800);color:var(--navy-300)}
+@media (min-width:900px){.hero .ph{border-radius:24px}}
+
+.todo{border:1px dashed var(--gold-400);background:var(--gold-50);border-radius:14px;padding:1rem 1.15rem;color:var(--charcoal-600);font-size:.88rem;line-height:1.55}
+.todo b{display:inline-block;background:var(--gold-400);color:#1a1a1a;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding:.2rem .5rem;border-radius:4px;margin-bottom:.45rem}
+.c-navy .todo,.c-accent .todo{background:rgba(255,255,255,.09);border-color:rgba(242,217,138,.5);color:rgba(255,255,255,.88)}
+body.clean .todo{display:none}
+
+.blok{position:relative}
+.blok::before{content:attr(data-blok);position:absolute;top:.4rem;left:.4rem;z-index:5;background:#1a1a1a;color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.1em;padding:.2rem .45rem;border-radius:4px;opacity:.5;pointer-events:none}
+body.clean .blok::before{display:none}
+
+/* ================= KRUGOVI USLUGA (Početna) — jezik verzije C =================
+   Mobilno prvo: vodoravni snap-carousel, krupni krugovi, jak kontrast.
+   Na desktopu se razvija u red od četiri. */
+.circles{display:flex;gap:1.25rem;overflow-x:auto;padding:.5rem .25rem 1.25rem;scroll-snap-type:x mandatory;scrollbar-width:none}
+.circles::-webkit-scrollbar{display:none}
+.circ{flex:none;scroll-snap-align:center;width:250px;display:flex;flex-direction:column;align-items:center;gap:1rem;text-decoration:none;color:inherit}
+.circ .disc{position:relative;width:250px;height:250px;border-radius:50%;overflow:hidden;box-shadow:0 16px 40px rgba(38,60,89,.24)}
+.circ .disc .ph{min-height:0;height:100%;border:0;border-radius:0}
+.circ .tint{position:absolute;inset:0}
+.circ .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;padding:1.9rem 1.4rem;text-align:center}
+.circ .lbl i{font-style:italic;font-size:.9rem;color:var(--gold-200)}
+.circ .lbl b{font-size:1.1rem;font-weight:800;letter-spacing:-.3px;color:#fff;line-height:1.2}
+.circ .lbl .pill{background:#fff;color:var(--charcoal);border-radius:var(--pill);padding:.55rem 1.2rem;font-size:.8rem;font-weight:700;text-decoration:none}
+.circ p{font-size:.93rem;line-height:1.5;color:var(--charcoal-500);text-align:center;max-width:250px}
+@media(min-width:1100px){
+  .circles{overflow:visible;justify-content:center;gap:1.5rem}
+  .circ,.circ .disc{width:245px}.circ .disc{height:245px}
+}
+.t-1{background:rgba(38,60,89,.84)}.t-2{background:rgba(184,149,47,.86)}
+.t-3{background:rgba(53,103,138,.84)}.t-4{background:rgba(166,67,46,.82)}
