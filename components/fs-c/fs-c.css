@@ -1,0 +1,293 @@
+/* ============================================================
+   Feng Shui — Verzija C, deljena dizajn-osnova za ceo sajt.
+   Koriste je Škola / Početna / O meni. Sve je skopirano pod
+   `.fs-c` da NE curi na ostatak sajta (globals.css / druge rute).
+   Tokeni + dizajn-jezik iz design/tokens.css + design/css/v-c.css.
+   Boje/tekst od klijenta se menjaju u :root delu ispod — na
+   JEDNOM mestu za sve tri stranice.
+   ============================================================ */
+
+.fs-c {
+  /* --- PALETA (trenutni brend draganajovic.com) --- */
+  --cream-50:  #FDFBF7;
+  --cream-100: #FAF7F0;
+  --cream-200: #F5F0E6;
+  --cream-300: #EDE5D5;
+
+  --charcoal:     #1a1a1a;
+  --charcoal-600: #3d3d3d;
+  --charcoal-500: #555555;
+  --charcoal-400: #777777;
+
+  --navy-50:  #EFF7FC;
+  --navy-100: #D4EAF5;
+  --navy-300: #A6DDED;
+  --navy-400: #6AADCC;
+  --navy-500: #4580A6;
+  --navy-600: #35678A;
+  --navy-700: #263C59;
+  --navy-800: #162A42;
+  --navy-900: #091526;
+
+  --gold-50:  #fdf8eb;
+  --gold-200: #f2d98a;
+  --gold-400: #c8a84e;
+  --gold-500: #b8952f;
+  --gold-600: #9a7a24;
+
+  /* Akcenat za "sekciju u jakoj boji" — terakota (bez vike). */
+  --accent:      #A6432E;
+  --accent-dark: #8A3524;
+  --accent-soft: #F7EBE7;
+
+  /* --- SEMANTIČKI TOKENI --- */
+  --bg:            var(--cream-50);
+  --bg-alt:        var(--cream-200);
+  --text:          var(--charcoal);
+  --text-muted:    var(--charcoal-500);
+
+  /* --- TIPOGRAFIJA — koristi već učitan Outfit (next/font) --- */
+  --font: var(--font-outfit), system-ui, -apple-system, sans-serif;
+
+  /* --- RITAM --- */
+  --maxw-narrow: 680px;
+  --radius:    18px;
+  --radius-sm: 12px;
+  --pill:      999px;
+  --shadow:    0 10px 30px rgba(38, 60, 89, .10);
+  --shadow-lg: 0 22px 50px rgba(38, 60, 89, .16);
+  --sticky-h:  68px;
+
+  /* Wrapper = "body" prototipa */
+  font-family: var(--font);
+  background: var(--cream-50);
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  padding-bottom: var(--sticky-h);
+  -webkit-text-size-adjust: 100%;
+}
+@media (min-width: 900px) { .fs-c { padding-bottom: 0; } }
+
+.fs-c *, .fs-c *::before, .fs-c *::after { box-sizing: border-box; }
+.fs-c p { margin: 0; }
+.fs-c h1, .fs-c h2, .fs-c h3 {
+  margin: 0; line-height: 1.08; letter-spacing: -1px; font-weight: 700; text-wrap: balance;
+}
+.fs-c h1 { font-size: clamp(2.35rem, 9vw, 4.5rem); font-weight: 800; color: inherit; }
+.fs-c h2 { font-size: clamp(1.9rem, 7vw, 3.25rem); }
+.fs-c h3 { font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight: 600; letter-spacing: -.4px; }
+.fs-c .lead { font-size: clamp(1.05rem, 3.4vw, 1.3rem); line-height: 1.55; color: var(--charcoal-500); }
+.fs-c .eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-500); }
+
+/* --- layout helpers --- */
+.fs-c .card { padding: clamp(2.75rem, 9vw, 5.5rem) 0; scroll-margin-top: 64px; }
+.fs-c .wrap { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 1.35rem; }
+.fs-c .stack { display: flex; flex-direction: column; }
+.fs-c .g8 { gap: .5rem; } .fs-c .g12 { gap: .75rem; } .fs-c .g16 { gap: 1rem; }
+.fs-c .g24 { gap: 1.5rem; } .fs-c .g32 { gap: 2rem; }
+
+/* --- naizmenične pozadine --- */
+.fs-c .c-cream { background: var(--cream-50); }
+.fs-c .c-sand  { background: var(--cream-200); }
+.fs-c .c-navy  { background: var(--navy-800); color: #fff; }
+.fs-c .c-navy h2, .fs-c .c-navy h3 { color: #fff; }
+.fs-c .c-navy .lead { color: var(--navy-300); }
+.fs-c .c-navy .eyebrow { color: var(--gold-200); }
+.fs-c .c-accent { background: var(--accent); color: #fff; }
+.fs-c .c-accent h2, .fs-c .c-accent h3 { color: #fff; }
+.fs-c .c-accent .lead { color: rgba(255,255,255,.85); }
+.fs-c .c-accent .eyebrow { color: rgba(255,255,255,.8); }
+
+/* --- dugmad --- */
+.fs-c .btn {
+  display: flex; width: 100%; align-items: center; justify-content: center; text-align: center;
+  font-family: var(--font); font-size: 1.05rem; font-weight: 700; line-height: 1.3;
+  padding: 1.15rem 1.5rem; border-radius: var(--pill); text-decoration: none; cursor: pointer; border: 0;
+  min-height: 58px; transition: transform .12s, background .2s;
+}
+.fs-c .btn:active { transform: scale(.98); }
+@media (min-width: 640px) { .fs-c .btn { display: inline-flex; width: auto; } }
+.fs-c .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 10px 26px rgba(166,67,46,.3); }
+.fs-c .btn-accent:hover { background: var(--accent-dark); }
+.fs-c .btn-white { background: #fff; color: var(--charcoal); }
+.fs-c .btn-navy { background: var(--navy-700); color: #fff; }
+.fs-c .btn-gold { background: var(--gold-400); color: #1a1a1a; }
+.fs-c .micro { font-size: .8rem; color: var(--charcoal-400); text-align: center; }
+.fs-c .c-navy .micro, .fs-c .c-accent .micro { color: rgba(255,255,255,.7); }
+
+/* --- skok-navigacija u krugovima (sidra ka sekcijama) --- */
+.fs-c .jump { display: flex; gap: .85rem; overflow-x: auto; padding: .25rem .1rem 1rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.fs-c .jump::-webkit-scrollbar { display: none; }
+.fs-c .jump a { flex: none; width: 88px; text-decoration: none; text-align: center; color: var(--charcoal-600); font-size: .78rem; font-weight: 600; }
+.fs-c .jump .dot {
+  width: 88px; height: 88px; border-radius: 50%; background: var(--cream-200);
+  border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center;
+  margin-bottom: .45rem; font-size: 1.5rem; color: var(--gold-400);
+}
+.fs-c .jump a:hover .dot { background: var(--gold-50); border-color: var(--gold-200); }
+@media (min-width: 700px) { .fs-c .jump { justify-content: center; overflow: visible; } }
+
+/* --- hero --- */
+.fs-c .hero { padding: 0; background: var(--navy-900); color: #fff; position: relative; }
+.fs-c .hero-photo { aspect-ratio: 3/4; position: relative; background: var(--navy-800); overflow: hidden; }
+.fs-c .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fs-c .hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,21,38,.1) 0%, rgba(9,21,38,.65) 58%, var(--navy-900) 100%); }
+.fs-c .hero-body { padding: 0 1.35rem clamp(2.5rem, 8vw, 4rem); margin-top: -5rem; position: relative; }
+.fs-c .hero h1 { color: #fff; }
+@media (min-width: 900px) {
+  .fs-c .hero-in { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; max-width: 1040px; margin: 0 auto; min-height: 640px; padding: 3rem 1.35rem; gap: 2rem; }
+  .fs-c .hero-photo { aspect-ratio: 4/5; border-radius: 24px; order: 2; }
+  .fs-c .hero-photo::after { background: linear-gradient(180deg, rgba(9,21,38,.05), rgba(9,21,38,.35)); }
+  .fs-c .hero-body { margin-top: 0; padding: 0 2.5rem 0 0; order: 1; }
+}
+
+/* --- koraci / brojevi --- */
+.fs-c .steps { display: grid; gap: .85rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .fs-c .steps { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .fs-c .steps-4 { grid-template-columns: repeat(4, 1fr); } }
+.fs-c .step { background: rgba(255,255,255,.07); border: 1px solid rgba(166,221,237,.2); border-radius: 20px; padding: 1.4rem; }
+.fs-c .step .n { font-size: 2.4rem; font-weight: 800; color: var(--gold-400); line-height: 1; letter-spacing: -2px; display: block; margin-bottom: .5rem; }
+.fs-c .step h3 { color: inherit; }
+.fs-c .step p { color: var(--navy-300); font-size: .95rem; margin-top: .35rem; }
+.fs-c .c-sand .step, .fs-c .c-cream .step { background: #fff; border-color: var(--cream-300); }
+.fs-c .c-sand .step p, .fs-c .c-cream .step p { color: var(--charcoal-500); }
+.fs-c .c-sand .step h3, .fs-c .c-cream .step h3 { color: var(--charcoal); }
+
+/* --- lista krupnih stavki --- */
+.fs-c .big-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .7rem; }
+.fs-c .big-list li {
+  background: #fff; border: 1px solid var(--cream-300); border-radius: 16px;
+  padding: 1.1rem 1.2rem; font-size: 1.02rem; line-height: 1.45; font-weight: 500;
+  display: flex; gap: .8rem; align-items: flex-start;
+}
+.fs-c .big-list li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-400); margin-top: .55rem; }
+.fs-c .c-navy .big-list li { background: rgba(255,255,255,.07); border-color: rgba(166,221,237,.2); color: #fff; }
+
+/* --- utisci --- */
+.fs-c .tst { background: #fff; border: 1px solid var(--cream-300); border-radius: 20px; padding: 1.5rem; }
+.fs-c .tst .res { font-size: 1.3rem; font-weight: 700; letter-spacing: -.5px; color: var(--accent); line-height: 1.2; margin-bottom: .7rem; }
+.fs-c .tst q { display: block; color: var(--charcoal-500); font-size: .98rem; line-height: 1.55; quotes: "„" "\""; }
+.fs-c .tst .who { font-size: .83rem; color: var(--charcoal-400); margin-top: .9rem; font-weight: 600; }
+
+/* --- brojke --- */
+.fs-c .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; text-align: center; }
+.fs-c .stats div { background: rgba(255,255,255,.08); border-radius: 16px; padding: 1.1rem .5rem; }
+.fs-c .stats b { display: block; font-size: clamp(1.5rem, 6vw, 2.3rem); font-weight: 800; letter-spacing: -1.5px; color: var(--gold-200); }
+.fs-c .stats span { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--navy-300); }
+/* Statistika na svetloj podlozi (npr. Kvalifikacije na navy je već pokrivena; na sand/cream): */
+.fs-c .c-sand .stats div, .fs-c .c-cream .stats div { background: #fff; border: 1px solid var(--cream-300); }
+.fs-c .c-sand .stats b, .fs-c .c-cream .stats b { color: var(--gold-600); }
+.fs-c .c-sand .stats span, .fs-c .c-cream .stats span { color: var(--charcoal-400); }
+
+/* --- o-meni foto --- */
+.fs-c .portrait { aspect-ratio: 4/5; max-width: 420px; margin-inline: auto; border-radius: 20px; overflow: hidden; background: var(--navy-700); width: 100%; }
+.fs-c .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* --- cena --- */
+.fs-c .pricebox { background: rgba(0,0,0,.22); border-radius: 22px; padding: 1.6rem; text-align: center; }
+.fs-c .price { font-size: clamp(3rem, 13vw, 4.5rem); font-weight: 800; letter-spacing: -3px; line-height: 1; }
+
+/* --- FAQ --- */
+.fs-c .faq details { background: #fff; border: 1px solid var(--cream-300); border-radius: 16px; margin-bottom: .7rem; overflow: hidden; }
+.fs-c .faq summary { cursor: pointer; list-style: none; padding: 1.15rem 3rem 1.15rem 1.2rem; position: relative; font-weight: 600; font-size: 1.02rem; line-height: 1.4; }
+.fs-c .faq summary::-webkit-details-marker { display: none; }
+.fs-c .faq summary::after { content: "+"; position: absolute; right: 1.1rem; top: .95rem; font-size: 1.5rem; font-weight: 400; color: var(--gold-500); }
+.fs-c .faq details[open] summary::after { content: "−"; }
+.fs-c .faq p { padding: 0 1.2rem 1.2rem; color: var(--charcoal-500); font-size: .97rem; }
+
+/* --- lepljiva traka (mobilno) --- */
+.fs-c .sticky {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: rgba(255,255,255,.97);
+  backdrop-filter: blur(12px); border-top: 1px solid var(--cream-300);
+  padding: .55rem 1.35rem; display: flex; gap: .75rem; align-items: center;
+}
+.fs-c .sticky .meta { flex: none; line-height: 1.15; }
+.fs-c .sticky .meta b { display: block; font-size: .95rem; font-weight: 700; }
+.fs-c .sticky .meta span { font-size: .7rem; color: var(--charcoal-400); }
+.fs-c .sticky .btn { flex: 1; padding: .85rem 1rem; font-size: .95rem; min-height: 46px; }
+@media (min-width: 900px) { .fs-c .sticky { display: none; } }
+
+/* ================= KRUGOVI USLUGA (Početna) — jezik verzije C =================
+   Mobilno prvo: vodoravni snap-carousel, krupni krugovi u boji, jak kontrast.
+   Na desktopu se razvija u red. Bez foto placeholder-a: disk je pun ton +
+   label; kad stignu prave slike usluga, dodaje se <img> ispod .tint. */
+.fs-c .circles { display: flex; gap: 1.25rem; overflow-x: auto; padding: .5rem .25rem 1.25rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.fs-c .circles::-webkit-scrollbar { display: none; }
+.fs-c .circ { flex: none; scroll-snap-align: center; width: 250px; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-decoration: none; color: inherit; }
+.fs-c .circ .disc { position: relative; width: 250px; height: 250px; border-radius: 50%; overflow: hidden; box-shadow: 0 16px 40px rgba(38,60,89,.24); background: var(--navy-800); }
+.fs-c .circ .disc img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fs-c .circ .tint { position: absolute; inset: 0; }
+.fs-c .circ .lbl { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; padding: 1.9rem 1.4rem; text-align: center; }
+.fs-c .circ .lbl i { font-style: italic; font-size: .9rem; color: var(--gold-200); }
+.fs-c .circ .lbl b { font-size: 1.1rem; font-weight: 800; letter-spacing: -.3px; color: #fff; line-height: 1.2; }
+.fs-c .circ .lbl .pill { background: #fff; color: var(--charcoal); border-radius: var(--pill); padding: .55rem 1.2rem; font-size: .8rem; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; font-family: var(--font); }
+.fs-c .circ p { font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); text-align: center; max-width: 250px; }
+@media (min-width: 1100px) {
+  .fs-c .circles { overflow: visible; justify-content: center; gap: 1.5rem; }
+  .fs-c .circ, .fs-c .circ .disc { width: 245px; }
+  .fs-c .circ .disc { height: 245px; }
+}
+.fs-c .t-1 { background: rgba(38,60,89,.84); }
+.fs-c .t-2 { background: rgba(184,149,47,.86); }
+.fs-c .t-3 { background: rgba(53,103,138,.84); }
+.fs-c .t-4 { background: rgba(166,67,46,.82); }
+
+/* ================= "ŠTA IZDVAJA MOJ PRISTUP" (O meni) — grid 2 kolone =========
+   Mala fotografija/ikonica levo, naslov + pasus desno (forma po referenci). */
+.fs-c .six { display: grid; gap: 28px 40px; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .fs-c .six { grid-template-columns: 1fr 1fr; } }
+.fs-c .six .it6 { display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start; }
+.fs-c .six .it6 .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--gold-50); border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-500); }
+.fs-c .six .it6 h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -.3px; line-height: 1.25; }
+.fs-c .six .it6 p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--charcoal-500); }
+.fs-c .c-navy .six .it6 .ico { background: rgba(255,255,255,.08); border-color: rgba(166,221,237,.2); color: var(--gold-200); }
+.fs-c .c-navy .six .it6 p { color: var(--navy-300); }
+
+/* ============================================================
+   MODAL (kontakt / prijava) — "Markov upitnik", otvara se bez
+   napuštanja stranice. Živa forma → Supabase `inquiries`.
+   Deljen za sve tri stranice; klase su nezavisne od .fs-c
+   wrappera (modal se renderuje preko celog viewporta).
+   ============================================================ */
+.fs-c-modal-overlay {
+  position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(9,21,38,.55); backdrop-filter: blur(4px); padding: 0; animation: fsc-fade .2s ease;
+}
+@media (min-width: 640px) { .fs-c-modal-overlay { align-items: center; padding: 1.5rem; } }
+.fs-c-modal {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  background: #FDFBF7; color: #1a1a1a; width: 100%; max-width: 460px;
+  max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 1.6rem 1.35rem 2rem;
+  box-shadow: 0 -10px 50px rgba(9,21,38,.3); animation: fsc-slide .25s cubic-bezier(.32,.72,0,1);
+}
+@media (min-width: 640px) { .fs-c-modal { border-radius: 22px; animation: fsc-pop .25s cubic-bezier(.32,.72,0,1); } }
+.fs-c-modal .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
+.fs-c-modal .modal-head h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.5px; line-height: 1.2; margin: 0; }
+.fs-c-modal .modal-head p { font-size: .9rem; color: #555; margin-top: .35rem; }
+.fs-c-modal .modal-close { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #F5F0E6; color: #3d3d3d; font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.fs-c-modal .modal-close:hover { background: #EDE5D5; }
+.fs-c-modal .field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+.fs-c-modal .field label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #777; }
+.fs-c-modal .field input, .fs-c-modal .field select {
+  font-family: inherit; font-size: 1.05rem; padding: .9rem 1rem; min-height: 52px;
+  border: 1.5px solid #EDE5D5; border-radius: 14px; background: #fff; color: #1a1a1a; width: 100%;
+}
+.fs-c-modal .field input:focus, .fs-c-modal .field select:focus { outline: 0; border-color: #A6432E; }
+.fs-c-modal .modal-btn {
+  width: 100%; border: 0; cursor: pointer; background: #A6432E; color: #fff; font-family: inherit;
+  font-size: 1.05rem; font-weight: 700; padding: 1.05rem 1.5rem; border-radius: 999px; min-height: 56px;
+  box-shadow: 0 10px 26px rgba(166,67,46,.3); transition: background .2s;
+}
+.fs-c-modal .modal-btn:hover { background: #8A3524; }
+.fs-c-modal .modal-btn:disabled { opacity: .6; cursor: default; }
+.fs-c-modal .modal-privacy { font-size: .78rem; color: #777; text-align: center; margin-top: .8rem; }
+.fs-c-modal .modal-error { color: #A6432E; font-size: .85rem; margin-top: .6rem; text-align: center; }
+.fs-c-modal .modal-success { text-align: center; padding: 1.5rem .5rem; }
+.fs-c-modal .modal-success .check { width: 64px; height: 64px; border-radius: 50%; background: #F7EBE7; color: #A6432E; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; }
+.fs-c-modal .modal-success h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: .5rem; }
+.fs-c-modal .modal-success p { color: #555; font-size: .95rem; }
+
+@keyframes fsc-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fsc-slide { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fsc-pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }

@@ -16,6 +16,16 @@ interface HeaderProps {
 
 const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
 
+// Preview-only shim: while the "C" redesign lives on parallel `-c` routes,
+// rewrite shared-header links to their C equivalents so the preview navigates
+// within itself instead of bouncing back to the live pages. Inert on every
+// other (live) route — removed at cutover when C replaces the real routes.
+const C_PREVIEW_ROUTES: Record<string, string> = {
+  '/': '/pocetna-c',
+  '/school': '/skola-c',
+  '/about': '/o-meni-c',
+};
+
 const Header = ({ content, webinar }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -41,6 +51,15 @@ const Header = ({ content, webinar }: HeaderProps) => {
   const navLinks = filteredNav.some((link) => link.to === '/school')
     ? filteredNav
     : [{ to: '/school', label: 'Škola', children: undefined }, ...filteredNav];
+  const isCPreview = pathname?.endsWith('-c') ?? false;
+  const cHref = (to: string) => (isCPreview ? (C_PREVIEW_ROUTES[to] ?? to) : to);
+  const navLinksResolved = isCPreview
+    ? navLinks.map((link) => ({
+        ...link,
+        to: cHref(link.to),
+        children: link.children?.map((child) => ({ ...child, to: cHref(child.to) })),
+      }))
+    : navLinks;
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
@@ -95,14 +114,14 @@ const Header = ({ content, webinar }: HeaderProps) => {
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
         }`}
       >
-        <Link href="/">
+        <Link href={cHref('/')}>
           <span className="flex items-center gap-2 px-3">
             <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
             <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
           </span>
         </Link>
 
-        {navLinks.map((link) => (
+        {navLinksResolved.map((link) => (
           link.children ? (
             <div
               key={link.to}
@@ -183,7 +202,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
         }`}
       >
-        <Link href="/">
+        <Link href={cHref('/')}>
           <span className="flex items-center gap-2 px-3">
             <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
             <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
@@ -219,7 +238,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
           </div>
 
           <nav className="flex flex-col items-center justify-center gap-6 mt-4">
-            {navLinks.map((link, index) => (
+            {navLinksResolved.map((link, index) => (
               link.children ? (
                 <div key={link.to} className="flex flex-col items-center">
                   <button
