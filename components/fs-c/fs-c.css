@@ -167,11 +167,19 @@
   padding: calc(var(--fsc-nav-clear) + .5rem) 1.35rem clamp(3rem, 9vw, 4.5rem);
   position: relative;
 }
-/* Tekst i dugmad drže gornju polovinu; slika nosi donju.
-   Visina prati odnos same mobilne slike (768×1376) umesto fiksne
-   vrednosti — inače `cover` seče vrh, Dragana se penje uz ekran i
-   naleti na mikro-tekst. min-height je samo pod, da tekst uvek stane. */
-.fs-c .hero { aspect-ratio: 768 / 1376; min-height: 600px; }
+/* Visina hero-a na mobilnom se RAČUNA, ne pogađa.
+   Slika je `cover` i usidrena na dno, pa je rastojanje od dna do
+   Draganine glave uvek isti udeo širine:
+     glava je na ~52% visine slike  ->  od dna do glave ostaje 48%
+     skalirana visina slike = 100vw * (1376/768) = 1.79 * 100vw
+     od dna do glave = 0.48 * 1.79 * 100vw ≈ 0.86 * 100vw
+   Sve iznad toga je čist tamnoplavi deo slike i tu sme tekst.
+   --fsc-text-space je koliko taj tekstualni blok traži (navbar +
+   eyebrow + naslov + dva dugmeta + mikro red) plus vazduh. */
+.fs-c .hero {
+  --fsc-text-space: 500px;
+  min-height: calc(0.86 * 100vw + var(--fsc-text-space));
+}
 
 /* Na tamnoj podlozi bez .c-navy klase osnovni .micro je prigušen
    do neupotrebljivog — hero ga eksplicitno vraća. */
@@ -179,14 +187,29 @@
 
 .fs-c .hero h1 {
   color: #fff;
-  /* smanjeno u odnosu na globalni h1 — na 4.5rem je naslov ulazio pod navbar */
-  font-size: clamp(1.85rem, 6.4vw, 3.15rem);
+  /* Donja granica je podignuta: na 1.85rem je naslov bio sitniji od
+     dugmadi ispod njega i gubio je primat u hijerarhiji. */
+  font-size: clamp(2.15rem, 8vw, 3.15rem);
   line-height: 1.1;
 }
-.fs-c .hero .btn { max-width: 24rem; }
+
+/* Oba poziva na akciju idu u JEDAN red. Na mobilnom to znači da
+   veličina slova mora da prati širinu ekrana — duži natpis
+   („Pokaži mi kako moj prostor utiče na moj život") inače prelama.
+   Vrednosti nisu procenjene: natpis je izmeren u Outfit 700 i staje
+   bez prelamanja od 320px naviše (na 320px ostaje ~5px rezerve). */
+.fs-c .hero .btn {
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(.75rem, 3.8vw, 1.05rem);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 
 @media (min-width: 768px) {
-  .fs-c .hero { aspect-ratio: auto; min-height: clamp(560px, 82vh, 780px); display: flex; align-items: center; }
+  /* Na desktopu raspored nosi širinu, ne visinu — računica sa
+     mobilnog (slika usidrena na dno) više ne važi. */
+  .fs-c .hero { min-height: clamp(560px, 82vh, 780px); display: flex; align-items: center; }
   /* desktop slika je prazna sleva — držimo je pomerenu tako da
      Draganina glava ostane u kadru i na niskim prozorima */
   .fs-c .hero-bg img { object-position: center 22%; }
@@ -194,13 +217,22 @@
     background: linear-gradient(90deg,
       rgba(9,21,38,.88) 0%, rgba(9,21,38,.72) 34%, rgba(9,21,38,.25) 56%, rgba(9,21,38,0) 72%);
   }
-  .fs-c .hero-in { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 2.5rem; }
+  .fs-c .hero-in { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 2.5rem; }
   .fs-c .hero-body {
     margin-top: 0;
     padding: var(--fsc-nav-clear) 0 3rem;
-    max-width: 54%;
+    /* Šira kolona: naslov diše u dva reda umesto tri, a duži CTA
+       staje u jedan red. Gornja granica je da tekst ne uđe u
+       Draganin deo slike. */
+    max-width: 62%;
     min-width: 22rem;
   }
+  /* Dugmad na desktopu prijanjaju uz svoj natpis umesto da se
+     razvlače po celoj koloni. */
+  .fs-c .hero .btn { align-self: flex-start; width: auto; }
+  /* Mikro red je bio centriran po celoj koloni, pa je vizuelno
+     „bežao" udesno u odnosu na levo poravnat naslov i dugmad. */
+  .fs-c .hero .micro { text-align: left; }
 }
 
 /* --- koraci / brojevi --- */
