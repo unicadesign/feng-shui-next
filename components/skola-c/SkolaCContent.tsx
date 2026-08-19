@@ -268,38 +268,44 @@ const SkolaCContent = () => {
 
       {/* BLOK 6 — ZA KOGA JE */}
       <section className="card c-cream" id="za-koga">
-        <div className="wrap stack g32">
-          <div className="stack g12">
-            <span className="eyebrow">Za koga je</span>
-            <h2>Feng shui online škola je za vas ako…</h2>
+        <div className="wrap">
+          <div className="whofor">
+            <div className="whofor-aside">
+              <div>
+                <span className="eyebrow">Za koga je</span>
+                <h2>Feng shui online škola je za vas ako&hellip;</h2>
+              </div>
+              <p className="whofor-note">
+                Predznanje nije potrebno. Ponesite tlocrt svog stana, otvoren um
+                i spremnost da svoj prostor vidite drugačije.
+              </p>
+            </div>
+            <ul className="whofor-list">
+              <li>
+                <span>Volite sami da uređujete svoj dom i želite da znate{' '}
+                <em>zašto</em> nešto radite, a ne samo šta.</span>
+              </li>
+              <li>
+                <span>Čuli ste za feng shui termine, ali ne znate odakle da počnete sa
+                sopstvenim prostorom.</span>
+              </li>
+              <li>
+                <span>Želite jasan okvir umesto razbacanih saveta sa interneta i
+                „srećnih predmeta&rdquo;.</span>
+              </li>
+              <li>
+                <span>Radite na sebi, ali osećate da vas dom u tome ne prati.</span>
+              </li>
+              <li>
+                <span>Želite korekcije koje se primenjuju bez renoviranja i bez velikih
+                troškova.</span>
+              </li>
+              <li>
+                <span>Selite se, gradite ili renovirate i želite da to odmah uradite
+                kako treba.</span>
+              </li>
+            </ul>
           </div>
-          <ul className="big-list">
-            <li>
-              Volite sami da uređujete svoj dom i želite da znate <em>zašto</em>{' '}
-              nešto radite, a ne samo šta.
-            </li>
-            <li>
-              Čuli ste za feng shui termine, ali ne znate odakle da počnete sa
-              sopstvenim prostorom.
-            </li>
-            <li>
-              Želite jasan okvir umesto razbacanih saveta sa interneta i „srećnih
-              predmeta&rdquo;.
-            </li>
-            <li>Radite na sebi, ali osećate da vas dom u tome ne prati.</li>
-            <li>
-              Želite korekcije koje se primenjuju bez renoviranja i bez velikih
-              troškova.
-            </li>
-            <li>
-              Selite se, gradite ili renovirate i želite da to odmah uradite kako
-              treba.
-            </li>
-          </ul>
-          <p className="lead">
-            Predznanje nije potrebno. Ponesite tlocrt svog stana, otvoren um i
-            spremnost da svoj prostor vidite drugačije.
-          </p>
         </div>
       </section>
 

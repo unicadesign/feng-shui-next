@@ -512,3 +512,48 @@
     font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--navy-300);
   }
 }
+
+/* --- ZA KOGA JE: podeljena kartica (navy levo, lista desno) --------
+   Naslov i zaključna napomena drže tamnu stranu, uslovi svetlu.
+   Kvačica je tamna na zlatnom krugu: bela na --gold-400 daje 2,29
+   kontrasta i pada prag za ikonice (3:1), tamna daje 7,60. */
+.fs-c .whofor {
+  display: grid; grid-template-columns: 1fr;
+  border-radius: 24px; overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--cream-300);
+}
+@media (min-width: 900px) { .fs-c .whofor { grid-template-columns: 37fr 63fr; } }
+
+.fs-c .whofor-aside {
+  background: var(--navy-800); color: #fff;
+  padding: 2.25rem 1.75rem;
+  display: flex; flex-direction: column; gap: 2rem;
+}
+@media (min-width: 900px) { .fs-c .whofor-aside { padding: 3rem 2.5rem; justify-content: space-between; } }
+.fs-c .whofor-aside .eyebrow { color: var(--gold-200); }
+.fs-c .whofor-aside h2 { color: #fff; margin-top: .75rem; }
+.fs-c .whofor-note {
+  font-size: 1rem; line-height: 1.6; color: var(--navy-300);
+  padding-top: 1.5rem; border-top: 1px solid rgba(166,221,237,.25);
+}
+
+.fs-c .whofor-list {
+  background: #fff; margin: 0; padding: .5rem 1.75rem; list-style: none;
+}
+@media (min-width: 900px) { .fs-c .whofor-list { padding: 1rem 2.5rem; } }
+.fs-c .whofor-list li {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.1rem;
+  align-items: start;
+  padding: 1.15rem 0; border-bottom: 1px solid var(--cream-200);
+  font-size: 1.02rem; line-height: 1.5; color: var(--charcoal);
+}
+.fs-c .whofor-list li:last-child { border-bottom: 0; }
+.fs-c .whofor-list li::before {
+  content: "✓";
+  width: 1.75rem; height: 1.75rem; flex: none;
+  border-radius: 50%; background: var(--gold-400); color: var(--charcoal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; font-weight: 700; line-height: 1;
+  margin-top: .05rem;
+}
