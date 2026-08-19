@@ -258,10 +258,62 @@
 .fs-c .c-navy .big-list li { background: rgba(255,255,255,.07); border-color: rgba(166,221,237,.2); color: #fff; }
 
 /* --- utisci --- */
-.fs-c .tst { background: #fff; border: 1px solid var(--cream-300); border-radius: 20px; padding: 1.5rem; }
-.fs-c .tst .res { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); line-height: 1.2; margin-bottom: .7rem; }
-.fs-c .tst q { display: block; color: var(--charcoal-500); font-size: .98rem; line-height: 1.55; quotes: "„" "\""; }
-.fs-c .tst .who { font-size: .83rem; color: var(--charcoal-400); margin-top: .9rem; font-weight: 600; }
+/* --- REZULTATI: „metrika prvo" kartice ---------------------------
+   Ishod je naslov kartice, citat je potvrda ispod njega. Radi bez
+   fotografije i bez videa, što je bilo pitanje klijenta.
+   Boje nisu preuzete iz predloška naslepo: zlatna --gold-400/500 na
+   beloj daje 2,3 odnosno 2,9 kontrasta i pada čak i prag za krupan
+   tekst (3:1). Metrika zato ide na --gold-600 (4,05), a sitne
+   oznake usluge na --gold-700 / --navy-700 (5,5 i 10,4). */
+.fs-c .results { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 640px) { .fs-c .results { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .fs-c .results { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
+
+.fs-c .tst {
+  background: #fff;
+  border: 1px solid var(--cream-300);
+  border-radius: 20px;
+  padding: 1.6rem 1.5rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  /* tanka zlatna nit gore — isti gest kao orbite oko krugova */
+  box-shadow: inset 0 3px 0 0 var(--gold-200);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+@media (hover: hover) {
+  .fs-c .tst:hover { transform: translateY(-2px); box-shadow: inset 0 3px 0 0 var(--gold-400), 0 14px 34px rgba(38,60,89,.10); }
+}
+
+.fs-c .tst .res {
+  font-size: clamp(1.9rem, 5.6vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gold-600);
+  line-height: 1.05;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .tst .res-note {
+  font-size: 1rem; font-weight: 600; color: var(--charcoal); line-height: 1.35;
+}
+.fs-c .tst q {
+  display: block; color: var(--charcoal-500); font-size: .95rem; line-height: 1.6;
+  /* srpski par navodnika; ranije je zatvarao ravnim " */
+  quotes: "„" "”";
+  margin-top: .2rem;
+}
+.fs-c .tst .who {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  font-size: .82rem; color: var(--charcoal-400); font-weight: 600;
+  margin-top: auto; padding-top: 1rem;
+  border-top: 1px solid var(--cream-200);
+}
+.fs-c .tst .tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: .22rem .6rem; border-radius: var(--pill); white-space: nowrap;
+}
+.fs-c .tst .tag-skola { background: var(--gold-50); color: #7a6220; }
+.fs-c .tst .tag-konsultacija { background: var(--navy-50); color: var(--navy-700); }
 
 /* --- brojke --- */
 .fs-c .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; text-align: center; }

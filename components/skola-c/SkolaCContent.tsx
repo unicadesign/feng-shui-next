@@ -80,8 +80,8 @@ const SkolaCContent = () => {
             <a href="#za-koga">
               <span className="dot">◈</span>Za koga je
             </a>
-            <a href="#utisci">
-              <span className="dot">❝</span>Utisci
+            <a href="#rezultati">
+              <span className="dot">❝</span>Rezultati
             </a>
             <a href="#o-meni">
               <span className="dot">✧</span>O meni
@@ -371,36 +371,41 @@ const SkolaCContent = () => {
       </section>
 
       {/* BLOK 9 — UTISCI */}
-      <section className="card c-sand" id="utisci">
+      <section className="card c-sand" id="rezultati">
         <div className="wrap stack g32">
           <div className="stack g12">
-            <span className="eyebrow">Utisci polaznika</span>
-            <h2>Šta se promenilo kod polaznica</h2>
+            <span className="eyebrow">Rezultati</span>
+            <h2>Šta se promenilo u brojkama</h2>
           </div>
-          <div className="steps" style={{ gridTemplateColumns: '1fr' }}>
-            <div className="tst">
-              <div className="res">12 stalnih klijenata</div>
+          <div className="results">
+            <article className="tst">
+              <div className="res">12 klijenata</div>
+              <p className="res-note">od polaznice do sopstvene prakse</p>
               <q>
                 Pre škole sam mislila da Feng Shui znači staviti bambus u ugao.
                 Sada radim konsultacije i već imam 12 stalnih klijenata.
               </q>
-              <div className="who">Jelena M. · Beograd</div>
-            </div>
-            <div className="tst">
-              <div className="res">Promenio se i dom i fokus na poslu</div>
+              <footer className="who">Jelena M. · Beograd</footer>
+            </article>
+            <article className="tst">
+              <div className="res">2 prostora</div>
+              <p className="res-note">dom i kancelarija, po istim principima</p>
               <q>
-                Upisao sam se jer je žena insistirala. Naš dom se transformisao, ali najviše me iznenadilo koliko se promenio moj fokus na poslu.
+                Upisao sam se jer je žena insistirala. Naš dom se transformisao,
+                ali najviše me iznenadilo koliko se promenio moj fokus na poslu.
               </q>
-              <div className="who">Milan D. · Novi Sad</div>
-            </div>
-            <div className="tst">
-              <div className="res">Posle 15 godina u dizajnu, nova dimenzija</div>
+              <footer className="who">Milan D. · Novi Sad</footer>
+            </article>
+            <article className="tst">
+              <div className="res">15 godina</div>
+              <p className="res-note">u struci, pa ipak nova dimenzija</p>
               <q>
-                Mislila sam da znam sve o prostoru. Sada kombinujem dizajn sa
-                Feng Shui principima i klijenti osećaju razliku, čak i skeptici.
+                Kao dizajnerka enterijera sa 15 godina iskustva, mislila sam da
+                znam sve o prostoru. Sada kombinujem dizajn sa Feng Shui
+                principima i klijenti osećaju razliku, čak i skeptici.
               </q>
-              <div className="who">Svetlana K. · Ljubljana</div>
-            </div>
+              <footer className="who">Svetlana K. · Ljubljana</footer>
+            </article>
           </div>
         </div>
       </section>
