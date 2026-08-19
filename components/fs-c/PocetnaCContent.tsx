@@ -14,17 +14,17 @@ const modalCopy: Record<
   konsultacije: {
     title: 'Zakažite besplatnu konsultaciju',
     subtitle:
-      'Ostavite podatke i dogovaramo razgovor o vašem prostoru — bez obaveze.',
+      'Ostavite podatke i dogovaramo razgovor o vašem prostoru, bez obaveze.',
     serviceType: 'Individualne konsultacije',
   },
   nekretnina: {
     title: 'Asistencija pri izboru nekretnine',
-    subtitle: 'Ostavite podatke — javljamo se sa detaljima procene prostora.',
+    subtitle: 'Ostavite podatke i javljamo se sa detaljima procene prostora.',
     serviceType: 'Asistencija pri izboru nekretnine',
   },
   radionice: {
     title: 'Radionice',
-    subtitle: 'Ostavite podatke — obavestićemo vas čim otvorimo nove termine.',
+    subtitle: 'Ostavite podatke i obavestićemo vas čim otvorimo nove termine.',
     serviceType: 'Radionice',
   },
 };
@@ -47,13 +47,13 @@ const PocetnaCContent = () => {
         <div className="hero-in">
           <div className="hero-photo">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/hero.jpeg" alt="Dragana Jović — Feng Shui" />
+            <img src="/images/hero.jpeg" alt="Dragana Jović, Feng Shui" />
           </div>
           <div className="hero-body stack g24">
             <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
               Uređenje prostora
             </span>
-            <h1>Feng Shui — put ka miru i radosti</h1>
+            <h1>Feng Shui: put ka miru i radosti</h1>
             <p className="lead" style={{ color: 'var(--navy-300)' }}>
               Oko 1000 osoba je osetilo promenu u odnosima, napretku i
               svakodnevnom miru uz pomoć naše Feng Shui konsultacije. Vaš dom je
@@ -113,8 +113,7 @@ const PocetnaCContent = () => {
                 </span>
               </div>
               <p>
-                Personalizovani proračun prostora i harmonizacija doma —
-                konkretne instrukcije šta promeniti da biste otklonili zastoj u
+                Personalizovani proračun prostora i harmonizacija doma, uz konkretne instrukcije šta promeniti da biste otklonili zastoj u
                 prilivu novca, komunikaciji, zdravlju ili karijeri.
               </p>
             </div>
@@ -162,7 +161,7 @@ const PocetnaCContent = () => {
         <div className="wrap stack g24">
           <h2>Zakažite besplatnu konsultaciju</h2>
           <p className="lead">
-            Trideset minuta, onlajn, bez obaveze — da vidimo šta vaš prostor
+            Trideset minuta, onlajn, bez obaveze, da vidimo šta vaš prostor
             traži.
           </p>
           <div className="stack g8">
@@ -190,8 +189,8 @@ const PocetnaCContent = () => {
         onClose={() => setModal(null)}
         title={modal ? modalCopy[modal].title : undefined}
         subtitle={modal ? modalCopy[modal].subtitle : undefined}
-        serviceType={modal ? modalCopy[modal].serviceType : 'Feng Shui — opšti upit'}
-        heardFrom="Početna — stranica (verzija C)"
+        serviceType={modal ? modalCopy[modal].serviceType : 'Feng Shui (opšti upit)'}
+        heardFrom="Početna (verzija C)"
       />
     </div>
   );

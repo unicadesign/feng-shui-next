@@ -72,11 +72,11 @@
 .fs-c *, .fs-c *::before, .fs-c *::after { box-sizing: border-box; }
 .fs-c p { margin: 0; }
 .fs-c h1, .fs-c h2, .fs-c h3 {
-  margin: 0; line-height: 1.08; letter-spacing: -1px; font-weight: 700; text-wrap: balance;
+  margin: 0; line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
 }
 .fs-c h1 { font-size: clamp(2.35rem, 9vw, 4.5rem); font-weight: 800; color: inherit; }
 .fs-c h2 { font-size: clamp(1.9rem, 7vw, 3.25rem); }
-.fs-c h3 { font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight: 600; letter-spacing: -.4px; }
+.fs-c h3 { font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight: 600; }
 .fs-c .lead { font-size: clamp(1.05rem, 3.4vw, 1.3rem); line-height: 1.55; color: var(--charcoal-500); }
 .fs-c .eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-500); }
 
@@ -240,7 +240,7 @@
 @media (min-width: 640px) { .fs-c .steps { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1000px) { .fs-c .steps-4 { grid-template-columns: repeat(4, 1fr); } }
 .fs-c .step { background: rgba(255,255,255,.07); border: 1px solid rgba(166,221,237,.2); border-radius: 20px; padding: 1.4rem; }
-.fs-c .step .n { font-size: 2.4rem; font-weight: 800; color: var(--gold-400); line-height: 1; letter-spacing: -2px; display: block; margin-bottom: .5rem; }
+.fs-c .step .n { font-size: 2.4rem; font-weight: 800; color: var(--gold-400); line-height: 1; letter-spacing: normal; display: block; margin-bottom: .5rem; }
 .fs-c .step h3 { color: inherit; }
 .fs-c .step p { color: var(--navy-300); font-size: .95rem; margin-top: .35rem; }
 .fs-c .c-sand .step, .fs-c .c-cream .step { background: #fff; border-color: var(--cream-300); }
@@ -259,14 +259,14 @@
 
 /* --- utisci --- */
 .fs-c .tst { background: #fff; border: 1px solid var(--cream-300); border-radius: 20px; padding: 1.5rem; }
-.fs-c .tst .res { font-size: 1.3rem; font-weight: 700; letter-spacing: -.5px; color: var(--accent); line-height: 1.2; margin-bottom: .7rem; }
+.fs-c .tst .res { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); line-height: 1.2; margin-bottom: .7rem; }
 .fs-c .tst q { display: block; color: var(--charcoal-500); font-size: .98rem; line-height: 1.55; quotes: "„" "\""; }
 .fs-c .tst .who { font-size: .83rem; color: var(--charcoal-400); margin-top: .9rem; font-weight: 600; }
 
 /* --- brojke --- */
 .fs-c .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; text-align: center; }
 .fs-c .stats div { background: rgba(255,255,255,.08); border-radius: 16px; padding: 1.1rem .5rem; }
-.fs-c .stats b { display: block; font-size: clamp(1.5rem, 6vw, 2.3rem); font-weight: 800; letter-spacing: -1.5px; color: var(--gold-200); }
+.fs-c .stats b { display: block; font-size: clamp(1.5rem, 6vw, 2.3rem); font-weight: 800; letter-spacing: normal; color: var(--gold-200); }
 .fs-c .stats span { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--navy-300); }
 /* Statistika na svetloj podlozi (npr. Kvalifikacije na navy je već pokrivena; na sand/cream): */
 .fs-c .c-sand .stats div, .fs-c .c-cream .stats div { background: #fff; border: 1px solid var(--cream-300); }
@@ -279,7 +279,7 @@
 
 /* --- cena --- */
 .fs-c .pricebox { background: rgba(0,0,0,.22); border-radius: 22px; padding: 1.6rem; text-align: center; }
-.fs-c .price { font-size: clamp(3rem, 13vw, 4.5rem); font-weight: 800; letter-spacing: -3px; line-height: 1; }
+.fs-c .price { font-size: clamp(3rem, 13vw, 4.5rem); font-weight: 800; letter-spacing: normal; line-height: 1; }
 
 /* --- FAQ --- */
 .fs-c .faq details { background: #fff; border: 1px solid var(--cream-300); border-radius: 16px; margin-bottom: .7rem; overflow: hidden; }
@@ -313,7 +313,7 @@
 .fs-c .circ .tint { position: absolute; inset: 0; }
 .fs-c .circ .lbl { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; padding: 1.9rem 1.4rem; text-align: center; }
 .fs-c .circ .lbl i { font-style: italic; font-size: .9rem; color: var(--gold-200); }
-.fs-c .circ .lbl b { font-size: 1.1rem; font-weight: 800; letter-spacing: -.3px; color: #fff; line-height: 1.2; }
+.fs-c .circ .lbl b { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: #fff; line-height: 1.2; }
 .fs-c .circ .lbl .pill { background: #fff; color: var(--charcoal); border-radius: var(--pill); padding: .55rem 1.2rem; font-size: .8rem; font-weight: 700; text-decoration: none; border: 0; cursor: pointer; font-family: var(--font); }
 .fs-c .circ p { font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); text-align: center; max-width: 250px; }
 @media (min-width: 1100px) {
@@ -332,7 +332,7 @@
 @media (min-width: 820px) { .fs-c .six { grid-template-columns: 1fr 1fr; } }
 .fs-c .six .it6 { display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start; }
 .fs-c .six .it6 .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--gold-50); border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-500); }
-.fs-c .six .it6 h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -.3px; line-height: 1.25; }
+.fs-c .six .it6 h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
 .fs-c .six .it6 p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--charcoal-500); }
 .fs-c .c-navy .six .it6 .ico { background: rgba(255,255,255,.08); border-color: rgba(166,221,237,.2); color: var(--gold-200); }
 .fs-c .c-navy .six .it6 p { color: var(--navy-300); }
@@ -356,7 +356,7 @@
 }
 @media (min-width: 640px) { .fs-c-modal { border-radius: 22px; animation: fsc-pop .25s cubic-bezier(.32,.72,0,1); } }
 .fs-c-modal .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
-.fs-c-modal .modal-head h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.5px; line-height: 1.2; margin: 0; }
+.fs-c-modal .modal-head h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin: 0; }
 .fs-c-modal .modal-head p { font-size: .9rem; color: #555; margin-top: .35rem; }
 .fs-c-modal .modal-close { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #F5F0E6; color: #3d3d3d; font-size: 1.3rem; line-height: 1; cursor: pointer; }
 .fs-c-modal .modal-close:hover { background: #EDE5D5; }

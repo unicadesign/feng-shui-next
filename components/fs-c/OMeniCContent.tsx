@@ -16,7 +16,7 @@ const pristup = [
   {
     ico: '✧',
     h: 'Personalizacija',
-    p: 'Nijedna dva čoveka — niti doma — nisu ista. Slušam vaš prostor i vašu priču da bih oblikovala rešenja koja odražavaju vašu energiju, ciljeve i ritam života.',
+    p: 'Nijedna dva čoveka, pa ni dva doma, nisu ista. Slušam vaš prostor i vašu priču da bih oblikovala rešenja koja odražavaju vašu energiju, ciljeve i ritam života.',
   },
   {
     ico: '☯',
@@ -26,22 +26,22 @@ const pristup = [
   {
     ico: '❁',
     h: 'Transformacija',
-    p: 'Feng Shui nije u vezi sa nameštajem. Radi se o energiji. Koristim prostor kao alat za isceljenje, usklađivanje i lični razvoj — iznutra ka spolja.',
+    p: 'Feng Shui nije u vezi sa nameštajem. Radi se o energiji. Koristim prostor kao alat za isceljenje, usklađivanje i lični razvoj, iznutra ka spolja.',
   },
   {
     ico: '◈',
     h: 'Ukorenjeno u pravoj tradiciji',
-    p: 'Godine posvećenog učenja kod priznatih Feng Shui majstora znače da dobijate autentičnu mudrost — a ne razvodnjene internet koncepte.',
+    p: 'Godine posvećenog učenja kod priznatih Feng Shui majstora znače da dobijate autentičnu mudrost, a ne razvodnjene internet koncepte.',
   },
   {
     ico: '◉',
     h: 'Praksa, ne teorija',
-    p: 'Polaznice ne uče samo koncepte — vide opipljive promene u svojim domovima. Metoda se oslanja na praktičnu primenu sa merljivim rezultatima.',
+    p: 'Polaznice ne uče samo koncepte, već vide opipljive promene u svojim domovima. Metoda se oslanja na praktičnu primenu sa merljivim rezultatima.',
   },
   {
     ico: '⟡',
     h: 'Istočnjačka mudrost, naši domovi',
-    p: 'Prevođenje drevnih principa u moderne domove našeg regiona — sa njegovim arhitektonskim i energetskim obrascima, a ne uopštenim savetima.',
+    p: 'Prevođenje drevnih principa u moderne domove našeg regiona, sa njegovim arhitektonskim i energetskim obrascima, a ne uopštenim savetima.',
   },
 ];
 
@@ -56,7 +56,7 @@ const OMeniCContent = () => {
           <span className="eyebrow">O Dragani</span>
           <h1>Vaš vodič na putu ka prostoru koji vas podržava</h1>
           <p className="lead">
-            Dragana Jović — 25 godina iskustva, preko 1000 projekata, i jedno
+            Dragana Jović, 25 godina iskustva, preko 1000 projekata, i jedno
             uverenje: kada se prostor uskladi sa vama, sve u životu počinje da
             teče.
           </p>
@@ -71,7 +71,7 @@ const OMeniCContent = () => {
       <section className="card c-sand">
         <div className="wrap stack g24">
           <p className="lead" style={{ maxWidth: 'none' }}>
-            Moj put je počeo daleko od Feng Shui — na Tehničko-metalurškom
+            Moj put je počeo daleko od Feng Shui, na Tehničko-metalurškom
             fakultetu u Beogradu. Ali ta osnova u strukturi i nauci dala mi je
             nešto dragoceno: sposobnost da vidim prostor ne samo kao estetiku,
             već kao sistem koji utiče na sve oko sebe.
@@ -79,7 +79,7 @@ const OMeniCContent = () => {
           <p className="lead" style={{ maxWidth: 'none' }}>
             Intenzivne studije na Mastery Academy of Chinese Metaphysics otvorile
             su mi potpuno novu dimenziju. Shvatila sam da drevna mudrost nije
-            suprotna nauci — već njena dopuna. To me je inspirisalo da kreiram
+            suprotna nauci, već njena dopuna. To me je inspirisalo da kreiram
             sopstvenu metodologiju, prilagođenu energetskim potrebama našeg
             regiona i naših domova.
           </p>
@@ -87,7 +87,7 @@ const OMeniCContent = () => {
             Danas, nakon 25 godina i više od 1000 projekata, moja praksa spaja
             tradicionalni Feng Shui sa radiestezijom, kristalnom terapijom,
             svetom geometrijom i holističkim dizajnom. Ali ono što me zaista
-            pokreće nije tehnika — već trenutak kada klijentkinja kaže: „Konačno
+            pokreće nije tehnika, već trenutak kada klijentkinja kaže: „Konačno
             se osećam kao kod kuće u sopstvenom domu.&rdquo;
           </p>
           <h2
@@ -133,14 +133,14 @@ const OMeniCContent = () => {
           <h2>Obuka i put</h2>
           <ul className="big-list">
             <li>
-              Tehničko-metalurški fakultet, Beograd — temelj u nauci i strukturi
+              Tehničko-metalurški fakultet, Beograd: temelj u nauci i strukturi
             </li>
             <li>
-              Mastery Academy of Chinese Metaphysics — međunarodno priznata obuka
+              Mastery Academy of Chinese Metaphysics: međunarodno priznata obuka
             </li>
-            <li>Kreator autorske Feng Shui metode — prilagođene našem regionu</li>
-            <li>TV i medijski nastupi — prepoznata stručnost</li>
-            <li>Holistička Akademija Maya — kontinuirano usavršavanje</li>
+            <li>Kreator autorske Feng Shui metode: prilagođene našem regionu</li>
+            <li>TV i medijski nastupi: prepoznata stručnost</li>
+            <li>Holistička Akademija Maya: kontinuirano usavršavanje</li>
           </ul>
           <div className="stats">
             <div>
@@ -165,7 +165,7 @@ const OMeniCContent = () => {
           <h2>Vaš sledeći korak počinje sa namerom</h2>
           <p className="lead">
             Bilo da ste spremni da promenite energiju u svom domu ili da
-            produbite znanje kroz školu — tu sam.
+            produbite znanje kroz školu, tu sam.
           </p>
           <div className="stack g8">
             <button className="btn btn-white" onClick={() => setModalOpen(true)}>
@@ -191,9 +191,9 @@ const OMeniCContent = () => {
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Zakažite besplatan razgovor"
-        subtitle="Ostavite podatke i Dragana će vam se javiti — bez obaveze."
-        serviceType="Feng Shui — razgovor (O meni)"
-        heardFrom="O meni — stranica (verzija C)"
+        subtitle="Ostavite podatke i Dragana će vam se javiti. Bez obaveze."
+        serviceType="Feng Shui razgovor (O meni)"
+        heardFrom="O meni (verzija C)"
       />
     </div>
   );

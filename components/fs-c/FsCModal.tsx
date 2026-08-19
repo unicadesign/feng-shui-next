@@ -162,7 +162,7 @@ const FsCModal = ({
                 <h3>{title || 'Zakažite besplatan razgovor'}</h3>
                 <p>
                   {subtitle ||
-                    'Ostavite podatke i Dragana će vam se javiti — bez obaveze.'}
+                    'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.'}
                 </p>
               </div>
               <button

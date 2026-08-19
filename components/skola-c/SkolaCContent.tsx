@@ -9,7 +9,7 @@ type ModalIntent = 'prijava' | 'konsultacije';
 const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
   prijava: {
     title: 'Prijava za feng shui školu',
-    subtitle: 'Ostavite podatke i Dragana će vam se javiti — bez obaveze.',
+    subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
   },
   konsultacije: {
     title: 'Zakažite konsultaciju',
@@ -45,7 +45,7 @@ const SkolaCContent = () => {
           />
           <img
             src="/images/skola-c-hero-desktop.jpg"
-            alt="Dragana Jović — Feng Shui"
+            alt="Dragana Jović, Feng Shui"
             fetchPriority="high"
           />
         </picture>
@@ -146,8 +146,7 @@ const SkolaCContent = () => {
           <p className="lead">
             Obuka je podeljena na četiri dela i svaki se nadovezuje na prethodni.
             Krećete od toga kako energija ulazi i kreće se kroz prostor, učite da
-            prepoznate gde zastaje, pa tek onda kako se bira korekcija — da
-            menjate ono što ima efekta, a ne sve odjednom.
+            prepoznate gde zastaje, pa tek onda kako se bira korekcija. Tako menjate ono što ima efekta, a ne sve odjednom.
           </p>
           <button className="btn btn-gold" onClick={open('prijava')}>
             Pokaži mi kako moj prostor utiče na moj život
@@ -181,7 +180,7 @@ const SkolaCContent = () => {
                 Prijavi se za besplatne konsultacije
               </button>
               <span className="micro">
-                Popunjavate kratak upitnik — otvara se ovde, bez napuštanja
+                Popunjavate kratak upitnik. Otvara se ovde, bez napuštanja
                 stranice.
               </span>
             </div>
@@ -197,25 +196,25 @@ const SkolaCContent = () => {
             <h2>Vaš prostor ima energetsku mapu</h2>
           </div>
           <p className="lead">
-            Feng Shui je za dom ono što je akupunktura za telo — otkriva blokade
+            Feng Shui je za dom ono što je akupunktura za telo: otkriva blokade
             koje ne vidite i vraća prirodan protok energije. Kada energija dobro
             teče, prostor podržava san, fokus i odnose. Kada zastane, prvo se
             oseti, a tek onda razume.
           </p>
           <ul className="big-list">
             <li>
-              Dođete kući nakon napornog dana — a umesto mira, osetite težinu.
+              Dođete kući nakon napornog dana, a umesto mira osetite težinu.
             </li>
             <li>Nered se vraća bez obzira koliko čistite. Fokus vam stalno beži.</li>
             <li>
-              Osećate da nešto u prostoru „ne štima&rdquo; — ali ne umete da objasnite
+              Osećate da nešto u prostoru „ne štima&rdquo;, ali ne umete da objasnite
               šta.
             </li>
             <li>
-              Uspešne ste, radite na sebi — ali dom vas ne podržava. I to se
+              Uspešne ste i radite na sebi, ali dom vas ne podržava. I to se
               oseća.
             </li>
-            <li>Soba koju izbegavate, ugao koji odbija — i ne znate zašto.</li>
+            <li>Soba koju izbegavate, ugao koji odbija, a ne znate zašto.</li>
           </ul>
           <h2
             style={{
@@ -235,7 +234,7 @@ const SkolaCContent = () => {
         <div className="wrap stack g32">
           <div className="stack g12">
             <span className="eyebrow">Za koga je</span>
-            <h2>Feng shui online škola je za vas — ako…</h2>
+            <h2>Feng shui online škola je za vas ako…</h2>
           </div>
           <ul className="big-list">
             <li>
@@ -301,7 +300,7 @@ const SkolaCContent = () => {
               </span>
               <h3>Da uredite prostorije</h3>
               <p>
-                Spavaća soba, radni ugao, kuhinja i kupatilo — svaka ima svoja
+                Spavaća soba, radni ugao, kuhinja i kupatilo. Svaka ima svoja
                 pravila.
               </p>
             </div>
@@ -356,7 +355,7 @@ const SkolaCContent = () => {
             <div className="step">
               <h3>Praktični zadaci</h3>
               <p>
-                Vaš dom je učionica — svaka lekcija se odmah primenjuje, uz
+                Vaš dom je učionica: svaka lekcija se odmah primenjuje, uz
                 povratnu informaciju.
               </p>
             </div>
@@ -390,16 +389,15 @@ const SkolaCContent = () => {
             <div className="tst">
               <div className="res">Promenio se i dom i fokus na poslu</div>
               <q>
-                Upisao sam se jer je žena insistirala. Naš dom se transformisao —
-                ali najviše me iznenadilo koliko se promenio moj fokus na poslu.
+                Upisao sam se jer je žena insistirala. Naš dom se transformisao, ali najviše me iznenadilo koliko se promenio moj fokus na poslu.
               </q>
               <div className="who">Milan D. · Novi Sad</div>
             </div>
             <div className="tst">
-              <div className="res">15 godina u dizajnu — i nova dimenzija</div>
+              <div className="res">Posle 15 godina u dizajnu, nova dimenzija</div>
               <q>
                 Mislila sam da znam sve o prostoru. Sada kombinujem dizajn sa
-                Feng Shui principima i klijenti osećaju razliku — čak i skeptici.
+                Feng Shui principima i klijenti osećaju razliku, čak i skeptici.
               </q>
               <div className="who">Svetlana K. · Ljubljana</div>
             </div>
@@ -418,14 +416,14 @@ const SkolaCContent = () => {
             <span className="eyebrow">O meni</span>
             <h2>Dragana Jović</h2>
             <p className="lead">
-              Moj put je počeo daleko od Feng Shui — na Tehničko-metalurškom
+              Moj put je počeo daleko od Feng Shui, na Tehničko-metalurškom
               fakultetu u Beogradu. Ta osnova dala mi je sposobnost da vidim
               prostor ne samo kao estetiku, već kao sistem koji utiče na sve oko
               sebe.
             </p>
             <p className="lead">
               Danas, nakon 25 godina i više od 1000 projekata, ono što me pokreće
-              nije tehnika — već trenutak kada klijentkinja kaže: „Konačno se
+              nije tehnika, već trenutak kada klijentkinja kaže: „Konačno se
               osećam kao kod kuće u sopstvenom domu.&rdquo;
             </p>
           </div>
@@ -451,7 +449,7 @@ const SkolaCContent = () => {
         <div className="wrap stack g32">
           <div className="stack g12">
             <span className="eyebrow">Upis</span>
-            <h2>Feng shui online program — 8 nedelja</h2>
+            <h2>Feng shui online program u 8 nedelja</h2>
           </div>
           <div className="pricebox stack g16">
             <div>
@@ -460,7 +458,7 @@ const SkolaCContent = () => {
               </span>
             </div>
             <p style={{ color: 'rgba(255,255,255,.9)' }}>
-              Program kreće u <strong>oktobru 2026.</strong> — cena i tačan datum
+              Program kreće u <strong>oktobru 2026.</strong> Cena i tačan datum
               upisa biće objavljeni uskoro.
             </p>
             <button className="btn btn-white" onClick={open('prijava')}>
@@ -520,7 +518,7 @@ const SkolaCContent = () => {
               <summary>Da li mi treba prethodno znanje o feng shui-ju?</summary>
               <p>
                 Nije potrebno. Program počinje od osnova i postepeno gradi
-                naprednije koncepte — pristupačan je potpunim početnicima, a i
+                naprednije koncepte. Pristupačan je potpunim početnicima, a i
                 dalje vredan onima sa nešto iskustva.
               </p>
             </details>
@@ -535,7 +533,7 @@ const SkolaCContent = () => {
             <details>
               <summary>Koliko vremena treba da izdvojim nedeljno?</summary>
               <p>
-                Računajte na nekoliko sati nedeljno — sesiju, čitanje i praktični
+                Računajte na nekoliko sati nedeljno: sesiju, čitanje i praktični
                 zadatak na sopstvenom prostoru.
               </p>
             </details>
@@ -546,7 +544,7 @@ const SkolaCContent = () => {
               </summary>
               <p>
                 Da. Program pokriva prilagođavanja za sve situacije, uključujući
-                iznajmljene i male prostore — bez građevinskih zahvata.
+                iznajmljene i male prostore, bez građevinskih zahvata.
               </p>
             </details>
             <details>
@@ -559,7 +557,7 @@ const SkolaCContent = () => {
             <details>
               <summary>Kako se vrši plaćanje?</summary>
               <p>
-                Detalje oko plaćanja dobijate nakon prijave — javićemo vam se sa
+                Detalje oko plaćanja dobijate nakon prijave. Javićemo vam se sa
                 svim informacijama i načinima uplate.
               </p>
             </details>
@@ -603,7 +601,7 @@ const SkolaCContent = () => {
         title={modal ? modalCopy[modal].title : undefined}
         subtitle={modal ? modalCopy[modal].subtitle : undefined}
         serviceType="Feng Shui škola (kurs)"
-        heardFrom="Škola — stranica (verzija C)"
+        heardFrom="Škola (verzija C)"
       />
     </div>
   );
