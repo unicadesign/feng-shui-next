@@ -445,6 +445,9 @@
 .fs-c .learn { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 1000px) { .fs-c .learn { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
 
+/* Leva kolona drži i listu i poziv na akciju, da dugme stoji pod
+   brojevima a ne preko cele širine ispod oba stupca. */
+.fs-c .learn-col { display: flex; flex-direction: column; gap: 1.75rem; }
 .fs-c .learn-list { border-top: 1px solid var(--cream-300); }
 .fs-c .learn-item {
   display: grid; grid-template-columns: auto 1fr auto; gap: .3rem 1.15rem;

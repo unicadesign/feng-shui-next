@@ -312,6 +312,7 @@ const SkolaCContent = () => {
           </div>
 
           <div className="learn">
+            <div className="learn-col">
             <div className="learn-list" role="tablist" aria-label="Ishodi po delovima programa">
               {ishodi.map((it, i) => (
                 <button
@@ -333,6 +334,10 @@ const SkolaCContent = () => {
                 </button>
               ))}
             </div>
+              <button className="btn btn-accent" onClick={open('prijava')}>
+                Rezerviši mi mesto
+              </button>
+            </div>
 
             <aside className="learn-panel" aria-live="polite">
               <span className="pe">{ishodi[ishod].eyebrow}</span>
@@ -343,10 +348,6 @@ const SkolaCContent = () => {
               </div>
             </aside>
           </div>
-
-          <button className="btn btn-accent" onClick={open('prijava')}>
-            Rezerviši mi mesto
-          </button>
         </div>
       </section>
 
