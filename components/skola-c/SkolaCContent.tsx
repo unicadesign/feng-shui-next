@@ -32,11 +32,24 @@ const SkolaCContent = () => {
     <div className="fs-c">
       {/* BLOK 1 — HERO */}
       <header className="hero">
+        {/*
+          Pozadina je art-directed: desktop verzija ima praznu levu trećinu,
+          mobilna praznu gornju polovinu — tekst u oba slučaja stoji na
+          praznini, a Dragana ostaje neisečena. <picture> je namerno umesto
+          next/image jer garantuje da se skida samo jedna od dve slike.
+        */}
+        <picture className="hero-bg">
+          <source
+            media="(max-width: 767px)"
+            srcSet="/images/skola-c-hero-mobile.jpg"
+          />
+          <img
+            src="/images/skola-c-hero-desktop.jpg"
+            alt="Dragana Jović — Feng Shui"
+            fetchPriority="high"
+          />
+        </picture>
         <div className="hero-in">
-          <div className="hero-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/hero.jpeg" alt="Dragana Jović — Feng Shui" />
-          </div>
           <div className="hero-body stack g24">
             <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
               Online program · dostupan uvek i svuda

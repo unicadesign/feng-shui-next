@@ -128,18 +128,79 @@
 .fs-c .jump a:hover .dot { background: var(--gold-50); border-color: var(--gold-200); }
 @media (min-width: 700px) { .fs-c .jump { justify-content: center; overflow: visible; } }
 
-/* --- hero --- */
-.fs-c .hero { padding: 0; background: var(--navy-900); color: #fff; position: relative; }
-.fs-c .hero-photo { aspect-ratio: 3/4; position: relative; background: var(--navy-800); overflow: hidden; }
-.fs-c .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.fs-c .hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(9,21,38,.1) 0%, rgba(9,21,38,.65) 58%, var(--navy-900) 100%); }
-.fs-c .hero-body { padding: 0 1.35rem clamp(2.5rem, 8vw, 4rem); margin-top: -5rem; position: relative; }
-.fs-c .hero h1 { color: #fff; }
-@media (min-width: 900px) {
-  .fs-c .hero-in { display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; max-width: 1040px; margin: 0 auto; min-height: 640px; padding: 3rem 1.35rem; gap: 2rem; }
-  .fs-c .hero-photo { aspect-ratio: 4/5; border-radius: 24px; order: 2; }
-  .fs-c .hero-photo::after { background: linear-gradient(180deg, rgba(9,21,38,.05), rgba(9,21,38,.35)); }
-  .fs-c .hero-body { margin-top: 0; padding: 0 2.5rem 0 0; order: 1; }
+/* ============================ HERO ============================
+   Pozadinska slika preko celog bloka; tekst stoji na praznini koja
+   je već u slici. Header je `fixed` bez kompenzacije u layoutu, pa
+   hero sam mora da obezbedi razmak odozgo (--fsc-nav-clear), inače
+   plutajući navbar prekrije eyebrow i vrh naslova.
+   -------------------------------------------------------------- */
+.fs-c .hero {
+  padding: 0;
+  background: var(--navy-900);
+  color: #fff;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* razmak za plutajući navbar: pt-5 (20px) + visina pilule */
+.fs-c .hero { --fsc-nav-clear: 92px; }
+@media (min-width: 768px) { .fs-c .hero { --fsc-nav-clear: 104px; } }
+
+.fs-c .hero-bg { position: absolute; inset: 0; z-index: -2; display: block; }
+.fs-c .hero-bg img {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+  /* mobilna slika ima Draganu pri dnu — dno je ono što se ne sme iseći */
+  object-position: center bottom;
+}
+/* Gradijent samo koliko treba da tekst ostane čitljiv i na uskim
+   ekranima gde bi naslov mogao da dodirne logo-znak u slici. */
+.fs-c .hero-bg::after {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg,
+    rgba(9,21,38,.86) 0%, rgba(9,21,38,.62) 30%, rgba(9,21,38,.12) 52%, rgba(9,21,38,0) 66%);
+}
+
+.fs-c .hero-in { position: relative; }
+.fs-c .hero-body {
+  padding: calc(var(--fsc-nav-clear) + .5rem) 1.35rem clamp(3rem, 9vw, 4.5rem);
+  position: relative;
+}
+/* Tekst i dugmad drže gornju polovinu; slika nosi donju.
+   Visina prati odnos same mobilne slike (768×1376) umesto fiksne
+   vrednosti — inače `cover` seče vrh, Dragana se penje uz ekran i
+   naleti na mikro-tekst. min-height je samo pod, da tekst uvek stane. */
+.fs-c .hero { aspect-ratio: 768 / 1376; min-height: 600px; }
+
+/* Na tamnoj podlozi bez .c-navy klase osnovni .micro je prigušen
+   do neupotrebljivog — hero ga eksplicitno vraća. */
+.fs-c .hero .micro { color: rgba(255,255,255,.78); }
+
+.fs-c .hero h1 {
+  color: #fff;
+  /* smanjeno u odnosu na globalni h1 — na 4.5rem je naslov ulazio pod navbar */
+  font-size: clamp(1.85rem, 6.4vw, 3.15rem);
+  line-height: 1.1;
+}
+.fs-c .hero .btn { max-width: 24rem; }
+
+@media (min-width: 768px) {
+  .fs-c .hero { aspect-ratio: auto; min-height: clamp(560px, 82vh, 780px); display: flex; align-items: center; }
+  /* desktop slika je prazna sleva — držimo je pomerenu tako da
+     Draganina glava ostane u kadru i na niskim prozorima */
+  .fs-c .hero-bg img { object-position: center 22%; }
+  .fs-c .hero-bg::after {
+    background: linear-gradient(90deg,
+      rgba(9,21,38,.88) 0%, rgba(9,21,38,.72) 34%, rgba(9,21,38,.25) 56%, rgba(9,21,38,0) 72%);
+  }
+  .fs-c .hero-in { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 2.5rem; }
+  .fs-c .hero-body {
+    margin-top: 0;
+    padding: var(--fsc-nav-clear) 0 3rem;
+    max-width: 54%;
+    min-width: 22rem;
+  }
 }
 
 /* --- koraci / brojevi --- */
