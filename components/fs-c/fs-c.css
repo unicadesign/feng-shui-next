@@ -436,3 +436,76 @@
 @keyframes fsc-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fsc-slide { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes fsc-pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
+
+/* --- ISHOD: editorial indeks (numerisana lista + panel) ------------
+   Kompozicija po obrascu 3b iz Claude Design projekta, prevedena na
+   jezik C verzije. Lista nosi pregled, panel razrađuje aktivnu
+   stavku. Panel se pojavljuje tek od 1000px — ispod toga bi bio
+   uzak i samo bi ponavljao ono što u listi već piše. */
+.fs-c .learn { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 1000px) { .fs-c .learn { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
+
+.fs-c .learn-list { border-top: 1px solid var(--cream-300); }
+.fs-c .learn-item {
+  display: grid; grid-template-columns: auto 1fr auto; gap: .3rem 1.15rem;
+  align-items: start; width: 100%; text-align: left;
+  background: none; border: 0; border-bottom: 1px solid var(--cream-300);
+  padding: 1.25rem .25rem; cursor: pointer; font-family: var(--font);
+  transition: background .18s ease;
+}
+.fs-c .learn-item:hover { background: rgba(255,255,255,.55); }
+.fs-c .learn-item:focus-visible { outline: 2px solid var(--navy-400); outline-offset: -2px; }
+
+.fs-c .learn-item .ln {
+  /* sve ćelije su postavljene eksplicitno: sa auto-placementom i
+     span-om preko dva reda strelica upadne u kolonu naslova */
+  grid-column: 1; grid-row: 1 / span 2; align-self: start;
+  font-size: 2.1rem; font-weight: 300; line-height: 1; letter-spacing: -0.02em;
+  color: var(--gold-400); transition: color .18s ease, font-weight .18s ease;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .learn-item .lt {
+  grid-column: 2; grid-row: 1;
+  font-size: 1.22rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em;
+  color: var(--charcoal); transition: color .18s ease;
+}
+.fs-c .learn-item .ld { grid-column: 2; grid-row: 2; font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); }
+.fs-c .learn-item .la {
+  grid-column: 3; grid-row: 1 / span 2; align-self: center;
+  font-size: 1.15rem; color: var(--charcoal-400);
+  transition: transform .18s ease, color .18s ease;
+}
+.fs-c .learn-item[aria-selected='true'] .ln { color: var(--gold-600); font-weight: 500; }
+.fs-c .learn-item[aria-selected='true'] .lt { color: var(--navy-600); }
+.fs-c .learn-item[aria-selected='true'] .la { color: var(--navy-600); transform: translateX(4px); }
+
+/* Panel — mesto gde kasnije može da stane fotografija po delu programa;
+   dok je nema, nosi ga isti prsten-motiv kao „Enso" zatvaranje. */
+.fs-c .learn-panel { display: none; }
+@media (min-width: 1000px) {
+  .fs-c .learn-panel {
+    display: flex; flex-direction: column; justify-content: flex-end; gap: .85rem;
+    position: relative; overflow: hidden;
+    min-height: 460px; padding: 2.5rem;
+    border-radius: 24px; background: var(--navy-800); color: #fff;
+    box-shadow: 0 22px 50px rgba(38,60,89,.18);
+  }
+  .fs-c .learn-panel::before,
+  .fs-c .learn-panel::after {
+    content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+    left: 50%; top: 42%; transform: translate(-50%,-50%);
+  }
+  .fs-c .learn-panel::before { width: 250px; height: 250px; border: 1px solid rgba(200,168,78,.5); }
+  .fs-c .learn-panel::after  { width: 330px; height: 330px; border: 1px dashed rgba(200,168,78,.28); }
+  .fs-c .learn-panel > * { position: relative; }
+  .fs-c .learn-panel .pe { font-style: italic; font-size: 1rem; color: var(--gold-200); }
+  .fs-c .learn-panel .pt {
+    font-size: 1.35rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .09em; line-height: 1.3; color: #fff;
+  }
+  .fs-c .learn-panel .pd { font-size: 1rem; line-height: 1.6; color: var(--navy-300); }
+  .fs-c .learn-panel .pc {
+    margin-top: .6rem; padding-top: 1rem; border-top: 1px solid rgba(166,221,237,.22);
+    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--navy-300);
+  }
+}

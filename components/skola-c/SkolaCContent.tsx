@@ -18,6 +18,42 @@ const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
   },
 };
 
+/** Ishodi po delovima programa. `kratko` nosi lista, `puno` panel. */
+const ishodi = [
+  {
+    br: '01',
+    eyebrow: 'posle prvog dela',
+    naslov: 'Da čitate tlocrt',
+    kratko: 'Tlocrt sa pravcem kompasa',
+    puno:
+      'Nacrtaćete tlocrt svog doma sa pravcem kompasa i videti kuda energija ulazi i kuda odlazi.',
+  },
+  {
+    br: '02',
+    eyebrow: 'posle drugog dela',
+    naslov: 'Da prepoznate blokadu',
+    kratko: 'Nered ili stvarna blokada',
+    puno:
+      'Znaćete da razlikujete običan nered od stvarne energetske blokade i šta vam koja govori.',
+  },
+  {
+    br: '03',
+    eyebrow: 'posle trećeg dela',
+    naslov: 'Da uredite prostorije',
+    kratko: 'Svaka prostorija po svojim pravilima',
+    puno:
+      'Spavaća soba, radni ugao, kuhinja i kupatilo. Svaka ima svoju logiku i svoja pravila.',
+  },
+  {
+    br: '04',
+    eyebrow: 'posle četvrtog dela',
+    naslov: 'Da aktivirate prostor',
+    kratko: 'Lični energetski broj i korekcije',
+    puno:
+      'Izračunaćete svoj lični energetski broj i znati koje korekcije podržavaju baš vaše ciljeve.',
+  },
+];
+
 /**
  * Feng Shui Škola — verzija C ("Mobilna kartica"), ugrađena u Next.js app.
  * Sadržaj i dizajn-jezik su porat iz prototipa design/skola/verzija-c.html.
@@ -26,6 +62,7 @@ const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
  */
 const SkolaCContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
+  const [ishod, setIshod] = useState(0);
   const open = (intent: ModalIntent) => () => setModal(intent);
 
   return (
@@ -273,48 +310,40 @@ const SkolaCContent = () => {
             <span className="eyebrow">Ishod</span>
             <h2>Tokom programa ćete naučiti</h2>
           </div>
-          <div className="steps steps-4">
-            <div className="step">
-              <span className="n" style={{ fontSize: '1.5rem' }}>
-                Posle 01
-              </span>
-              <h3>Da čitate tlocrt</h3>
-              <p>
-                Nacrtaćete tlocrt svog doma sa pravcem kompasa i videti kuda
-                energija ulazi i kuda odlazi.
-              </p>
+
+          <div className="learn">
+            <div className="learn-list" role="tablist" aria-label="Ishodi po delovima programa">
+              {ishodi.map((it, i) => (
+                <button
+                  key={it.br}
+                  type="button"
+                  role="tab"
+                  aria-selected={ishod === i}
+                  className="learn-item"
+                  onClick={() => setIshod(i)}
+                  onMouseEnter={() => setIshod(i)}
+                  onFocus={() => setIshod(i)}
+                >
+                  <span className="ln">{it.br}</span>
+                  <span className="lt">{it.naslov}</span>
+                  <span className="ld">{it.kratko}</span>
+                  <span className="la" aria-hidden="true">
+                    &rarr;
+                  </span>
+                </button>
+              ))}
             </div>
-            <div className="step">
-              <span className="n" style={{ fontSize: '1.5rem' }}>
-                Posle 02
-              </span>
-              <h3>Da prepoznate blokadu</h3>
-              <p>
-                Znaćete da razlikujete običan nered od stvarne energetske
-                blokade.
-              </p>
-            </div>
-            <div className="step">
-              <span className="n" style={{ fontSize: '1.5rem' }}>
-                Posle 03
-              </span>
-              <h3>Da uredite prostorije</h3>
-              <p>
-                Spavaća soba, radni ugao, kuhinja i kupatilo. Svaka ima svoja
-                pravila.
-              </p>
-            </div>
-            <div className="step">
-              <span className="n" style={{ fontSize: '1.5rem' }}>
-                Posle 04
-              </span>
-              <h3>Da aktivirate prostor</h3>
-              <p>
-                Izračunaćete svoj lični energetski broj i koje korekcije
-                podržavaju vaše ciljeve.
-              </p>
-            </div>
+
+            <aside className="learn-panel" aria-live="polite">
+              <span className="pe">{ishodi[ishod].eyebrow}</span>
+              <span className="pt">{ishodi[ishod].naslov}</span>
+              <p className="pd">{ishodi[ishod].puno}</p>
+              <div className="pc">
+                Deo {ishodi[ishod].br} od {ishodi.length}
+              </div>
+            </aside>
           </div>
+
           <button className="btn btn-accent" onClick={open('prijava')}>
             Rezerviši mi mesto
           </button>
