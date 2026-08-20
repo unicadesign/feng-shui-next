@@ -18,6 +18,19 @@ const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
   },
 };
 
+/** Talas ispred naslova kartice; sa tačkom označava energiju koja zastane. */
+const Talas = ({ tacka = false }: { tacka?: boolean }) => (
+  <svg width="38" height="12" viewBox="0 0 38 12" fill="none" aria-hidden="true" focusable="false">
+    <path
+      d="M2 6c2.2-4.5 4.4-4.5 6.6 0s4.4 4.5 6.6 0 4.4-4.5 6.6 0"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+    />
+    {tacka && <circle cx="30.5" cy="6" r="2.6" fill="currentColor" />}
+  </svg>
+);
+
 /** Ishodi po delovima programa. `kratko` nosi lista, `puno` panel. */
 const ishodi = [
   {
@@ -228,41 +241,45 @@ const SkolaCContent = () => {
       {/* BLOK 5 — ZAŠTO PROSTOR UTIČE */}
       <section className="card c-navy">
         <div className="wrap stack g32">
-          <div className="stack g12">
+          <div className="emap-head stack g12">
             <span className="eyebrow">Zašto prostor utiče na vas</span>
             <h2>Vaš prostor ima energetsku mapu</h2>
+            <p className="lead">
+              Feng Shui je za dom ono što je akupunktura za telo: otkriva blokade
+              koje ne vidite i vraća prirodan protok energije.
+            </p>
           </div>
-          <p className="lead">
-            Feng Shui je za dom ono što je akupunktura za telo: otkriva blokade
-            koje ne vidite i vraća prirodan protok energije. Kada energija dobro
-            teče, prostor podržava san, fokus i odnose. Kada zastane, prvo se
-            oseti, a tek onda razume.
+
+          <div className="emap">
+            <div className="emap-card emap-flow">
+              <header>
+                <Talas />
+                <b>Kada teče</b>
+              </header>
+              <p>
+                Prostor podržava san, fokus i odnose. Dom vas dočeka i napuni.
+              </p>
+            </div>
+
+            <div className="emap-card emap-stall">
+              <header>
+                <Talas tacka />
+                <b>Kada zastane</b>
+              </header>
+              <ul className="emap-list">
+                <li>Umesto mira kod kuće osetite težinu.</li>
+                <li>Nered se vraća, fokus stalno beži.</li>
+                <li>Nešto „ne štima&rdquo;, a ne znate šta.</li>
+                <li>Radite na sebi, ali dom vas ne podržava.</li>
+                <li>Soba koju izbegavate, ugao koji odbija.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="emap-close">
+            <span className="a">Ne popravljamo dom.</span>
+            <span className="b">Usklađujemo ga sa vama.</span>
           </p>
-          <ul className="big-list">
-            <li>
-              Dođete kući nakon napornog dana, a umesto mira osetite težinu.
-            </li>
-            <li>Nered se vraća bez obzira koliko čistite. Fokus vam stalno beži.</li>
-            <li>
-              Osećate da nešto u prostoru „ne štima&rdquo;, ali ne umete da objasnite
-              šta.
-            </li>
-            <li>
-              Uspešne ste i radite na sebi, ali dom vas ne podržava. I to se
-              oseća.
-            </li>
-            <li>Soba koju izbegavate, ugao koji odbija, a ne znate zašto.</li>
-          </ul>
-          <h2
-            style={{
-              fontSize: 'clamp(1.5rem,5.5vw,2.2rem)',
-              textAlign: 'center',
-            }}
-          >
-            Ne popravljamo dom.
-            <br />
-            Usklađujemo ga sa vama.
-          </h2>
         </div>
       </section>
 
