@@ -560,8 +560,12 @@ const SkolaCContent = () => {
             <span className="eyebrow">Pitanja</span>
             <h2>Pre nego što se prijavite</h2>
           </div>
+          {/* Zajednicki `name` pravi harmoniku: otvaranje jednog
+              pitanja zatvara prethodno, bez JavaScript-a. Stariji
+              pregledaci koji atribut ne poznaju samo zadrze staro
+              ponasanje, gde ostaju svi otvoreni. */}
           <div className="faq">
-            <details open>
+            <details name="faq" open>
               <summary>Da li mi treba prethodno znanje o feng shui-ju?</summary>
               <p>
                 Nije potrebno. Program počinje od osnova i postepeno gradi
@@ -569,7 +573,7 @@ const SkolaCContent = () => {
                 dalje vredan onima sa nešto iskustva.
               </p>
             </details>
-            <details>
+            <details name="faq">
               <summary>Šta ako propustim sesiju uživo?</summary>
               <p>
                 Sve sesije uživo se snimaju i postaju dostupne u roku od 24 sata.
@@ -577,14 +581,14 @@ const SkolaCContent = () => {
                 uspešno završe program gledajući snimke.
               </p>
             </details>
-            <details>
+            <details name="faq">
               <summary>Koliko vremena treba da izdvojim nedeljno?</summary>
               <p>
                 Računajte na nekoliko sati nedeljno: sesiju, čitanje i praktični
                 zadatak na sopstvenom prostoru.
               </p>
             </details>
-            <details>
+            <details name="faq">
               <summary>
                 Mogu li da primenim ovo ako živim u stanu ili iznajmljenom
                 prostoru?
@@ -594,14 +598,14 @@ const SkolaCContent = () => {
                 iznajmljene i male prostore, bez građevinskih zahvata.
               </p>
             </details>
-            <details>
+            <details name="faq">
               <summary>Koliko dugo imam pristup materijalima?</summary>
               <p>
                 Materijalima i snimcima sesija imate pristup tokom celog trajanja
                 kursa.
               </p>
             </details>
-            <details>
+            <details name="faq">
               <summary>Kako se vrši plaćanje?</summary>
               <p>
                 Detalje oko plaćanja dobijate nakon prijave. Javićemo vam se sa
