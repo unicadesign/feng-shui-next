@@ -476,39 +476,46 @@ const SkolaCContent = () => {
       </section>
 
       {/* BLOK 10 — O MENI */}
-      <section className="card c-navy" id="o-meni">
-        <div className="wrap stack g32">
-          <div className="portrait">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/dragana-joivc.webp" alt="Dragana Jović" />
-          </div>
-          <div className="stack g16">
-            <span className="eyebrow">O meni</span>
-            <h2>Dragana Jović</h2>
-            <p className="lead">
-              Moj put je počeo daleko od Feng Shui, na Tehničko-metalurškom
-              fakultetu u Beogradu. Ta osnova dala mi je sposobnost da vidim
-              prostor ne samo kao estetiku, već kao sistem koji utiče na sve oko
-              sebe.
-            </p>
-            <p className="lead">
-              Danas, nakon 25 godina i više od 1000 projekata, ono što me pokreće
-              nije tehnika, već trenutak kada klijentkinja kaže: „Konačno se
-              osećam kao kod kuće u sopstvenom domu.&rdquo;
-            </p>
-          </div>
-          <div className="stats">
-            <div>
-              <b>25</b>
-              <span>godina iskustva</span>
+      <section className="card c-navy about" id="o-meni">
+        <div className="about-bg">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/skola-c-o-meni.jpg"
+            alt="Dragana Jović"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="wrap about-in">
+          <div className="about-col stack g24">
+            <div className="stack g16">
+              <span className="eyebrow">O meni</span>
+              <h2>Dragana Jović</h2>
+              <p className="lead">
+                Moj put je počeo daleko od Feng Shui, na Tehničko-metalurškom
+                fakultetu u Beogradu. Ta osnova dala mi je sposobnost da vidim
+                prostor ne samo kao estetiku, već kao sistem koji utiče na sve
+                oko sebe.
+              </p>
+              <p className="lead">
+                Danas, nakon 25 godina i više od 1000 projekata, ono što me
+                pokreće nije tehnika, već trenutak kada klijentkinja kaže:
+                „Konačno se osećam kao kod kuće u sopstvenom domu.&rdquo;
+              </p>
             </div>
-            <div>
-              <b>1000+</b>
-              <span>projekata</span>
-            </div>
-            <div>
-              <b>180+</b>
-              <span>radionica</span>
+            <div className="stats">
+              <div>
+                <b>25</b>
+                <span>godina iskustva</span>
+              </div>
+              <div>
+                <b>1000+</b>
+                <span>projekata</span>
+              </div>
+              <div>
+                <b>180+</b>
+                <span>radionica</span>
+              </div>
             </div>
           </div>
         </div>

@@ -329,6 +329,61 @@
 .fs-c .portrait { aspect-ratio: 4/5; max-width: 420px; margin-inline: auto; border-radius: 20px; overflow: hidden; background: var(--navy-700); width: 100%; }
 .fs-c .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
+/* ================= O MENI kao pozadinska slika =================
+   Dragana stoji u levoj trećini kadra (izmereno: bela odeća zauzima
+   15,4%–32,8% širine slike, teme na 7% visine), pa tekst ide desno.
+   Osnova slike je #020B1E — sve prelivke idu ka toj boji, ne ka
+   --navy-900, da se ne vidi šav tamo gde slika prestaje.
+   Na mobilnom pored nje nema mesta za tekst: slika postaje traka na
+   vrhu koja se gasi u boju sekcije, a tekst stoji ispod.
+   --------------------------------------------------------------- */
+.fs-c .about {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #020B1E;
+  padding-top: 0;
+}
+.fs-c .about-bg {
+  position: absolute; top: 0; left: 0; right: 0; z-index: -2;
+  /* traka: dovoljno visoka da se vidi cela figura, a ne samo glava */
+  height: clamp(300px, 100vw, 460px);
+}
+.fs-c .about-bg img {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+  /* 26% drži Draganu u levoj trećini i kad se kadar seče po širini;
+     `top` čuva teme, jer se figura seče odozdo, nikad odozgo */
+  object-position: 26% top;
+}
+/* Bez z-index-a: ::after je posle <img> u stablu pa ga pokriva. */
+.fs-c .about-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(2,11,30,0) 42%, rgba(2,11,30,.55) 72%, rgba(2,11,30,.92) 92%, #020B1E 100%);
+}
+.fs-c .about-in { padding-top: clamp(300px, 100vw, 460px); }
+
+@media (min-width: 900px) {
+  /* Slika drži celu sekciju; tekst stoji u desnoj koloni, van figure. */
+  .fs-c .about { padding-top: clamp(2.75rem, 9vw, 5.5rem); min-height: 34rem; display: flex; align-items: center; }
+  .fs-c .about-bg { bottom: 0; height: auto; }
+  /* Vodoravna vrednost radi samo dok je kadar širi od prozora (do
+     ~1370px) — iznad toga se slika seče po visini. A baš tu i treba:
+     na 900px sa 22% figuri ostaje 62px do tekstualne kolone, sa 34%
+     razmak je 106px. */
+  .fs-c .about-bg img { object-position: 34% top; }
+  /* Zastor samo nad tekstom: najsvetlije linije geometrije daju
+     belom tekstu 3,85:1, a ispod 55% zastora 6,8:1. Levo ostaje
+     čisto da se figura ne zamuti. */
+  .fs-c .about-bg::after {
+    background: linear-gradient(90deg,
+      rgba(2,11,30,0) 32%, rgba(2,11,30,.35) 46%, rgba(2,11,30,.62) 60%, rgba(2,11,30,.72) 100%);
+  }
+  .fs-c .about-in { padding-top: 0; display: flex; justify-content: flex-end; }
+  .fs-c .about-col { width: min(100%, 30rem); }
+}
+
 /* --- cena --- */
 .fs-c .pricebox { background: rgba(0,0,0,.22); border-radius: 22px; padding: 1.6rem; text-align: center; }
 .fs-c .price { font-size: clamp(3rem, 13vw, 4.5rem); font-weight: 800; letter-spacing: normal; line-height: 1; }
