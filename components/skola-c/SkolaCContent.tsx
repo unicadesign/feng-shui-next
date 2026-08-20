@@ -516,63 +516,33 @@ const SkolaCContent = () => {
 
       {/* BLOK 11 — UPIS / CENA */}
       <section className="card c-accent" id="upis">
-        <div className="wrap stack g32">
-          <div className="stack g12">
+        <div className="wrap">
+          <div className="enroll">
+            <div className="enroll-rule" aria-hidden="true" />
             <span className="eyebrow">Upis</span>
             <h2>Feng shui online program u 8 nedelja</h2>
-          </div>
-          <div className="pricebox stack g16">
-            <div>
-              <span className="price" style={{ fontSize: 'clamp(2rem,9vw,3rem)' }}>
-                Uskoro
-              </span>
+
+            <div className="enroll-when">
+              <div>
+                <span className="lbl">Program kreće</span>
+                <span className="val">oktobar 2026.</span>
+              </div>
             </div>
-            <p style={{ color: 'rgba(255,255,255,.9)' }}>
-              Program kreće u <strong>oktobru 2026.</strong> Cena i tačan datum
-              upisa biće objavljeni uskoro.
+            <p className="enroll-note">
+              Cena i tačan datum upisa biće objavljeni uskoro.
             </p>
+
+            <ul className="enroll-chips">
+              <li>8 nedelja lekcija, dostupnih celo vreme</li>
+              <li>Konsultacije uživo sa Draganom</li>
+              <li>Praktični zadaci nakon svake lekcije</li>
+              <li>Grupa za podršku polaznica</li>
+            </ul>
+
             <button className="btn btn-white" onClick={open('prijava')}>
               Rezervišite mesto
             </button>
           </div>
-          <ul className="big-list" style={{ gap: '.5rem' }}>
-            <li
-              style={{
-                background: 'rgba(255,255,255,.12)',
-                borderColor: 'rgba(255,255,255,.25)',
-                color: '#fff',
-              }}
-            >
-              8 nedelja lekcija, dostupnih tokom celog trajanja kursa
-            </li>
-            <li
-              style={{
-                background: 'rgba(255,255,255,.12)',
-                borderColor: 'rgba(255,255,255,.25)',
-                color: '#fff',
-              }}
-            >
-              Konsultacije uživo sa Draganom
-            </li>
-            <li
-              style={{
-                background: 'rgba(255,255,255,.12)',
-                borderColor: 'rgba(255,255,255,.25)',
-                color: '#fff',
-              }}
-            >
-              Praktični zadaci i vežbe nakon svake lekcije
-            </li>
-            <li
-              style={{
-                background: 'rgba(255,255,255,.12)',
-                borderColor: 'rgba(255,255,255,.25)',
-                color: '#fff',
-              }}
-            >
-              Grupa za podršku polaznica
-            </li>
-          </ul>
         </div>
       </section>
 

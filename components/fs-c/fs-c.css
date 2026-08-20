@@ -650,3 +650,51 @@
 .fs-c .emap-close span { display: block; }
 .fs-c .emap-close .a { color: #fff; }
 .fs-c .emap-close .b { color: var(--gold-200); }
+
+/* --- UPIS: centrirana sekcija sa datumom i čipovima ---------------
+   Kontrast na akcentu #A6432E: belo 6,06 · gold-100 5,20 ·
+   belo 82% 4,62 · belo u čipu 4,96. gold-200 daje 4,35 i za sitan
+   verzal eyebrow je ispod praga, zato je eyebrow --gold-100. */
+.fs-c .enroll { text-align: center; max-width: 52rem; margin-inline: auto; }
+.fs-c .enroll-rule {
+  width: 1px; height: 4.5rem; margin: 0 auto 1.75rem;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.45));
+}
+.fs-c .enroll .eyebrow { color: var(--gold-100); }
+.fs-c .enroll h2 { color: #fff; margin-top: .6rem; }
+
+/* „PROGRAM KREĆE / oktobar 2026." sa crticama sa strane */
+.fs-c .enroll-when {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+  gap: 1.25rem; margin-top: 2rem;
+}
+.fs-c .enroll-when::before,
+.fs-c .enroll-when::after { content: ""; height: 1px; background: rgba(255,255,255,.35); }
+.fs-c .enroll-when .lbl {
+  display: block; font-size: .72rem; font-weight: 600; letter-spacing: .18em;
+  text-transform: uppercase; color: rgba(255,255,255,.82); margin-bottom: .3rem;
+}
+.fs-c .enroll-when .val {
+  display: block; font-size: clamp(1.5rem, 5.5vw, 2rem); font-weight: 700;
+  letter-spacing: -0.02em; color: #fff; line-height: 1.15;
+}
+.fs-c .enroll-note { color: rgba(255,255,255,.82); font-size: 1rem; margin-top: 1rem; }
+
+.fs-c .enroll-chips {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem;
+  margin-top: 2rem; list-style: none; padding: 0;
+}
+.fs-c .enroll-chips li {
+  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.28);
+  border-radius: var(--pill); padding: .8rem 1.35rem;
+  font-size: .97rem; line-height: 1.35; color: #fff;
+}
+.fs-c .enroll .btn { margin: 2.25rem auto 0; }
+/* Naslov je nešto manji nego globalni h2 — na 3.25rem se lomi u dva
+   reda i razbija centriranu kompoziciju. */
+.fs-c .enroll h2 { font-size: clamp(1.7rem, 4.4vw, 2.5rem); }
+/* CTA nosi boju sekcije, ne opšti charcoal: akcent na belom daje
+   6,06 kontrasta. Uže je scope-ovano na .enroll da ne dira
+   ista dugmad na drugim sekcijama i stranicama. */
+.fs-c .enroll .btn-white { color: var(--accent); }
+.fs-c .enroll .btn-white:hover { background: var(--accent-soft); }
