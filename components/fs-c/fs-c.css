@@ -557,3 +557,52 @@
   font-size: .85rem; font-weight: 700; line-height: 1;
   margin-top: .05rem;
 }
+
+/* --- KAKO IZGLEDA KURS: traka nedelja + kolone sa razdelnicima ----
+   Traka nosi ritam osam nedelja; četiri tačke stoje tačno iznad
+   četiri kolone jer dele isti grid. Natpis na kraju je --gold-600:
+   --gold-400 na cream podlozi daje 2,22 i ne bi se pročitao. */
+.fs-c .course-rail { display: none; }
+@media (min-width: 900px) {
+  .fs-c .course-rail {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    align-items: center; position: relative;
+    height: 1.6rem; margin-bottom: .5rem; padding-right: 6.5rem;
+  }
+  .fs-c .course-rail::before {
+    content: ""; position: absolute; left: 0; right: 5.75rem; top: 50%;
+    height: 1px; background: var(--gold-400); opacity: .6;
+  }
+  .fs-c .rail-dot {
+    position: relative; justify-self: start;
+    width: .72rem; height: .72rem; border-radius: 50%;
+    border: 1.5px solid var(--gold-400); background: var(--cream-50);
+  }
+  .fs-c .rail-dot.is-on { width: .95rem; height: .95rem; background: var(--gold-400); }
+  .fs-c .rail-end {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    font-size: .82rem; font-weight: 700; color: var(--gold-600); white-space: nowrap;
+  }
+}
+
+.fs-c .course-cols { display: grid; grid-template-columns: 1fr; gap: 1.75rem; }
+@media (min-width: 640px) { .fs-c .course-cols { grid-template-columns: 1fr 1fr; gap: 2rem 0; } }
+@media (min-width: 900px) { .fs-c .course-cols { grid-template-columns: repeat(4, 1fr); gap: 0; } }
+
+.fs-c .course-col { padding-top: 1.5rem; border-top: 1px solid var(--cream-300); }
+@media (min-width: 900px) {
+  .fs-c .course-col {
+    padding: 1.75rem 1.75rem 0; border-top: 0;
+    border-left: 1px solid var(--cream-300);
+  }
+  .fs-c .course-col:first-child { padding-left: 0; border-left: 0; }
+  .fs-c .course-col:last-child { padding-right: 0; }
+}
+.fs-c .course-col h3 { font-size: 1.15rem; font-weight: 700; color: var(--charcoal); margin-bottom: .6rem; }
+.fs-c .course-col p { font-size: 1rem; line-height: 1.6; color: var(--charcoal-500); }
+
+.fs-c .course-note {
+  font-style: italic; font-weight: 500;
+  font-size: clamp(1.02rem, 2.6vw, 1.22rem); line-height: 1.5;
+  color: var(--charcoal); margin-top: .75rem;
+}

@@ -366,40 +366,52 @@ const SkolaCContent = () => {
               Osam nedelja, tempo koji možete da pratite uz posao i porodicu
             </h2>
           </div>
-          <div className="steps steps-4">
-            <div className="step">
-              <h3>Sesije uživo</h3>
-              <p>
-                Interaktivni časovi sa demonstracijama i pitanjima. Sve se snima,
-                pa ništa ne propuštate.
-              </p>
+
+          <div>
+            {/* Traka deli grid sa kolonama ispod, pa tačke stoje tačno
+                iznad naslova. Dekoracija — čitaču ekrana ne govori ništa
+                što tekst ispod već ne kaže. */}
+            <div className="course-rail" aria-hidden="true">
+              <span className="rail-dot is-on" />
+              <span className="rail-dot" />
+              <span className="rail-dot" />
+              <span className="rail-dot" />
+              <span className="rail-end">nedelja 8</span>
             </div>
-            <div className="step">
-              <h3>Materijali</h3>
-              <p>
-                Detaljni materijali i vizuelni vodiči kroz onlajn platformu,
-                dostupni celo vreme.
-              </p>
-            </div>
-            <div className="step">
-              <h3>Mala grupa</h3>
-              <p>
-                Broj polaznica je namerno ograničen, da svaka dobije prostor i
-                pažnju.
-              </p>
-            </div>
-            <div className="step">
-              <h3>Praktični zadaci</h3>
-              <p>
-                Vaš dom je učionica: svaka lekcija se odmah primenjuje, uz
-                povratnu informaciju.
-              </p>
+
+            <div className="course-cols">
+              <div className="course-col">
+                <h3>Sesije uživo</h3>
+                <p>
+                  Interaktivni časovi sa demonstracijama i pitanjima. Sve se
+                  snima, pa ništa ne propuštate.
+                </p>
+              </div>
+              <div className="course-col">
+                <h3>Materijali</h3>
+                <p>
+                  Detaljni materijali i vizuelni vodiči kroz onlajn platformu,
+                  dostupni celo vreme.
+                </p>
+              </div>
+              <div className="course-col">
+                <h3>Mala grupa</h3>
+                <p>
+                  Broj polaznica je namerno ograničen, da svaka dobije prostor i
+                  pažnju.
+                </p>
+              </div>
+              <div className="course-col">
+                <h3>Praktični zadaci</h3>
+                <p>
+                  Vaš dom je učionica: svaka lekcija se odmah primenjuje, uz
+                  povratnu informaciju.
+                </p>
+              </div>
             </div>
           </div>
-          <p
-            className="lead"
-            style={{ fontWeight: 500, color: 'var(--charcoal)' }}
-          >
+
+          <p className="course-note">
             Feng shui postaje korisniji kada znate šta tražite i zašto je
             potrebna određena korekcija.
           </p>
