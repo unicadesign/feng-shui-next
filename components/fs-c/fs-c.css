@@ -111,6 +111,11 @@
 .fs-c .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 10px 26px rgba(166,67,46,.3); }
 .fs-c .btn-accent:hover { background: var(--accent-dark); }
 .fs-c .btn-white { background: #fff; color: var(--charcoal); }
+/* Tiha varijanta za tamnu podlogu: puni beli taster je prejak kad
+   uz njega stoji terakota, pa sekundarna radnja ostaje samo kontura.
+   Ivica na --navy-800 daje 3,78:1, iznad praga 3:1 za elemente. */
+.fs-c .btn-line { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
+.fs-c .btn-line:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.6); }
 .fs-c .btn-navy { background: var(--navy-700); color: #fff; }
 .fs-c .btn-gold { background: var(--gold-400); color: #1a1a1a; }
 .fs-c .micro { font-size: .8rem; color: var(--charcoal-400); text-align: center; }
@@ -753,3 +758,37 @@
    ista dugmad na drugim sekcijama i stranicama. */
 .fs-c .enroll .btn-white { color: var(--accent); }
 .fs-c .enroll .btn-white:hover { background: var(--accent-soft); }
+
+/* ============ BLOK 13 — ZATVARANJE PRE FOOTERA ============
+   Poslednji poziv je centriran: naslov, jedna rečenica, dve radnje u
+   redu i tanka linija ispod koje stoje tri broja. Brojevi se ovde ne
+   ponavljaju u karticama kao u „O meni" nego kao tihi red, da ne
+   preuzmu pažnju od dugmadi.
+   --------------------------------------------------------- */
+.fs-c .close { text-align: center; max-width: 52rem; margin-inline: auto; }
+.fs-c .close .lead { max-width: 34rem; margin-inline: auto; margin-top: 1rem; }
+.fs-c .close-cta { display: flex; flex-direction: column; gap: .75rem; margin-top: 2.25rem; }
+@media (min-width: 640px) {
+  .fs-c .close-cta { flex-direction: row; justify-content: center; gap: 1rem; }
+  /* Bez donje granice „Prijavi se" ispadne upola uža pilula od
+     „Zakaži konsultaciju" — dve radnje istog reda treba da nose
+     istu težinu. */
+  .fs-c .close-cta .btn { min-width: 13rem; }
+}
+/* Linija i brojevi dele istu širinu, pa linija čita kao granica tog
+   reda, a ne kao slobodna crta preko sekcije. */
+.fs-c .close-proof {
+  max-width: 30rem; margin: 3rem auto 0; padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,.22);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: start;
+}
+.fs-c .close-proof b {
+  display: block; font-size: clamp(1.5rem, 5.5vw, 2.1rem);
+  font-weight: 800; letter-spacing: normal; color: #fff; line-height: 1.1;
+}
+/* Natpis ide malim slovima, ne verzalom kao u .stats: verzal na .72rem
+   uz beli broj pravi drugi naglasak tamo gde treba samo fusnota. */
+.fs-c .close-proof span {
+  display: block; margin-top: .35rem; font-size: .85rem; line-height: 1.35;
+  color: var(--navy-300);
+}

@@ -614,19 +614,33 @@ const SkolaCContent = () => {
 
       {/* BLOK 13 — FINALNI CTA */}
       <section className="card c-navy" id="upis-dole">
-        <div className="wrap stack g24">
+        <div className="wrap close">
           <h2>Mesto se rezerviše prijavom</h2>
           <p className="lead">
             Ostavite svoje podatke i javićemo vam se sa detaljima oko uplate i
             pristupa kursu.
           </p>
-          <div className="stack g8">
+          <div className="close-cta">
             <button className="btn btn-accent" onClick={open('prijava')}>
               Prijavi se
             </button>
-            <button className="btn btn-white" onClick={open('konsultacije')}>
+            <button className="btn btn-line" onClick={open('konsultacije')}>
               Zakaži konsultaciju
             </button>
+          </div>
+          <div className="close-proof">
+            <div>
+              <b>1000+</b>
+              <span>projekata</span>
+            </div>
+            <div>
+              <b>25</b>
+              <span>godina iskustva</span>
+            </div>
+            <div>
+              <b>180+</b>
+              <span>održanih radionica</span>
+            </div>
           </div>
         </div>
       </section>
