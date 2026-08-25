@@ -18,52 +18,30 @@ const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
   },
 };
 
-/** Talas ispred naslova kartice; sa tačkom označava energiju koja zastane. */
-const Talas = ({ tacka = false }: { tacka?: boolean }) => (
-  <svg width="38" height="12" viewBox="0 0 38 12" fill="none" aria-hidden="true" focusable="false">
-    <path
-      d="M2 6c2.2-4.5 4.4-4.5 6.6 0s4.4 4.5 6.6 0 4.4-4.5 6.6 0"
-      stroke="currentColor"
-      strokeWidth="1.7"
-      strokeLinecap="round"
-    />
-    {tacka && <circle cx="30.5" cy="6" r="2.6" fill="currentColor" />}
-  </svg>
-);
-
-/** Ishodi po delovima programa. `kratko` nosi lista, `puno` panel. */
+/** Ishodi po delovima programa; lista ih prikazuje jedan ispod drugog. */
 const ishodi = [
   {
     br: '01',
-    eyebrow: 'posle prvog dela',
-    naslov: 'Da čitate tlocrt',
-    kratko: 'Tlocrt sa pravcem kompasa',
-    puno:
-      'Nacrtaćete tlocrt svog doma sa pravcem kompasa i videti kuda energija ulazi i kuda odlazi.',
+    naslov: 'Kako da prostor gledate na drugačiji način',
+    opis:
+      'Okolina, ulaz i raspored prostorija utiču na kvalitet energije i kvalitet života',
   },
   {
     br: '02',
-    eyebrow: 'posle drugog dela',
-    naslov: 'Da prepoznate blokadu',
-    kratko: 'Nered ili stvarna blokada',
-    puno:
-      'Znaćete da razlikujete običan nered od stvarne energetske blokade i šta vam koja govori.',
+    naslov: 'Znaćete da prepoznate blokade i kako da ih otklonite',
+    opis:
+      'Jer određeni obrasci ukazuju da prostorija, pravac ili sektor zaslužuju posebnu pažnju',
   },
   {
     br: '03',
-    eyebrow: 'posle trećeg dela',
-    naslov: 'Da uredite prostorije',
-    kratko: 'Svaka prostorija po svojim pravilima',
-    puno:
-      'Spavaća soba, radni ugao, kuhinja i kupatilo. Svaka ima svoju logiku i svoja pravila.',
+    naslov: 'Pratite praktičan redosled',
+    opis: 'I svaku prostoriju energetski oplemenite za njenu namenu',
   },
   {
     br: '04',
-    eyebrow: 'posle četvrtog dela',
     naslov: 'Da aktivirate prostor',
-    kratko: 'Lični energetski broj i korekcije',
-    puno:
-      'Izračunaćete svoj lični energetski broj i znati koje korekcije podržavaju baš vaše ciljeve.',
+    opis:
+      'Koristeći jednostavne principe aktivaciju vašeg doma uz pomoć 5 elemenata',
   },
 ];
 
@@ -75,7 +53,6 @@ const ishodi = [
  */
 const SkolaCContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
-  const [ishod, setIshod] = useState(0);
   const open = (intent: ModalIntent) => () => setModal(intent);
 
   return (
@@ -104,7 +81,12 @@ const SkolaCContent = () => {
             <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
               Online program · dostupan uvek i svuda
             </span>
-            <h1>NOVI dvomesečni feng shui kurs sa Draganom Jović</h1>
+            <div className="stack g12">
+              <h1>Feng shui program</h1>
+              <p className="hero-sub">
+                Naučite kako da uskladite dom sa svojim ciljevima
+              </p>
+            </div>
             <div className="stack g8">
               <button className="btn btn-accent" onClick={open('prijava')}>
                 Pokaži mi kako moj prostor utiče na moj život
@@ -149,17 +131,16 @@ const SkolaCContent = () => {
       {/* BLOK 2 — UVOD */}
       <section className="card c-cream">
         <div className="wrap stack g24">
-          <h2>
-            Vi i vaše okruženje ste u stalnoj interakciji i međusobnom uticaju
-          </h2>
+          <h2>Znate li da vaš dom čak sa 30% utiče na vašu sreću?</h2>
           <p className="lead">
             Tokom ove dvomesečne obuke Dragana Jović će vam pokazati kako da
-            identifikujete oblasti u vašem prostoru koje vam možda crpe energiju
-            i prave blokade za vaše bogatstvo, odnose i zdravlje.
+            identifikujete oblasti u vašem prostoru koje vam crpe energiju i
+            blokiraju dotok bogatstva, dobre odnose i zdravlje.
           </p>
           <p className="lead">
-            Feng shui vam pomaže da otkrijete da li vaš prostor podržava vaš
-            napredak ili vam život čini težim.
+            Feng shui vam pomaže da otkrijete na koji način vaš prostor može da
+            podržava vaš napredak i kako da izbegnete zamke u prostoru koje
+            život čini težim.
           </p>
         </div>
       </section>
@@ -175,28 +156,28 @@ const SkolaCContent = () => {
             <div className="step">
               <span className="n">01</span>
               <h3>Osnovne postavke</h3>
-              <p>Kako da feng shui funkcioniše na pravi način</p>
+              <p>Kako se uskladiti sa energijom svog prostora</p>
             </div>
             <div className="step">
               <span className="n">02</span>
-              <h3>Blokade u prostoru</h3>
-              <p>Kako ih pronaći i šta nam govore</p>
+              <h3>Dijagnostika prostora</h3>
+              <p>Blokade i kako ih otkloniti</p>
             </div>
             <div className="step">
               <span className="n">03</span>
               <h3>Delovi prostora</h3>
-              <p>I kako da rade za našu korist</p>
+              <p>I kako ih organizovati u skladu sa vašom energijom</p>
             </div>
             <div className="step">
               <span className="n">04</span>
               <h3>Aktivacija</h3>
-              <p>Kako da pokrenete uzlaznu spiralu</p>
+              <p>Kako da pokrenete uzlaznu spiralu života</p>
             </div>
           </div>
           <p className="lead">
-            Obuka je podeljena na četiri dela i svaki se nadovezuje na prethodni.
-            Krećete od toga kako energija ulazi i kreće se kroz prostor, učite da
-            prepoznate gde zastaje, pa tek onda kako se bira korekcija. Tako menjate ono što ima efekta, a ne sve odjednom.
+            Svaka sesija se nadovezuje na prethodnu. Počećete sa ulogom Chi-ja,
+            ispitati feng shui plan prostora, locirati moguće izvore blokada i
+            videti kako se biraju korekcije.
           </p>
           <button className="btn btn-gold" onClick={open('prijava')}>
             Pokaži mi kako moj prostor utiče na moj život
@@ -214,8 +195,8 @@ const SkolaCContent = () => {
               lineHeight: 1.3,
             }}
           >
-            „Nije potrebno da sve u vašem domu promenite, ali morate da znate šta
-            ugrožava vašu energiju i kako da to precizno promenite&rdquo;
+            „Nije potrebno da sve u vašem domu promenite kada znate šta ugrožava
+            vašu energiju i kako da precizno primenite feng shui&rdquo;
           </h2>
           <div className="stack g24">
             <div className="stack g12">
@@ -227,7 +208,7 @@ const SkolaCContent = () => {
             </div>
             <div className="stack g8">
               <button className="btn btn-accent" onClick={open('prijava')}>
-                Prijavi se za besplatne konsultacije
+                Prijavi se
               </button>
               <span className="micro">
                 Popunjavate kratak upitnik. Otvara se ovde, bez napuštanja
@@ -245,41 +226,42 @@ const SkolaCContent = () => {
             <span className="eyebrow">Zašto prostor utiče na vas</span>
             <h2>Vaš prostor ima energetsku mapu</h2>
             <p className="lead">
-              Feng Shui je za dom ono što je akupunktura za telo: otkriva blokade
-              koje ne vidite i vraća prirodan protok energije.
+              Feng shui se bavi životnom energijom Chi i kako se ona kreće.
             </p>
           </div>
 
-          <div className="emap">
-            <div className="emap-card emap-flow">
-              <header>
-                <Talas />
-                <b>Kada teče</b>
-              </header>
-              <p>
-                Prostor podržava san, fokus i odnose. Dom vas dočeka i napuni.
-              </p>
-            </div>
+          <p className="emap-p">
+            Način na koji Chi ulazi, sakuplja se i kreće kroz vaš dom može
+            uticati na to koliko je to okruženje podržavajuće. Kada energija
+            dobro teče, prostor je pogodan za oporavak, fokus, povezivanje i
+            napredak.
+          </p>
 
-            <div className="emap-card emap-stall">
-              <header>
-                <Talas tacka />
-                <b>Kada zastane</b>
-              </header>
-              <ul className="emap-list">
-                <li>Umesto mira kod kuće osetite težinu.</li>
-                <li>Nered se vraća, fokus stalno beži.</li>
-                <li>Nešto „ne štima&rdquo;, a ne znate šta.</li>
-                <li>Radite na sebi, ali dom vas ne podržava.</li>
-                <li>Soba koju izbegavate, ugao koji odbija.</li>
-              </ul>
-            </div>
+          <div className="stack g16">
+            <p className="emap-cue">
+              Kada postane slab, blokiran ili loše raspoređen, možete iskusiti:
+            </p>
+            <ul className="emap-grid">
+              <li>Kašnjenja uprkos stalnim naporima</li>
+              <li>Niska energija bez očiglednog razloga</li>
+              <li>Teškoće sa koncentracijom ili donošenjem odluka</li>
+              <li>Napetost u određenim oblastima života</li>
+              <li>Osećaj da svakodnevni zadaci zahtevaju previše truda</li>
+            </ul>
           </div>
 
-          <p className="emap-close">
-            <span className="a">Ne popravljamo dom.</span>
-            <span className="b">Usklađujemo ga sa vama.</span>
+          <p className="emap-p">
+            Feng shui vam daje sistem za otklanjanje ovih obrazaca.
           </p>
+          <p className="emap-p is-muted">
+            Videćete kako se oblici, forme, sektori i oblasti koriste zajedno za
+            procenu prostora. Ovo vam daje praktičnu početnu tačku za
+            odlučivanje na šta je prvo potrebno obratiti pažnju.
+          </p>
+
+          <button className="btn btn-gold" onClick={open('prijava')}>
+            Pokaži mi šta moj prostor utiče na moj život
+          </button>
         </div>
       </section>
 
@@ -293,29 +275,31 @@ const SkolaCContent = () => {
                 <h2>Feng shui online škola je za vas ako&hellip;</h2>
               </div>
               <p className="whofor-note">
-                Predznanje nije potrebno. Ponesite tlocrt svog stana, otvoren um
-                i spremnost da svoj prostor vidite drugačije.
+                Predznanje nije potrebno. Ponesite otvoren um i spremnost da
+                svoj prostor vidite drugačije.
               </p>
             </div>
             <ul className="whofor-list">
               <li>
-                <span>Volite sami da uređujete svoj dom i želite da znate{' '}
-                <em>zašto</em> nešto radite, a ne samo šta.</span>
+                <span>Volite sami da uređujete svoj dom i želite da znate kako
+                da kroz prostor unosite poboljšanje za sebe i svoju
+                porodicu.</span>
               </li>
               <li>
-                <span>Čuli ste za feng shui termine, ali ne znate odakle da počnete sa
-                sopstvenim prostorom.</span>
+                <span>Čuli ste za feng shui, ali ne znate odakle da počnete da
+                ga primenjujete u svom domu.</span>
               </li>
               <li>
-                <span>Želite jasan okvir umesto razbacanih saveta sa interneta i
+                <span>Želite jasan smer umesto razbacanih saveta sa interneta i
                 „srećnih predmeta&rdquo;.</span>
               </li>
               <li>
-                <span>Radite na sebi, ali osećate da vas dom u tome ne prati.</span>
+                <span>Radite na sebi, ali osećate da ulažete veliki napor a
+                rezultati su mali.</span>
               </li>
               <li>
-                <span>Želite korekcije koje se primenjuju bez renoviranja i bez velikih
-                troškova.</span>
+                <span>Želite korekcije koje se mogu primeniti i bez velikih
+                renoviranja i skupih predmeta.</span>
               </li>
               <li>
                 <span>Selite se, gradite ili renovirate i želite da to odmah uradite
@@ -336,25 +320,13 @@ const SkolaCContent = () => {
 
           <div className="learn">
             <div className="learn-col">
-            <div className="learn-list" role="tablist" aria-label="Ishodi po delovima programa">
-              {ishodi.map((it, i) => (
-                <button
-                  key={it.br}
-                  type="button"
-                  role="tab"
-                  aria-selected={ishod === i}
-                  className="learn-item"
-                  onClick={() => setIshod(i)}
-                  onMouseEnter={() => setIshod(i)}
-                  onFocus={() => setIshod(i)}
-                >
+            <div className="learn-list">
+              {ishodi.map((it) => (
+                <div key={it.br} className="learn-item">
                   <span className="ln">{it.br}</span>
                   <span className="lt">{it.naslov}</span>
-                  <span className="ld">{it.kratko}</span>
-                  <span className="la" aria-hidden="true">
-                    &rarr;
-                  </span>
-                </button>
+                  <span className="ld">{it.opis}</span>
+                </div>
               ))}
             </div>
               <button className="btn btn-accent" onClick={open('prijava')}>
@@ -362,13 +334,12 @@ const SkolaCContent = () => {
               </button>
             </div>
 
-            <aside className="learn-panel" aria-live="polite">
-              <span className="pe">{ishodi[ishod].eyebrow}</span>
-              <span className="pt">{ishodi[ishod].naslov}</span>
-              <p className="pd">{ishodi[ishod].puno}</p>
-              <div className="pc">
-                Deo {ishodi[ishod].br} od {ishodi.length}
-              </div>
+            <aside className="learn-price">
+              <span className="lp-label">Cena programa</span>
+              <span className="lp-value">286 &euro;</span>
+              <p className="lp-note">
+                Broj mesta je ograničen. Rezervišite svoje mesto na vreme.
+              </p>
             </aside>
           </div>
         </div>
@@ -408,14 +379,14 @@ const SkolaCContent = () => {
                 <h3>Materijali</h3>
                 <p>
                   Detaljni materijali i vizuelni vodiči kroz onlajn platformu,
-                  dostupni celo vreme.
+                  dostupni i nakon završetka kursa.
                 </p>
               </div>
               <div className="course-col">
                 <h3>Mala grupa</h3>
                 <p>
-                  Broj polaznica je namerno ograničen, da svaka dobije prostor i
-                  pažnju.
+                  Broj polaznica je ograničen, da bih svakome od vas mogla lično
+                  da se posvetim.
                 </p>
               </div>
               <div className="course-col">
@@ -440,36 +411,49 @@ const SkolaCContent = () => {
         <div className="wrap stack g32">
           <div className="stack g12">
             <span className="eyebrow">Rezultati</span>
-            <h2>Šta se promenilo u brojkama</h2>
+            <h2>Šta kažu polaznice</h2>
           </div>
-          <div className="results">
+          {/* Samo Izabelin utisak nosi merljiv ishod, pa jedino on ide u
+              „metrika prvo" formu. Ostala dva su preporuke bez brojke i
+              stoje ispod, tiše. */}
+          <article className="tst tst-lead">
+            <div className="res">10 dana</div>
+            <p className="res-note">
+              od postavke severa do prvih poslovnih prilika
+            </p>
+            <q>
+              Mnogo sam zahvalna na kursu, znanju i nesebičnom predavanju koje
+              ste nam davali. Zato učim i dalje i zato sam nastavila obuku.
+              Postavkom mog severa, u roku od deset dana promenio mi se poslovni
+              svet i aktivirale su se mnoge poslovne okolnosti. Radujem se
+              svemu što nam tek predstoji.
+            </q>
+            <footer className="who">Izabela</footer>
+          </article>
+          <div className="quotes">
             <article className="tst">
-              <div className="res">12 klijenata</div>
-              <p className="res-note">od polaznice do sopstvene prakse</p>
               <q>
-                Pre škole sam mislila da Feng Shui znači staviti bambus u ugao.
-                Sada radim konsultacije i već imam 12 stalnih klijenata.
+                Ova škola je najbolja moguća ulaznica u principe feng šui
+                prakse, vođena na iskren i prijateljski način, a utemeljena na
+                velikom znanju i iskustvu predavača. Dragana majstorski vodi
+                svoje učenike i stara se da iz svih aspekata sagledamo tajne ove
+                drevne veštine i filozofije života, kroz dobro osmišljena
+                predavanja i detaljne diskusije na razne teme. Škola nas je
+                povezala u misiju koja oplemenjuje, kako naše živote, tako i
+                naše okruženje i koju sada, sa radošću, nastavljamo zajedničkim
+                snagama. Pridružite nam se.
               </q>
-              <footer className="who">Jelena M. · Beograd</footer>
+              <footer className="who">Jovana</footer>
             </article>
             <article className="tst">
-              <div className="res">2 prostora</div>
-              <p className="res-note">dom i kancelarija, po istim principima</p>
               <q>
-                Upisao sam se jer je žena insistirala. Naš dom se transformisao,
-                ali najviše me iznenadilo koliko se promenio moj fokus na poslu.
+                Naučila sam da usaglasim energiju prostora sa svojom energijom i
+                to itekako radi! Hvala Dragani na svemu i radujem se novim
+                temama i izazovima. Moja topla preporuka za školu, početnicima
+                savetujem da sve što rade u stanu, zapisuju jer će tako najbolje
+                da uvide povezanost sa dobrim dešavanjima.
               </q>
-              <footer className="who">Milan D. · Novi Sad</footer>
-            </article>
-            <article className="tst">
-              <div className="res">15 godina</div>
-              <p className="res-note">u struci, pa ipak nova dimenzija</p>
-              <q>
-                Kao dizajnerka enterijera sa 15 godina iskustva, mislila sam da
-                znam sve o prostoru. Sada kombinujem dizajn sa Feng Shui
-                principima i klijenti osećaju razliku, čak i skeptici.
-              </q>
-              <footer className="who">Svetlana K. · Ljubljana</footer>
+              <footer className="who">Mara</footer>
             </article>
           </div>
         </div>
@@ -530,13 +514,19 @@ const SkolaCContent = () => {
             <h2>Feng shui online program u 8 nedelja</h2>
 
             <div className="enroll-when">
-              <div>
-                <span className="lbl">Program kreće</span>
-                <span className="val">oktobar 2026.</span>
+              <div className="enroll-facts">
+                <div>
+                  <span className="lbl">Program kreće</span>
+                  <span className="val">oktobar 2026.</span>
+                </div>
+                <div>
+                  <span className="lbl">Cena programa</span>
+                  <span className="val">286 &euro;</span>
+                </div>
               </div>
             </div>
             <p className="enroll-note">
-              Cena i tačan datum upisa biće objavljeni uskoro.
+              Tačan datum upisa biće objavljen uskoro.
             </p>
 
             <ul className="enroll-chips">

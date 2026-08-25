@@ -8,32 +8,61 @@
    ============================================================ */
 
 .fs-c {
-  /* --- PALETA (trenutni brend draganajovic.com) --- */
-  --cream-50:  #FDFBF7;
-  --cream-100: #FAF7F0;
-  --cream-200: #F5F0E6;
-  --cream-300: #EDE5D5;
+  /* ============ PALETA (nova, 24.08.2026.) ============
+     Klijent je zadao dve boje: zelena #12403C i bež #EDD8BE, uz to da
+     crna nestane i pređe u braon. Plava je cela otišla u zelenu.
 
-  --charcoal:     #1a1a1a;
-  --charcoal-600: #3d3d3d;
-  --charcoal-500: #555555;
-  --charcoal-400: #777777;
+     IMENA TOKENA SU OSTALA STARA namerno. `navy-*` više nije plava nego
+     zelena, `cream-*` je bež, `charcoal-*` je braon. Preimenovanje bi
+     značilo diranje oko 750 mesta u ovom fajlu i klasa `.c-navy` u tri
+     komponente, bez ijedne koristi danas. Kada dođe red, to je mehanički
+     prolaz. Do tada: ime je istorijsko, vrednost je brend.
 
-  --navy-50:  #EFF7FC;
-  --navy-100: #D4EAF5;
-  --navy-300: #A6DDED;
-  --navy-400: #6AADCC;
-  --navy-500: #4580A6;
-  --navy-600: #35678A;
-  --navy-700: #263C59;
-  --navy-800: #162A42;
-  --navy-900: #091526;
+     Svaki odnos ispod je izmeren, ne procenjen.
+     ==================================================== */
+
+  /* BEŽ — svetle površine. #EDD8BE je brend, ostalo je izvedeno. */
+  --cream-50:  #FAF4ED;   /* pozadina strane; braon na njoj 12,37:1 */
+  --cream-100: #F5EBDD;
+  --cream-200: #EDD8BE;   /* BREND; naizmenične sekcije, braon 9,76:1 */
+  --cream-300: #DCC5A6;   /* ivice */
+
+  /* BRAON — zamena za crnu. Lestvica prati stare odnose kontrasta
+     (17,40 / 10,86 / 7,46 / 4,48 na belom), mešanjem ka bež da ton
+     ostane topao. */
+  --charcoal:     #3E2A1E;  /* 13,51:1 na belom */
+  --charcoal-600: #4C382B;  /* 11,01:1 */
+  --charcoal-500: #665243;  /*  7,36:1 */
+  /* Poslednji je namerno tamniji od pukog preslikavanja: stari #777777
+     daje 4,48:1, taman ispod praga, a na novoj bež sekciji bi bilo još
+     gore. Ovako .micro prolazi i na najtamnijoj svetloj podlozi
+     (#EDD8BE) sa 4,63:1. */
+  --charcoal-400: #6F5B4B;
+
+  /* ZELENA — zamena za tamnoplavu. #12403C je brend. */
+  --navy-50:  #E8EFE9;   /* svetla podloga za oznake; zelena na njoj 9,4:1 */
+  --navy-100: #CFE0D6;
+  /* Tekst na zelenim sekcijama je BEŽ, ne svetlija zelena: zelena
+     razblažena belom brzo gubi boju i ode u sivo. Bež na #0F3532 daje
+     9,63:1 i drži paletu na dve boje. */
+  --navy-300: #EDD8BE;
+  --navy-400: #849C9A;   /* fokus-obrub i ukrasi, ne tekst */
+  --navy-500: #597976;
+  --navy-600: #335B57;
+  --navy-700: #12403C;   /* BREND */
+  --navy-800: #0F3532;   /* tamne sekcije; belo 13,33:1, bež 9,63:1 */
+  --navy-900: #0B2B28;   /* najtamnije; belo 15,10:1 */
 
   --gold-50:  #fdf8eb;
   --gold-200: #f2d98a;
   --gold-400: #c8a84e;
   --gold-500: #b8952f;
   --gold-600: #9a7a24;
+  /* Novi, tamniji ton. Na svetlim sekcijama zlato je i pre bilo tesno
+     (gold-500 na starom kremu 2,51), a na bež #EDD8BE pada na 2,06.
+     gold-700 daje 5,16 na bež i 6,55 na bež-50, pa sitan verzal
+     eyebrow prvi put prolazi prag od 4,5. */
+  --gold-700: #6B5518;
 
   /* Akcenat za "sekciju u jakoj boji" — terakota (bez vike). */
   --accent:      #A6432E;
@@ -54,8 +83,9 @@
   --radius:    18px;
   --radius-sm: 12px;
   --pill:      999px;
-  --shadow:    0 10px 30px rgba(38, 60, 89, .10);
-  --shadow-lg: 0 22px 50px rgba(38, 60, 89, .16);
+  /* Senke su bile plavkaste; sada nose ton braon boje teksta. */
+  --shadow:    0 10px 30px rgba(62, 42, 30, .10);
+  --shadow-lg: 0 22px 50px rgba(62, 42, 30, .16);
   --sticky-h:  68px;
 
   /* Wrapper = "body" prototipa */
@@ -78,7 +108,7 @@
 .fs-c h2 { font-size: clamp(1.9rem, 7vw, 3.25rem); }
 .fs-c h3 { font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight: 600; }
 .fs-c .lead { font-size: clamp(1.05rem, 3.4vw, 1.3rem); line-height: 1.55; color: var(--charcoal-500); }
-.fs-c .eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-500); }
+.fs-c .eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-700); }
 
 /* --- layout helpers --- */
 .fs-c .card { padding: clamp(2.75rem, 9vw, 5.5rem) 0; scroll-margin-top: 64px; }
@@ -117,7 +147,7 @@
 .fs-c .btn-line { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
 .fs-c .btn-line:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.6); }
 .fs-c .btn-navy { background: var(--navy-700); color: #fff; }
-.fs-c .btn-gold { background: var(--gold-400); color: #1a1a1a; }
+.fs-c .btn-gold { background: var(--gold-400); color: var(--charcoal); }
 .fs-c .micro { font-size: .8rem; color: var(--charcoal-400); text-align: center; }
 .fs-c .c-navy .micro, .fs-c .c-accent .micro { color: rgba(255,255,255,.7); }
 
@@ -128,7 +158,7 @@
 .fs-c .jump .dot {
   width: 88px; height: 88px; border-radius: 50%; background: var(--cream-200);
   border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center;
-  margin-bottom: .45rem; font-size: 1.5rem; color: var(--gold-400);
+  margin-bottom: .45rem; font-size: 1.5rem; color: var(--gold-700);
 }
 .fs-c .jump a:hover .dot { background: var(--gold-50); border-color: var(--gold-200); }
 @media (min-width: 700px) { .fs-c .jump { justify-content: center; overflow: visible; } }
@@ -160,7 +190,11 @@
   object-position: center bottom;
 }
 /* Gradijent samo koliko treba da tekst ostane čitljiv i na uskim
-   ekranima gde bi naslov mogao da dodirne logo-znak u slici. */
+   ekranima gde bi naslov mogao da dodirne logo-znak u slici.
+   PAŽNJA: ove vrednosti su namerno ostale tamnoplave. Hero fotografija
+   je tamnoplava (Higgsfield), pa bi zelen preliv preko nje pravio šav.
+   Kada se fotografije preprave u zeleno, i ovde ide #0B2B28. Isto važi
+   za #020B1E u sekciji „O meni". */
 .fs-c .hero-bg::after {
   content: ""; position: absolute; inset: 0; z-index: -1;
   background: linear-gradient(180deg,
@@ -189,6 +223,17 @@
 /* Na tamnoj podlozi bez .c-navy klase osnovni .micro je prigušen
    do neupotrebljivog — hero ga eksplicitno vraća. */
 .fs-c .hero .micro { color: rgba(255,255,255,.78); }
+
+/* Podnaslov ispod naslova heroja. Naslov je 24.08. skraćen na „Feng
+   shui program", pa ono što je pre stajalo u njemu (šta polaznica
+   dobija) sada nosi ovaj red. */
+.fs-c .hero-sub {
+  color: rgba(255,255,255,.92);
+  font-size: clamp(1.05rem, 3.8vw, 1.45rem);
+  font-weight: 500;
+  line-height: 1.4;
+  max-width: 34ch;
+}
 
 .fs-c .hero h1 {
   color: #fff;
@@ -244,7 +289,7 @@
 .fs-c .steps { display: grid; gap: .85rem; grid-template-columns: 1fr; }
 @media (min-width: 640px) { .fs-c .steps { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1000px) { .fs-c .steps-4 { grid-template-columns: repeat(4, 1fr); } }
-.fs-c .step { background: rgba(255,255,255,.07); border: 1px solid rgba(166,221,237,.2); border-radius: 20px; padding: 1.4rem; }
+.fs-c .step { background: rgba(255,255,255,.07); border: 1px solid rgba(237,216,190,.2); border-radius: 20px; padding: 1.4rem; }
 .fs-c .step .n { font-size: 2.4rem; font-weight: 800; color: var(--gold-400); line-height: 1; letter-spacing: normal; display: block; margin-bottom: .5rem; }
 .fs-c .step h3 { color: inherit; }
 .fs-c .step p { color: var(--navy-300); font-size: .95rem; margin-top: .35rem; }
@@ -260,7 +305,7 @@
   display: flex; gap: .8rem; align-items: flex-start;
 }
 .fs-c .big-list li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-400); margin-top: .55rem; }
-.fs-c .c-navy .big-list li { background: rgba(255,255,255,.07); border-color: rgba(166,221,237,.2); color: #fff; }
+.fs-c .c-navy .big-list li { background: rgba(255,255,255,.07); border-color: rgba(237,216,190,.2); color: #fff; }
 
 /* --- utisci --- */
 /* --- REZULTATI: „metrika prvo" kartice ---------------------------
@@ -270,9 +315,10 @@
    beloj daje 2,3 odnosno 2,9 kontrasta i pada čak i prag za krupan
    tekst (3:1). Metrika zato ide na --gold-600 (4,05), a sitne
    oznake usluge na --gold-700 / --navy-700 (5,5 i 10,4). */
-.fs-c .results { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: stretch; }
-@media (min-width: 640px) { .fs-c .results { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px) { .fs-c .results { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; } }
+/* Jedan utisak nosi merljiv ishod i stoji preko cele širine; ostala
+   dva su preporuke bez brojke i idu u dve kolone ispod njega. */
+.fs-c .quotes { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 900px) { .fs-c .quotes { grid-template-columns: 1fr 1fr; gap: 1.25rem; } }
 
 .fs-c .tst {
   background: #fff;
@@ -287,7 +333,7 @@
   transition: box-shadow .2s ease, transform .2s ease;
 }
 @media (hover: hover) {
-  .fs-c .tst:hover { transform: translateY(-2px); box-shadow: inset 0 3px 0 0 var(--gold-400), 0 14px 34px rgba(38,60,89,.10); }
+  .fs-c .tst:hover { transform: translateY(-2px); box-shadow: inset 0 3px 0 0 var(--gold-400), 0 14px 34px rgba(62,42,30,.10); }
 }
 
 .fs-c .tst .res {
@@ -319,6 +365,14 @@
 }
 .fs-c .tst .tag-skola { background: var(--gold-50); color: #7a6220; }
 .fs-c .tst .tag-konsultacija { background: var(--navy-50); color: var(--navy-700); }
+
+/* Vodeći utisak: ista kartica, samo diše šire jer stoji sam u redu. */
+@media (min-width: 900px) {
+  .fs-c .tst-lead { padding: 2.1rem 2.1rem 1.8rem; }
+  .fs-c .tst-lead .res { font-size: clamp(2.4rem, 6vw, 3.1rem); }
+  .fs-c .tst-lead .res-note { font-size: 1.1rem; }
+  .fs-c .tst-lead q { font-size: 1.05rem; max-width: 68ch; }
+}
 
 /* --- brojke --- */
 .fs-c .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; text-align: center; }
@@ -389,10 +443,6 @@
   .fs-c .about-col { width: min(100%, 30rem); }
 }
 
-/* --- cena --- */
-.fs-c .pricebox { background: rgba(0,0,0,.22); border-radius: 22px; padding: 1.6rem; text-align: center; }
-.fs-c .price { font-size: clamp(3rem, 13vw, 4.5rem); font-weight: 800; letter-spacing: normal; line-height: 1; }
-
 /* --- FAQ --- */
 .fs-c .faq details { background: #fff; border: 1px solid var(--cream-300); border-radius: 16px; margin-bottom: .7rem; overflow: hidden; }
 .fs-c .faq summary { cursor: pointer; list-style: none; padding: 1.15rem 3rem 1.15rem 1.2rem; position: relative; font-weight: 600; font-size: 1.02rem; line-height: 1.4; }
@@ -420,7 +470,7 @@
 .fs-c .circles { display: flex; gap: 1.25rem; overflow-x: auto; padding: .5rem .25rem 1.25rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
 .fs-c .circles::-webkit-scrollbar { display: none; }
 .fs-c .circ { flex: none; scroll-snap-align: center; width: 250px; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-decoration: none; color: inherit; }
-.fs-c .circ .disc { position: relative; width: 250px; height: 250px; border-radius: 50%; overflow: hidden; box-shadow: 0 16px 40px rgba(38,60,89,.24); background: var(--navy-800); }
+.fs-c .circ .disc { position: relative; width: 250px; height: 250px; border-radius: 50%; overflow: hidden; box-shadow: 0 16px 40px rgba(62,42,30,.24); background: var(--navy-800); }
 .fs-c .circ .disc img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .fs-c .circ .tint { position: absolute; inset: 0; }
 .fs-c .circ .lbl { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; padding: 1.9rem 1.4rem; text-align: center; }
@@ -433,7 +483,7 @@
   .fs-c .circ, .fs-c .circ .disc { width: 245px; }
   .fs-c .circ .disc { height: 245px; }
 }
-.fs-c .t-1 { background: rgba(38,60,89,.84); }
+.fs-c .t-1 { background: rgba(15,53,50,.84); }
 .fs-c .t-2 { background: rgba(184,149,47,.86); }
 .fs-c .t-3 { background: rgba(53,103,138,.84); }
 .fs-c .t-4 { background: rgba(166,67,46,.82); }
@@ -446,7 +496,7 @@
 .fs-c .six .it6 .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--gold-50); border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-500); }
 .fs-c .six .it6 h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
 .fs-c .six .it6 p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--charcoal-500); }
-.fs-c .c-navy .six .it6 .ico { background: rgba(255,255,255,.08); border-color: rgba(166,221,237,.2); color: var(--gold-200); }
+.fs-c .c-navy .six .it6 .ico { background: rgba(255,255,255,.08); border-color: rgba(237,216,190,.2); color: var(--gold-200); }
 .fs-c .c-navy .six .it6 p { color: var(--navy-300); }
 
 /* ============================================================
@@ -457,26 +507,26 @@
    ============================================================ */
 .fs-c-modal-overlay {
   position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center;
-  background: rgba(9,21,38,.55); backdrop-filter: blur(4px); padding: 0; animation: fsc-fade .2s ease;
+  background: rgba(11,43,40,.55); backdrop-filter: blur(4px); padding: 0; animation: fsc-fade .2s ease;
 }
 @media (min-width: 640px) { .fs-c-modal-overlay { align-items: center; padding: 1.5rem; } }
 .fs-c-modal {
   font-family: var(--font-outfit), system-ui, sans-serif;
-  background: #FDFBF7; color: #1a1a1a; width: 100%; max-width: 460px;
+  background: #FAF4ED; color: #3E2A1E; width: 100%; max-width: 460px;
   max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 1.6rem 1.35rem 2rem;
-  box-shadow: 0 -10px 50px rgba(9,21,38,.3); animation: fsc-slide .25s cubic-bezier(.32,.72,0,1);
+  box-shadow: 0 -10px 50px rgba(11,43,40,.3); animation: fsc-slide .25s cubic-bezier(.32,.72,0,1);
 }
 @media (min-width: 640px) { .fs-c-modal { border-radius: 22px; animation: fsc-pop .25s cubic-bezier(.32,.72,0,1); } }
 .fs-c-modal .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
 .fs-c-modal .modal-head h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin: 0; }
-.fs-c-modal .modal-head p { font-size: .9rem; color: #555; margin-top: .35rem; }
-.fs-c-modal .modal-close { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #F5F0E6; color: #3d3d3d; font-size: 1.3rem; line-height: 1; cursor: pointer; }
-.fs-c-modal .modal-close:hover { background: #EDE5D5; }
+.fs-c-modal .modal-head p { font-size: .9rem; color: #665243; margin-top: .35rem; }
+.fs-c-modal .modal-close { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #EDD8BE; color: #4C382B; font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.fs-c-modal .modal-close:hover { background: #DCC5A6; }
 .fs-c-modal .field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
-.fs-c-modal .field label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #777; }
+.fs-c-modal .field label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #6F5B4B; }
 .fs-c-modal .field input, .fs-c-modal .field select {
   font-family: inherit; font-size: 1.05rem; padding: .9rem 1rem; min-height: 52px;
-  border: 1.5px solid #EDE5D5; border-radius: 14px; background: #fff; color: #1a1a1a; width: 100%;
+  border: 1.5px solid #DCC5A6; border-radius: 14px; background: #fff; color: #3E2A1E; width: 100%;
 }
 .fs-c-modal .field input:focus, .fs-c-modal .field select:focus { outline: 0; border-color: #A6432E; }
 .fs-c-modal .modal-btn {
@@ -486,22 +536,24 @@
 }
 .fs-c-modal .modal-btn:hover { background: #8A3524; }
 .fs-c-modal .modal-btn:disabled { opacity: .6; cursor: default; }
-.fs-c-modal .modal-privacy { font-size: .78rem; color: #777; text-align: center; margin-top: .8rem; }
+.fs-c-modal .modal-privacy { font-size: .78rem; color: #6F5B4B; text-align: center; margin-top: .8rem; }
 .fs-c-modal .modal-error { color: #A6432E; font-size: .85rem; margin-top: .6rem; text-align: center; }
 .fs-c-modal .modal-success { text-align: center; padding: 1.5rem .5rem; }
 .fs-c-modal .modal-success .check { width: 64px; height: 64px; border-radius: 50%; background: #F7EBE7; color: #A6432E; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; }
 .fs-c-modal .modal-success h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: .5rem; }
-.fs-c-modal .modal-success p { color: #555; font-size: .95rem; }
+.fs-c-modal .modal-success p { color: #665243; font-size: .95rem; }
 
 @keyframes fsc-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fsc-slide { from { transform: translateY(100%); } to { transform: translateY(0); } }
 @keyframes fsc-pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
 
-/* --- ISHOD: editorial indeks (numerisana lista + panel) ------------
-   Kompozicija po obrascu 3b iz Claude Design projekta, prevedena na
-   jezik C verzije. Lista nosi pregled, panel razrađuje aktivnu
-   stavku. Panel se pojavljuje tek od 1000px — ispod toga bi bio
-   uzak i samo bi ponavljao ono što u listi već piše. */
+/* --- ISHOD: numerisana lista + kartica sa cenom --------------------
+   Lista je 24.08. prestala da bude interaktivna: nema više panela koji
+   se menja, pa nema ni šta da se bira. Ostao je isti izgled (broj,
+   naslov, opis, iste linije), samo bez radnje i bez strelice koja je
+   nagoveštavala klik. Desno je sada cena.
+   Kontrast na zelenoj kartici #0F3532: gold-200 9,56 · bež 9,63 ·
+   belo 13,33. -------------------------------------------------------- */
 .fs-c .learn { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
 @media (min-width: 1000px) { .fs-c .learn { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
 
@@ -510,67 +562,61 @@
 .fs-c .learn-col { display: flex; flex-direction: column; gap: 1.75rem; }
 .fs-c .learn-list { border-top: 1px solid var(--cream-300); }
 .fs-c .learn-item {
-  display: grid; grid-template-columns: auto 1fr auto; gap: .3rem 1.15rem;
+  display: grid; grid-template-columns: auto 1fr; gap: .3rem 1.15rem;
   align-items: start; width: 100%; text-align: left;
-  background: none; border: 0; border-bottom: 1px solid var(--cream-300);
-  padding: 1.25rem .25rem; cursor: pointer; font-family: var(--font);
-  transition: background .18s ease;
+  border-bottom: 1px solid var(--cream-300);
+  padding: 1.25rem .25rem;
 }
-.fs-c .learn-item:hover { background: rgba(255,255,255,.55); }
-.fs-c .learn-item:focus-visible { outline: 2px solid var(--navy-400); outline-offset: -2px; }
-
 .fs-c .learn-item .ln {
-  /* sve ćelije su postavljene eksplicitno: sa auto-placementom i
-     span-om preko dva reda strelica upadne u kolonu naslova */
+  /* obe ćelije su postavljene eksplicitno: sa auto-placementom i
+     span-om preko dva reda opis upadne u kolonu broja */
   grid-column: 1; grid-row: 1 / span 2; align-self: start;
   font-size: 2.1rem; font-weight: 300; line-height: 1; letter-spacing: -0.02em;
-  color: var(--gold-400); transition: color .18s ease, font-weight .18s ease;
+  /* gold-400 na bež daje 1,65 i broj se gubi; gold-700 daje 5,16 */
+  color: var(--gold-700);
   font-variant-numeric: lining-nums tabular-nums;
 }
 .fs-c .learn-item .lt {
   grid-column: 2; grid-row: 1;
   font-size: 1.22rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em;
-  color: var(--charcoal); transition: color .18s ease;
+  color: var(--charcoal);
 }
 .fs-c .learn-item .ld { grid-column: 2; grid-row: 2; font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); }
-.fs-c .learn-item .la {
-  grid-column: 3; grid-row: 1 / span 2; align-self: center;
-  font-size: 1.15rem; color: var(--charcoal-400);
-  transition: transform .18s ease, color .18s ease;
-}
-.fs-c .learn-item[aria-selected='true'] .ln { color: var(--gold-600); font-weight: 500; }
-.fs-c .learn-item[aria-selected='true'] .lt { color: var(--navy-600); }
-.fs-c .learn-item[aria-selected='true'] .la { color: var(--navy-600); transform: translateX(4px); }
 
-/* Panel — mesto gde kasnije može da stane fotografija po delu programa;
-   dok je nema, nosi ga isti prsten-motiv kao „Enso" zatvaranje. */
-.fs-c .learn-panel { display: none; }
+/* Kartica sa cenom. Za razliku od starog panela, vidi se na SVIM
+   širinama: stari panel je ponavljao ono što u listi već piše pa je
+   ispod 1000px bio suvišan, a cena nigde drugde na strani ne stoji. */
+.fs-c .learn-price {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  position: relative; overflow: hidden; text-align: center;
+  padding: 2.4rem 1.75rem; border-radius: 24px;
+  background: var(--navy-800); color: #fff;
+  box-shadow: 0 22px 50px rgba(62,42,30,.18);
+}
+.fs-c .learn-price > * { position: relative; }
+.fs-c .lp-label {
+  font-size: .78rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--gold-200);
+}
+.fs-c .lp-value {
+  font-size: clamp(2.8rem, 11vw, 4rem); font-weight: 800;
+  line-height: 1; letter-spacing: normal;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .lp-note {
+  margin-top: 1rem; max-width: 22rem;
+  font-size: .97rem; line-height: 1.55; color: var(--navy-300);
+}
 @media (min-width: 1000px) {
-  .fs-c .learn-panel {
-    display: flex; flex-direction: column; justify-content: flex-end; gap: .85rem;
-    position: relative; overflow: hidden;
-    min-height: 460px; padding: 2.5rem;
-    border-radius: 24px; background: var(--navy-800); color: #fff;
-    box-shadow: 0 22px 50px rgba(38,60,89,.18);
-  }
-  .fs-c .learn-panel::before,
-  .fs-c .learn-panel::after {
+  .fs-c .learn-price { min-height: 460px; justify-content: center; padding: 2.5rem; }
+  /* isti prsten-motiv kao „Enso" zatvaranje, da kartica ne bude prazna ploča */
+  .fs-c .learn-price::before,
+  .fs-c .learn-price::after {
     content: ""; position: absolute; border-radius: 50%; pointer-events: none;
-    left: 50%; top: 42%; transform: translate(-50%,-50%);
+    left: 50%; top: 50%; transform: translate(-50%,-50%);
   }
-  .fs-c .learn-panel::before { width: 250px; height: 250px; border: 1px solid rgba(200,168,78,.5); }
-  .fs-c .learn-panel::after  { width: 330px; height: 330px; border: 1px dashed rgba(200,168,78,.28); }
-  .fs-c .learn-panel > * { position: relative; }
-  .fs-c .learn-panel .pe { font-style: italic; font-size: 1rem; color: var(--gold-200); }
-  .fs-c .learn-panel .pt {
-    font-size: 1.35rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: .09em; line-height: 1.3; color: #fff;
-  }
-  .fs-c .learn-panel .pd { font-size: 1rem; line-height: 1.6; color: var(--navy-300); }
-  .fs-c .learn-panel .pc {
-    margin-top: .6rem; padding-top: 1rem; border-top: 1px solid rgba(166,221,237,.22);
-    font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--navy-300);
-  }
+  .fs-c .learn-price::before { width: 250px; height: 250px; border: 1px solid rgba(200,168,78,.5); }
+  .fs-c .learn-price::after  { width: 330px; height: 330px; border: 1px dashed rgba(200,168,78,.28); }
 }
 
 /* --- ZA KOGA JE: podeljena kartica (navy levo, lista desno) --------
@@ -595,7 +641,7 @@
 .fs-c .whofor-aside h2 { color: #fff; margin-top: .75rem; }
 .fs-c .whofor-note {
   font-size: 1rem; line-height: 1.6; color: var(--navy-300);
-  padding-top: 1.5rem; border-top: 1px solid rgba(166,221,237,.25);
+  padding-top: 1.5rem; border-top: 1px solid rgba(237,216,190,.25);
 }
 
 .fs-c .whofor-list {
@@ -667,49 +713,38 @@
   color: var(--charcoal); margin-top: .75rem;
 }
 
-/* --- ENERGETSKA MAPA: dve kartice, „teče" naspram „zastane" ------
-   Kontrast na navy-800 podlozi: navy-300 9,82 · gold-200 10,43 ·
-   belo 14,54 — sve komotno iznad praga. */
+/* --- ENERGETSKA MAPA -----------------------------------------------
+   Sekcija je 24.08. prešla sa dve kartice („teče" naspram „zastane")
+   na niz od pet simptoma, po klijentovom tekstu. Kontrast na zelenoj
+   podlozi --navy-800 (#0F3532): belo 13,33 · bež 9,63 · gold-200 9,56.
+   -------------------------------------------------------------------- */
 .fs-c .emap-head { text-align: center; max-width: 46rem; margin-inline: auto; }
 .fs-c .emap-head .lead { color: var(--navy-300); }
 
-.fs-c .emap { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-@media (min-width: 900px) { .fs-c .emap { grid-template-columns: 1fr 1fr; gap: 1.5rem; } }
-
-.fs-c .emap-card { border-radius: 20px; padding: 1.85rem 1.6rem; border: 1px solid transparent; }
-@media (min-width: 900px) { .fs-c .emap-card { padding: 2.1rem 1.9rem; } }
-.fs-c .emap-flow  { border-color: rgba(166,221,237,.3);  background: rgba(255,255,255,.03); }
-.fs-c .emap-stall { border-color: rgba(200,168,78,.55); background: rgba(255,255,255,.055); }
-
-.fs-c .emap-card header { display: flex; align-items: center; gap: .85rem; margin-bottom: 1.35rem; }
-.fs-c .emap-card header b {
-  font-size: .95rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+/* Uvodni i zaključni pasus dele istu širinu sa naslovom, da sekcija
+   ostane jedan centriran stub. */
+.fs-c .emap-p {
+  max-width: 46rem; margin-inline: auto; text-align: center;
+  color: #fff; font-size: 1.05rem; line-height: 1.65;
 }
-.fs-c .emap-flow header  { color: var(--navy-300); }
-.fs-c .emap-stall header { color: var(--gold-200); }
-.fs-c .emap-card header svg { flex: none; }
-/* talas za „zastane" ima tačku na kraju: energija koja stane */
-.fs-c .emap-stall header svg { color: var(--gold-400); }
-
-.fs-c .emap-card p { color: #fff; font-size: 1.02rem; line-height: 1.65; }
-.fs-c .emap-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .8rem; }
-.fs-c .emap-list li {
-  position: relative; padding-left: 1.05rem;
-  color: #fff; font-size: 1rem; line-height: 1.5;
-}
-.fs-c .emap-list li::before {
-  content: "·"; position: absolute; left: 0; top: -.05em;
-  color: var(--gold-400); font-weight: 700; font-size: 1.15em;
+.fs-c .emap-p.is-muted { color: var(--navy-300); }
+.fs-c .emap-cue {
+  text-align: center; font-weight: 700; color: var(--gold-200);
+  font-size: 1.05rem;
 }
 
-.fs-c .emap-close {
-  text-align: center; margin-top: .75rem;
-  font-size: clamp(1.5rem, 5.5vw, 2.2rem); font-weight: 700;
-  letter-spacing: -0.02em; line-height: 1.25;
+.fs-c .emap-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: .75rem;
 }
-.fs-c .emap-close span { display: block; }
-.fs-c .emap-close .a { color: #fff; }
-.fs-c .emap-close .b { color: var(--gold-200); }
+@media (min-width: 640px) { .fs-c .emap-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
+@media (min-width: 900px) { .fs-c .emap-grid { grid-template-columns: repeat(3, 1fr); } }
+.fs-c .emap-grid li {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(237,216,190,.22);
+  border-radius: 18px; padding: 1.15rem 1.3rem;
+  color: #fff; font-size: 1rem; line-height: 1.45;
+}
 
 /* --- UPIS: centrirana sekcija sa datumom i čipovima ---------------
    Kontrast na akcentu #A6432E: belo 6,06 · gold-100 5,20 ·
@@ -738,6 +773,14 @@
   display: block; font-size: clamp(1.5rem, 5.5vw, 2rem); font-weight: 700;
   letter-spacing: -0.02em; color: #fff; line-height: 1.15;
 }
+/* Dva podatka u istom redu: kad je stigla cena, datum više nije sam.
+   Razdvaja ih tanka linija, na uskom ekranu se slažu jedan pod drugi. */
+.fs-c .enroll-facts { display: flex; flex-direction: column; gap: 1.1rem; align-items: center; }
+@media (min-width: 560px) {
+  .fs-c .enroll-facts { flex-direction: row; gap: 2.25rem; }
+  .fs-c .enroll-facts > div + div { padding-left: 2.25rem; border-left: 1px solid rgba(255,255,255,.3); }
+}
+
 .fs-c .enroll-note { color: rgba(255,255,255,.82); font-size: 1rem; margin-top: 1rem; }
 
 .fs-c .enroll-chips {
@@ -791,4 +834,52 @@
 .fs-c .close-proof span {
   display: block; margin-top: .35rem; font-size: .85rem; line-height: 1.35;
   color: var(--navy-300);
+}
+
+/* ====== HEADER I FOOTER NA `-c` STRANAMA ==========================
+   Zaglavlje i podnožje dolaze iz zajedničkog layouta i nose staru
+   paletu, pa bi na zelenoj strani ostala plava pilula „Prijava" i
+   plave ikonice u footeru.
+
+   `body:has(.fs-c)` pogađa TAČNO tri `-c` strane, jer samo one
+   renderuju `.fs-c` omotač. Redefinišu se Tailwind-ove promenljive
+   (`--color-*`), a njegove klase (`.bg-navy-500` i slične) su
+   definisane kao `var(--color-navy-500)` pa se povlače za njima.
+   Stari sajt ne oseća ništa: promenljive se nigde drugde ne menjaju,
+   nijedan HTML nije diran.
+
+   Kad ceo sajt pređe na novu paletu (Izmena 03), ovaj blok se briše.
+   ================================================================== */
+body:has(.fs-c) {
+  /* svetle površine zaglavlja */
+  --color-cream-50:  #FAF4ED;
+  --color-cream-100: #F5EBDD;
+  --color-cream-200: #EDD8BE;
+  --color-cream-300: #DCC5A6;
+  --color-sand-100:  #F5EBDD;
+  --color-sand-200:  #DCC5A6;
+  /* tekst i ikonice na braon podnožju: bež 9,76 i 8,60 na #3E2A1E */
+  --color-sand-300:  #EDD8BE;
+  --color-sand-400:  #E1CBB0;
+
+  /* plava -> zelena */
+  --color-navy-50:  #E8EFE9;
+  --color-navy-100: #CFE0D6;
+  --color-navy-200: #CFE0D6;
+  /* navy-400 nosi ikonice i linkove na braon podnožju; zlato daje
+     5,90 gde je stara plava davala 5,44 */
+  --color-navy-300: #F2D98A;
+  --color-navy-400: #C8A84E;
+  --color-navy-500: #12403C;  /* pilula „Prijava"; belo na njoj 11,51 */
+  --color-navy-600: #0F3532;  /* tekst u čipu na navy-50: 11,40 */
+  --color-navy-700: #0F3532;
+  --color-navy-800: #0B2B28;
+  --color-navy-900: #0B2B28;
+
+  /* crna -> braon */
+  --color-charcoal:     #3E2A1E;
+  --color-charcoal-700: #4C382B;
+  --color-charcoal-600: #4C382B;
+  --color-charcoal-500: #665243;
+  --color-charcoal-400: #6F5B4B;
 }
