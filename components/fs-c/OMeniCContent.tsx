@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import FsCModal from './FsCModal';
+import { useFsCEnrollTrigger } from './enrollTrigger';
 import './fs-c.css';
 
 /**
@@ -46,7 +47,24 @@ const pristup = [
 ];
 
 const OMeniCContent = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  // Dva povoda za isti modal: dugmad na strani zovu na razgovor, a
+  // „Sačuvaj svoje mesto" iz navigacije na upis u školu. Natpis obećava
+  // različite stvari, pa i modal mora da govori različito.
+  const [modal, setModal] = useState<'razgovor' | 'prijava' | null>(null);
+  const modalCopy =
+    modal === 'prijava'
+      ? {
+          title: 'Prijava za feng shui školu',
+          subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+          serviceType: 'Feng Shui škola',
+        }
+      : {
+          title: 'Zakažite besplatan razgovor',
+          subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+          serviceType: 'Feng Shui razgovor (O meni)',
+        };
+
+  useFsCEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
@@ -168,7 +186,7 @@ const OMeniCContent = () => {
             produbite znanje kroz školu, tu sam.
           </p>
           <div className="stack g8">
-            <button className="btn btn-white" onClick={() => setModalOpen(true)}>
+            <button className="btn btn-white" onClick={() => setModal('razgovor')}>
               Zakažite besplatan razgovor
             </button>
             <span className="micro">Otvara se ovde, bez napuštanja stranice.</span>
@@ -182,17 +200,17 @@ const OMeniCContent = () => {
           <b>Dragana Jović</b>
           <span>25 godina · 1000+ projekata</span>
         </div>
-        <button className="btn btn-accent" onClick={() => setModalOpen(true)}>
+        <button className="btn btn-accent" onClick={() => setModal('razgovor')}>
           Zakažite poziv
         </button>
       </div>
 
       <FsCModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title="Zakažite besplatan razgovor"
-        subtitle="Ostavite podatke i Dragana će vam se javiti. Bez obaveze."
-        serviceType="Feng Shui razgovor (O meni)"
+        open={modal !== null}
+        onClose={() => setModal(null)}
+        title={modalCopy.title}
+        subtitle={modalCopy.subtitle}
+        serviceType={modalCopy.serviceType}
         heardFrom="O meni (verzija C)"
       />
     </div>

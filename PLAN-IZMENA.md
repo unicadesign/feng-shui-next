@@ -675,3 +675,45 @@ Tri puta:
 u sekciji „Upis", pored datuma početka. Rečenica „Cena i tačan datum
 upisa biće objavljeni uskoro" je zamenjena sa „Tačan datum upisa biće
 objavljen uskoro".
+
+---
+
+## Izmena 05 — Navigacija vodi u prijavu, ne u login
+
+**Status:** `GOTOVO` 24.08.
+
+### Šta je traženo
+
+Dugme u navigaciji na desktopu prestaje da bude „Prijava" i postaje
+**„Sačuvaj svoje mesto"**, a klik otvara prijavu kao modal, na licu mesta,
+umesto da vodi na drugu stranu. Na telefonu ostaje kako jeste, tu tu ulogu
+već ima lepljiva traka pri dnu sa natpisom „Prijavi se".
+
+### Kako je rešeno
+
+Header dolazi iz `(site)/layout.tsx` i stoji van `.fs-c` stabla, pa ne može
+da dosegne stanje modala koje živi u komponenti strane. Umesto provlačenja
+konteksta kroz layout (koji je serverska komponenta), uveden je
+[components/fs-c/enrollTrigger.ts](components/fs-c/enrollTrigger.ts): Header
+javi prozoru, a strana koja je otvorena to čuje i otvori svoj modal.
+
+Prolazno rešenje, kao i `C_PREVIEW_ROUTES`. Briše se kada redizajn C
+preuzme prave rute i Header prestane da bude deljen između dve verzije.
+
+Provereno preko CDP-a na sve tri strane: natpis je „Sačuvaj svoje mesto" i
+klik otvara modal „Prijava za feng shui školu". Na `/`, `/school` i
+`/about` navigacija je nedirnuta, i dalje „Prijava" koja vodi na `/login`.
+
+### Posledica koju treba znati
+
+Na `-c` stranama posetilac koji nije ulogovan **više nema ulaz u login iz
+navigacije na desktopu**. Postojeće polaznice koje idu na `/dashboard` bi
+morale drugim putem. Ako to smeta, može tih link „Prijavite se" pored
+dugmeta, ili ostaje samo na starom sajtu do preseljenja.
+
+### Usput
+
+Natpisi na modalu su morali da se razlikuju po strani. Na Početnoj i „O
+meni" modal je do sada govorio o konsultacijama i razgovoru, a natpis
+dugmeta obećava upis u školu. Obe strane su dobile zaseban tekst za
+prijavu, da natpis i modal govore isto.

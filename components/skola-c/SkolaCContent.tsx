@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import FsCModal from '../fs-c/FsCModal';
+import { useFsCEnrollTrigger } from '../fs-c/enrollTrigger';
 import '../fs-c/fs-c.css';
 
 type ModalIntent = 'prijava' | 'konsultacije';
@@ -54,6 +55,9 @@ const ishodi = [
 const SkolaCContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
   const open = (intent: ModalIntent) => () => setModal(intent);
+
+  // „Sačuvaj svoje mesto" iz navigacije otvara istu prijavu kao dugmad na strani.
+  useFsCEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">

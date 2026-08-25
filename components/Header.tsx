@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import WebinarNavbarBar from '@/components/WebinarNavbarBar';
+import { requestFsCEnroll } from '@/components/fs-c/enrollTrigger';
 import type { GlobalContent, HomeContent } from '@/types/content';
 
 interface HeaderProps {
@@ -185,6 +186,19 @@ const Header = ({ content, webinar }: HeaderProps) => {
               </div>
             )}
           </div>
+        ) : isCPreview ? (
+          /* Na `-c` stranama gornji poziv na akciju vodi u prijavu za kurs,
+             a ne na /login: prijava se otvara kao modal, na licu mesta, pa
+             posetilac ne napušta prodajnu stranu. Samo desktop — na telefonu
+             tu ulogu već ima lepljiva traka pri dnu. Natpis je za sada u
+             kodu; kada C preuzme prave rute, ide u admin uz ostale (Izmena 03). */
+          <button
+            type="button"
+            onClick={requestFsCEnroll}
+            className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
+          >
+            Sačuvaj svoje mesto
+          </button>
         ) : (
           <Link
             href="/login"

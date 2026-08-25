@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import FsCModal from './FsCModal';
+import { useFsCEnrollTrigger } from './enrollTrigger';
 import './fs-c.css';
 
-type ModalIntent = 'konsultacije' | 'nekretnina' | 'radionice';
+type ModalIntent = 'konsultacije' | 'nekretnina' | 'radionice' | 'prijava';
 
 const modalCopy: Record<
   ModalIntent,
@@ -27,6 +28,13 @@ const modalCopy: Record<
     subtitle: 'Ostavite podatke i obavestićemo vas čim otvorimo nove termine.',
     serviceType: 'Radionice',
   },
+  /* Otvara ga „Sačuvaj svoje mesto" iz navigacije. Natpis obećava upis u
+     školu, pa i modal mora da govori o školi, a ne o konsultacijama. */
+  prijava: {
+    title: 'Prijava za feng shui školu',
+    subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+    serviceType: 'Feng Shui škola',
+  },
 };
 
 /**
@@ -39,6 +47,8 @@ const modalCopy: Record<
 const PocetnaCContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
   const open = (intent: ModalIntent) => () => setModal(intent);
+
+  useFsCEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
