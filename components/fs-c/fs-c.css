@@ -203,16 +203,19 @@
   /* mobilna slika ima Draganu pri dnu — dno je ono što se ne sme iseći */
   object-position: center bottom;
 }
-/* Gradijent samo koliko treba da tekst ostane čitljiv i na uskim
-   ekranima gde bi naslov mogao da dodirne logo-znak u slici.
-   PAŽNJA: ove vrednosti su namerno ostale tamnoplave. Hero fotografija
-   je tamnoplava (Higgsfield), pa bi zelen preliv preko nje pravio šav.
-   Kada se fotografije preprave u zeleno, i ovde ide #0B2B28. Isto važi
-   za #020B1E u sekciji „O meni". */
+/* Preliv postoji zbog tirkiznog sjaja u sredini slike: on je najsvetlija
+   tačka i baš ispod njega padaju dva sitna natpisa. Bez preliva eyebrow
+   (gold-200) daje 4,30 a `.micro` 4,34, oboje taman ispod praga od 4,5.
+
+   Nema `z-index`. Raniji `z-index: -1` unutar `.hero-bg` (koji je na -2)
+   gurao je preliv u negativni sloj, ISPOD <img>, pa se nikada nije video.
+   Bez z-index-a ::after dolazi posle slike u stablu i pokriva je. */
 .fs-c .hero-bg::after {
-  content: ""; position: absolute; inset: 0; z-index: -1;
+  content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg,
-    rgba(9,21,38,.86) 0%, rgba(9,21,38,.62) 30%, rgba(9,21,38,.12) 52%, rgba(9,21,38,0) 66%);
+    rgba(11,43,40,.62) 0%, rgba(11,43,40,.60) 34%, rgba(11,43,40,.56) 48%,
+    rgba(11,43,40,.46) 57%, rgba(11,43,40,.30) 65%, rgba(11,43,40,.14) 73%,
+    rgba(11,43,40,.04) 80%, rgba(11,43,40,0) 88%);
 }
 
 .fs-c .hero-in { position: relative; }
@@ -223,7 +226,7 @@
 /* Visina hero-a na mobilnom se RAČUNA, ne pogađa.
    Slika je `cover` i usidrena na dno, pa je rastojanje od dna do
    Draganine glave uvek isti udeo širine:
-     glava je na ~52% visine slike  ->  od dna do glave ostaje 48%
+     glava je na 52,8% visine slike ->  od dna do glave ostaje 47%
      skalirana visina slike = 100vw * (1376/768) = 1.79 * 100vw
      od dna do glave = 0.48 * 1.79 * 100vw ≈ 0.86 * 100vw
    Sve iznad toga je čist tamnoplavi deo slike i tu sme tekst.
@@ -236,7 +239,9 @@
 
 /* Na tamnoj podlozi bez .c-navy klase osnovni .micro je prigušen
    do neupotrebljivog — hero ga eksplicitno vraća. */
-.fs-c .hero .micro { color: rgba(255,255,255,.78); }
+/* Puna bela, ne 78%: sitan red pada tačno na tirkizni sjaj u slici i na
+   78% gubi prag od 4,5. */
+.fs-c .hero .micro { color: #fff; }
 
 /* Podnaslov ispod naslova heroja. Naslov je 24.08. skraćen na „Feng
    shui program", pa ono što je pre stajalo u njemu (šta polaznica
@@ -246,7 +251,9 @@
   font-size: clamp(1.05rem, 3.8vw, 1.45rem);
   font-weight: 500;
   line-height: 1.4;
-  max-width: 34ch;
+  /* 28ch, ne 34ch: na desktopu je duži red stizao do belog logo-znaka u
+     slici, gde je kontrast padao na 2,20. Ovako se prelomi pre njega. */
+  max-width: 28ch;
 }
 
 .fs-c .hero h1 {
@@ -277,9 +284,29 @@
   /* desktop slika je prazna sleva — držimo je pomerenu tako da
      Draganina glava ostane u kadru i na niskim prozorima */
   .fs-c .hero-bg img { object-position: center 22%; }
+  /* Na desktopu tekst stoji levo, pa preliv ide vodoravno i gasi se pre
+     Dragane da je ne zamuti. */
+  /* Na desktopu tekst stoji levo, pa preliv ide vodoravno i gasi se pre
+     Dragane da je ne zamuti. Zastor mora da drži gustinu kroz celu
+     tekstualnu kolonu, ne samo uz levu ivicu: kadar se na užim
+     desktopima seče po visini, pa beli logo-znak iz slike sklizne ulevo
+     tačno pod naslov. Na 1024px je tamo kontrast bio 2,83. */
   .fs-c .hero-bg::after {
     background: linear-gradient(90deg,
-      rgba(9,21,38,.88) 0%, rgba(9,21,38,.72) 34%, rgba(9,21,38,.25) 56%, rgba(9,21,38,0) 72%);
+      rgba(11,43,40,.72) 0%, rgba(11,43,40,.68) 30%, rgba(11,43,40,.58) 50%,
+      rgba(11,43,40,.30) 64%, rgba(11,43,40,0) 78%);
+  }
+
+  /* Uski desktop je najgori slučaj. Kadar se tu najjače seče po visini,
+     pa logo-znak sklizne najdalje ulevo: na 768px pokriva 291–607, a
+     tekst stoji na 40–516. Zato ovaj pojas dobija gušći i širi zastor.
+     Iznad 1000px se ne koristi, jer bi tamo prešao preko Dragane. */
+  @media (max-width: 999px) {
+    .fs-c .hero-bg::after {
+      background: linear-gradient(90deg,
+        rgba(11,43,40,.88) 0%, rgba(11,43,40,.86) 40%, rgba(11,43,40,.74) 62%,
+        rgba(11,43,40,.38) 76%, rgba(11,43,40,0) 90%);
+    }
   }
   .fs-c .hero-in { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 2.5rem; }
   .fs-c .hero-body {

@@ -649,25 +649,25 @@ jedan ima brojku. Naslov je promenjen u **„Šta kažu polaznice"**, jer bi
 stari obećavao tri merljiva ishoda kojih nema. To nije bilo u klijentovom
 tekstu, pa reci ako treba drugačije.
 
-### Fotografije su ostale tamnoplave
+### Fotografije: hero rešen 25.08, „O meni" još nije
 
-Ovo je jedina stvar koju kod ne može da reši. Tri slike su generisane u
-Higgsfieldu u tamnoplavoj: hero (desktop i mobilni) i pozadina sekcije
-„O meni".
+Slike su bile generisane u tamnoplavoj. **Hero je zamenjen zelenim
+verzijama** (desktop i mobilni), pa je i preliv preko njega prebačen na
+zeleno. Ostala je još samo pozadina sekcije „O meni".
 
-Provereno na renderu cele strane: **svaki preostali plav ili crn piksel
-je unutar te dve fotografije.** Van njih nema nijednog, ni u jednoj CSS
-vrednosti.
+Mereno na renderu cele strane: plavkastih piksela je sa 4,69% palo na
+**1,75%**, a od toga je gotovo sve u „O meni" fotografiji. U herou je
+ostalo 2.388 piksela, i to je Draganina sivoplava haljina, ne paleta.
 
-Zato su i prelivi preko tih slika namerno ostali plavi (`rgba(9,21,38,…)`
-i `#020B1E`) — zelen preliv preko plave slike pravio bi šav.
+Preliv preko `#020B1E` u sekciji „O meni" namerno ostaje plav dok je
+slika plava, jer bi zelen preliv preko plave slike pravio šav.
 
-Tri puta:
+Tri puta za tu jednu sliku:
 
-1. Preprave se slike u Higgsfieldu u zelenoj, pa se i prelivi prebace.
-   **Predlog**, jer je hero prvo što se vidi.
-2. Ostaju plave, kao namerni kontrast.
-3. Zamenjuju se običnom fotografijom bez pozadine u boji.
+1. Prepravi se u Higgsfieldu u zelenoj, pa se i preliv prebaci.
+   **Predlog.**
+2. Ostaje plava, kao namerni kontrast.
+3. Zamenjuje se običnom fotografijom bez pozadine u boji.
 
 ### Cena je ušla na dva mesta
 
@@ -717,3 +717,24 @@ Natpisi na modalu su morali da se razlikuju po strani. Na Početnoj i „O
 meni" modal je do sada govorio o konsultacijama i razgovoru, a natpis
 dugmeta obećava upis u školu. Obe strane su dobile zaseban tekst za
 prijavu, da natpis i modal govore isto.
+
+### Hero preliv nikada nije radio (otkriveno 25.08.)
+
+`.hero-bg::after` je imao `z-index: -1`, a stoji unutar `.hero-bg` koji je
+na `-2`. To ga je gurnulo u negativni sloj, **ispod** `<img>`, pa se preliv
+nikada nije video. Na staroj slici se to nije primetilo jer je bila dovoljno
+tamna sama po sebi; nova zelena ima svetao logo-znak i tirkizni sjaj tačno
+ispod teksta, pa je odmah izbilo.
+
+Popravljeno uklanjanjem `z-index`-a. Izmereno pre popravke: podnaslov je na
+1500px imao **2,20**, a na 1024px naslov **2,83**. Posle: sve prolazi na
+svakoj širini od 360 do 1920.
+
+Uz to su trebale tri stvari koje se iz tabele ne vide:
+
+- Zaseban, gušći zastor za **uski desktop (768–999px)**. Tu se kadar
+  najjače seče po visini pa logo-znak sklizne najdalje ulevo, tačno pod
+  naslov. Iznad 1000px se taj zastor ne koristi jer bi prešao preko Dragane.
+- `.micro` u herou ide na **punu belu** umesto 78%; na tirkiznom sjaju je
+  gubio prag.
+- Podnaslov je sužen sa 34ch na **28ch** da se prelomi pre logo-znaka.

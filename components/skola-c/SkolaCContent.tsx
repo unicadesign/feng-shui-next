@@ -70,10 +70,21 @@ const SkolaCContent = () => {
           next/image jer garantuje da se skida samo jedna od dve slike.
         */}
         <picture className="hero-bg">
+          {/* Redosled je bitan: pregledač uzima prvi `source` koji odgovara,
+              pa mobilne varijante moraju pre desktop varijanti, a AVIF pre
+              JPEG-a. Skida se tačno jedan fajl. AVIF je upola lakši od
+              JPEG-a pri istom kvalitetu (66 KB naspram 129 KB na desktopu),
+              a JPEG ostaje za starije pregledače, pre svega Edge ispod 121. */}
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet="/images/skola-c-hero-mobile.avif"
+          />
           <source
             media="(max-width: 767px)"
             srcSet="/images/skola-c-hero-mobile.jpg"
           />
+          <source type="image/avif" srcSet="/images/skola-c-hero-desktop.avif" />
           <img
             src="/images/skola-c-hero-desktop.jpg"
             alt="Dragana Jović, Feng Shui"
