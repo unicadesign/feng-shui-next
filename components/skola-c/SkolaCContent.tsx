@@ -259,7 +259,10 @@ const SkolaCContent = () => {
             odlučivanje na šta je prvo potrebno obratiti pažnju.
           </p>
 
-          <button className="btn btn-gold" onClick={open('prijava')}>
+          <button
+            className="btn btn-gold emap-cta"
+            onClick={open('prijava')}
+          >
             Pokaži mi šta moj prostor utiče na moj život
           </button>
         </div>

@@ -137,7 +137,21 @@
   min-height: 58px; transition: transform .12s, background .2s;
 }
 .fs-c .btn:active { transform: scale(.98); }
-@media (min-width: 640px) { .fs-c .btn { display: inline-flex; width: auto; } }
+/* `width: auto` nije dovoljno: dugme skoro uvek stoji u `.stack`
+   koji je flex-kolona, a tamo ga podrazumevani `align-items: stretch`
+   razvuče preko cele širine sekcije. Zato i `align-self`. */
+@media (min-width: 640px) {
+  .fs-c .btn { display: inline-flex; width: auto; align-self: flex-start; }
+  /* U centriranim sekcijama dugme prati kompoziciju, ne levu ivicu. */
+  .fs-c .emap-cta, .fs-c .close-cta .btn { align-self: center; }
+  /* Sitan red ispod dugmeta ide uz njega. Dok je dugme bilo preko cele
+     širine, centriran natpis je stajao tačno ispod; sada bi visio sam
+     na sredini sekcije. */
+  .fs-c .btn + .micro { text-align: left; }
+  /* Lepljiva traka sama poravnava po sredini i dugmetu daje `flex: 1`,
+     pa je izuzeta iz gornjeg pravila. */
+  .fs-c .sticky .btn { align-self: center; }
+}
 .fs-c .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 10px 26px rgba(166,67,46,.3); }
 .fs-c .btn-accent:hover { background: var(--accent-dark); }
 .fs-c .btn-white { background: #fff; color: var(--charcoal); }
