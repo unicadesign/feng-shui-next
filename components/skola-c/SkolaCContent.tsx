@@ -97,7 +97,11 @@ const SkolaCContent = () => {
               Online program · dostupan uvek i svuda
             </span>
             <div className="stack g12">
-              <h1>Feng Shui Online program</h1>
+              <h1>
+                Feng Shui
+                <br />
+                Online program
+              </h1>
               <p className="hero-sub">
                 Naučite kako da uskladite dom sa svojim ciljevima
               </p>
@@ -312,7 +316,7 @@ const SkolaCContent = () => {
                 </div>
               ))}
             </div>
-              <button className="btn btn-accent" onClick={open('prijava')}>
+              <button className="btn btn-navy" onClick={open('prijava')}>
                 Rezerviši mi mesto
               </button>
             </div>

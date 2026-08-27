@@ -236,3 +236,66 @@ se"), pa sam promenio samo njega. Ako treba i drugo, to je jedna reč.
 
 Posle ove runde terakota je ostala samo na tom dugmetu i u lepljivoj traci
 na telefonu.
+
+---
+
+## Treća runda, 27.08.
+
+| Traženo | Status |
+|---|---|
+| Terakota dugme („Rezerviši mi mesto") postaje zeleno | ✅ |
+| Veći naslov u herou, u dva reda: „Feng Shui" / „Online program" | ✅ |
+| Podnaslov u jednom redu na velikim ekranima | ✅ |
+| Minimalna širina dugmeta na desktopu 150px | ✅ |
+| Padajući meni na prelazak mišem umesto na klik | ✅ |
+| Nove hero fotografije (desktop i mobilni) | ✅ |
+
+Time je i **stavka 8** iz gornjeg spiska zatvorena: nova hero fotografija
+je baš ona sa Draganom u belom.
+
+### Slike
+
+Skinute preko Higgsfield konektora. Za desktop su postojale **dve** 16:9
+verzije napravljene u istom minutu; uzeta je ona sa Draganom uz desnu ivicu
+i logo-znakom u mint tonu. Druga ima znak u **plavoj**, što se kosi sa
+paletom, i Draganu bliže sredini, gde bi ulazila u tekst. Ako je mišljena
+ta druga, reci.
+
+AVIF ostaje primarni: **24,0 KB** desktop i **21,8 KB** mobilni. Nove slike
+su ravnije od prethodnih pa se bolje sabijaju (ranije 66 i 37 KB). PSNR
+prema originalu je 42,8 odnosno 42,9 dB.
+
+### Mobilna slika je morala da se produži
+
+Nova mobilna verzija ima **teme na 31,7% visine**, gde je prethodna imala
+52,8%. Sa originalom 768×1376 tekst bi morao da stane u gornjih 31,7%
+heroja, što bi na 390px tražilo hero od **1443px**. Dugmad su padala preko
+lica.
+
+Platno je produženo na **768×2100**: dodato je 724 reda zelene uzete iz
+prvog reda same slike. Šav se ne vidi, izmereno je (20,61,53) naspram
+(20,61,55). Time slika postaje uža od okvira, pa `cover` skalira po širini
+i sidrenje za dno drži rastojanje od dna do temena stalnim. Hero je sada
+947px na 390px širine, a teme pada 37px ispod poslednjeg reda teksta.
+
+Ako dobiješ mobilnu verziju sa više praznog prostora iznad glave, produžetak
+se briše i vraća se čista slika.
+
+### Podnaslov u jednom redu je tražio zastor iza teksta
+
+U jednom redu podnaslov prelazi preko svetlog logo-znaka i zlatna je tamo
+padala na **3,83–3,92** na svim širinama od 1200px naviše.
+
+Umesto jačeg opšteg zastora, koji bi posivio celu sliku, dodat je meki
+zastor **samo iza tekstualnog bloka**. Posle toga: **6,09–6,23**. Slika
+ostaje čista, znak se i dalje vidi.
+
+Izmereno na trinaest širina od 360 do 1920, samo tamo gde ima mastila:
+nema nijednog pada.
+
+### Terakota je ostala samo na jednom mestu
+
+Posle ove runde na desktopu je nema uopšte (izmereno na renderu cele
+strane: **nula piksela**). Ostala je samo u **lepljivoj traci na telefonu**,
+[SkolaCContent.tsx:626](components/skola-c/SkolaCContent.tsx#L626). Nisi je
+pominjao, pa je nisam dirao.

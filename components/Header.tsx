@@ -29,7 +29,8 @@ const C_PREVIEW_ROUTES: Record<string, string> = {
 
 // Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
 // izbačeni, pa se ista navigacija seli u padajući meni pod „Škola".
-// Otvara se na klik, ne na prelazak mišem, kako klijent traži.
+// Otvara se na prelazak mišem, kao i ostali padajući meniji u navigaciji.
+// Klik i dalje radi, zbog tastature i dodira gde prelaska mišem nema.
 const C_SKOLA_SIDRA: { to: string; label: string }[] = [
   { to: '/skola-c#program', label: 'Program' },
   { to: '/skola-c#za-koga', label: 'Za koga je' },
@@ -165,7 +166,13 @@ const Header = ({ content, webinar }: HeaderProps) => {
           isCPreview && link.to === '/skola-c' ? (
             /* „Škola" na `-c` stranama nosi padajući meni sa sidrima koja su
                ranije bili bež krugovi ispod heroja. Otvara se na klik. */
-            <div key={link.to} className="relative" ref={skolaRef}>
+            <div
+              key={link.to}
+              className="relative"
+              ref={skolaRef}
+              onMouseEnter={() => setSkolaOpen(true)}
+              onMouseLeave={() => setSkolaOpen(false)}
+            >
               <button
                 type="button"
                 aria-expanded={skolaOpen}
