@@ -277,20 +277,15 @@
      slici, gde je kontrast padao na 2,20. Ovako se prelomi pre njega. */
   max-width: 28ch;
 }
-/* Od 1200px ima mesta za jedan red, pa se prelom ukida. Ali dug red
-   tada prelazi preko svetlog logo-znaka u slici i zlatna pada na 3,9.
-   Umesto da se posivi cela slika jačim opštim zastorom, ide meki zastor
-   SAMO iza tekstualnog bloka. Slika ostaje čista, tekst dobija podlogu. */
+/* Od 1200px ima mesta za jedan red, pa se prelom ukida. */
 @media (min-width: 1200px) {
   .fs-c .hero-sub { max-width: none; white-space: nowrap; }
-  .fs-c .hero-body::before {
-    content: ""; position: absolute; z-index: -1;
-    top: calc(var(--fsc-nav-clear) - 1.5rem); bottom: 1.5rem;
-    left: -3rem; right: -6rem;
-    background: linear-gradient(90deg,
-      rgba(11,43,40,.58) 0%, rgba(11,43,40,.55) 55%,
-      rgba(11,43,40,.34) 78%, rgba(11,43,40,0) 100%);
-  }
+}
+/* Na vrlo širokim ekranima kolona od 1180px ostavlja levo preko 400px
+   praznine, pa red gurne desno u svetliji deo slike. Šira kolona vraća
+   tekst ulevo, u tamniji deo, i usput smanjuje prazan hod. */
+@media (min-width: 1700px) {
+  .fs-c .hero-in { max-width: 1400px; }
 }
 
 .fs-c .hero h1 {
@@ -331,8 +326,8 @@
      tačno pod naslov. Na 1024px je tamo kontrast bio 2,83. */
   .fs-c .hero-bg::after {
     background: linear-gradient(90deg,
-      rgba(11,43,40,.78) 0%, rgba(11,43,40,.74) 30%, rgba(11,43,40,.64) 50%,
-      rgba(11,43,40,.34) 64%, rgba(11,43,40,0) 78%);
+      rgba(11,43,40,.78) 0%, rgba(11,43,40,.77) 28%, rgba(11,43,40,.76) 46%,
+      rgba(11,43,40,.66) 57%, rgba(11,43,40,.32) 69%, rgba(11,43,40,0) 80%);
   }
 
   /* Uski desktop je najgori slučaj. Kadar se tu najjače seče po visini,
