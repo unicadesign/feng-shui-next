@@ -97,51 +97,22 @@ const SkolaCContent = () => {
               Online program · dostupan uvek i svuda
             </span>
             <div className="stack g12">
-              <h1>Feng shui program</h1>
+              <h1>Feng Shui Online program</h1>
               <p className="hero-sub">
                 Naučite kako da uskladite dom sa svojim ciljevima
               </p>
             </div>
-            <div className="stack g8">
-              <button className="btn btn-accent" onClick={open('prijava')}>
-                Pokaži mi kako moj prostor utiče na moj život
+            <div className="stack g8 hero-cta">
+              <button className="btn btn-white" onClick={open('prijava')}>
+                Prijavi se
               </button>
-              <button className="btn btn-white" onClick={open('konsultacije')}>
+              <button className="btn btn-line" onClick={open('konsultacije')}>
                 Zakaži besplatnu konsultaciju
               </button>
-              <span className="micro">
-                Besplatno i bez obaveze · odgovor u roku od 24h
-              </span>
             </div>
           </div>
         </div>
       </header>
-
-      {/* Skok-navigacija (krugovi) */}
-      <div className="c-cream" style={{ paddingTop: '1.5rem' }}>
-        <div className="wrap">
-          <nav className="jump">
-            <a href="#program">
-              <span className="dot">◷</span>Program
-            </a>
-            <a href="#za-koga">
-              <span className="dot">◈</span>Za koga je
-            </a>
-            <a href="#rezultati">
-              <span className="dot">❝</span>Rezultati
-            </a>
-            <a href="#o-meni">
-              <span className="dot">✧</span>O meni
-            </a>
-            <a href="#upis">
-              <span className="dot">◉</span>Upis
-            </a>
-            <a href="#faq">
-              <span className="dot">?</span>Pitanja
-            </a>
-          </nav>
-        </div>
-      </div>
 
       {/* BLOK 2 — UVOD */}
       <section className="card c-cream">
@@ -221,15 +192,9 @@ const SkolaCContent = () => {
                 pažnju i konkretna rešenja za svoj prostor.
               </p>
             </div>
-            <div className="stack g8">
-              <button className="btn btn-accent" onClick={open('prijava')}>
-                Prijavi se
-              </button>
-              <span className="micro">
-                Popunjavate kratak upitnik. Otvara se ovde, bez napuštanja
-                stranice.
-              </span>
-            </div>
+            <button className="btn btn-white" onClick={open('prijava')}>
+              Prijavi se
+            </button>
           </div>
         </div>
       </section>
@@ -262,6 +227,7 @@ const SkolaCContent = () => {
               <li>Teškoće sa koncentracijom ili donošenjem odluka</li>
               <li>Napetost u određenim oblastima života</li>
               <li>Osećaj da svakodnevni zadaci zahtevaju previše truda</li>
+              <li>Imate osećaj da trčite u mestu</li>
             </ul>
           </div>
 
@@ -278,7 +244,7 @@ const SkolaCContent = () => {
             className="btn btn-gold emap-cta"
             onClick={open('prijava')}
           >
-            Pokaži mi šta moj prostor utiče na moj život
+            Pokaži mi kako moj prostor utiče na moj život
           </button>
         </div>
       </section>
@@ -289,7 +255,6 @@ const SkolaCContent = () => {
           <div className="whofor">
             <div className="whofor-aside">
               <div>
-                <span className="eyebrow">Za koga je</span>
                 <h2>Feng shui online škola je za vas ako&hellip;</h2>
               </div>
               <p className="whofor-note">
@@ -354,7 +319,7 @@ const SkolaCContent = () => {
 
             <aside className="learn-price">
               <span className="lp-label">Cena programa</span>
-              <span className="lp-value">286 &euro;</span>
+              <span className="lp-value">289 &euro;</span>
               <p className="lp-note">
                 Broj mesta je ograničen. Rezervišite svoje mesto na vreme.
               </p>
@@ -431,14 +396,10 @@ const SkolaCContent = () => {
             <span className="eyebrow">Rezultati</span>
             <h2>Šta kažu polaznice</h2>
           </div>
-          {/* Samo Izabelin utisak nosi merljiv ishod, pa jedino on ide u
-              „metrika prvo" formu. Ostala dva su preporuke bez brojke i
-              stoje ispod, tiše. */}
+          {/* Metrika „10 dana" je izbačena 27.08. na klijentov zahtev, pa
+              su sva tri utiska sada obični citati. Izabelin i dalje stoji
+              sam u redu, kao istaknut. */}
           <article className="tst tst-lead">
-            <div className="res">10 dana</div>
-            <p className="res-note">
-              od postavke severa do prvih poslovnih prilika
-            </p>
             <q>
               Mnogo sam zahvalna na kursu, znanju i nesebičnom predavanju koje
               ste nam davali. Zato učim i dalje i zato sam nastavila obuku.
@@ -523,44 +484,6 @@ const SkolaCContent = () => {
         </div>
       </section>
 
-      {/* BLOK 11 — UPIS / CENA */}
-      <section className="card c-accent" id="upis">
-        <div className="wrap">
-          <div className="enroll">
-            <div className="enroll-rule" aria-hidden="true" />
-            <span className="eyebrow">Upis</span>
-            <h2>Feng shui online program u 8 nedelja</h2>
-
-            <div className="enroll-when">
-              <div className="enroll-facts">
-                <div>
-                  <span className="lbl">Program kreće</span>
-                  <span className="val">oktobar 2026.</span>
-                </div>
-                <div>
-                  <span className="lbl">Cena programa</span>
-                  <span className="val">286 &euro;</span>
-                </div>
-              </div>
-            </div>
-            <p className="enroll-note">
-              Tačan datum upisa biće objavljen uskoro.
-            </p>
-
-            <ul className="enroll-chips">
-              <li>8 nedelja lekcija, dostupnih celo vreme</li>
-              <li>Konsultacije uživo sa Draganom</li>
-              <li>Praktični zadaci nakon svake lekcije</li>
-              <li>Grupa za podršku polaznica</li>
-            </ul>
-
-            <button className="btn btn-white" onClick={open('prijava')}>
-              Rezervišite mesto
-            </button>
-          </div>
-        </div>
-      </section>
-
       {/* BLOK 12 — FAQ */}
       <section className="card c-cream" id="faq">
         <div className="wrap stack g24">
@@ -624,22 +547,55 @@ const SkolaCContent = () => {
         </div>
       </section>
 
-      {/* BLOK 13 — FINALNI CTA */}
-      <section className="card c-navy" id="upis-dole">
+      {/* BLOK 11 — UPIS I ZATVARANJE (spojeni 27.08.)
+          Terakota sekcija „Upis" i zatvaranje pred footerom bile su dva
+          bloka koja su govorila istu stvar. Sada su jedan zeleni: osnovne
+          informacije, poziv na prijavu i tri brojke. */}
+      <section className="card c-navy" id="upis">
         <div className="wrap close">
+          <span className="eyebrow">Upis</span>
           <h2>Mesto se rezerviše prijavom</h2>
           <p className="lead">
             Ostavite svoje podatke i javićemo vam se sa detaljima oko uplate i
             pristupa kursu.
           </p>
+
+          {/* PAŽNJA: datum i vreme su IZMIŠLJENI, na zahtev, dok ne stigne
+              tačan termin. Menjaju se ovde i nigde više. */}
+          <div className="upis-fakti">
+            <div>
+              <span className="lbl">Program kreće</span>
+              <span className="val">14. oktobar 2026.</span>
+              <span className="sub">utorkom u 19h</span>
+            </div>
+            <div>
+              <span className="lbl">Trajanje</span>
+              <span className="val">8 nedelja</span>
+              <span className="sub">online, sve se snima</span>
+            </div>
+            <div>
+              <span className="lbl">Cena</span>
+              <span className="val">289 &euro;</span>
+              <span className="sub">broj mesta je ograničen</span>
+            </div>
+          </div>
+
+          <ul className="enroll-chips">
+            <li>8 nedelja lekcija, dostupnih celo vreme</li>
+            <li>Konsultacije uživo sa Draganom</li>
+            <li>Praktični zadaci nakon svake lekcije</li>
+            <li>Grupa za podršku polaznica</li>
+          </ul>
+
           <div className="close-cta">
-            <button className="btn btn-accent" onClick={open('prijava')}>
+            <button className="btn btn-white" onClick={open('prijava')}>
               Prijavi se
             </button>
             <button className="btn btn-line" onClick={open('konsultacije')}>
               Zakaži konsultaciju
             </button>
           </div>
+
           <div className="close-proof">
             <div>
               <b>1000+</b>

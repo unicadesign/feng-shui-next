@@ -55,10 +55,6 @@ const PocetnaCContent = () => {
       {/* HERO */}
       <header className="hero">
         <div className="hero-in">
-          <div className="hero-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/hero.jpeg" alt="Dragana Jović, Feng Shui" />
-          </div>
           <div className="hero-body stack g24">
             <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
               Uređenje prostora

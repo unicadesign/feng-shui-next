@@ -206,7 +206,7 @@ const FsCModal = ({
                   id="fsc-phone"
                   name="phone"
                   type="tel"
-                  placeholder="06x xxx xxxx"
+                  placeholder="+381 6x xxx xxxx"
                   value={form.phone}
                   onChange={handleChange}
                 />

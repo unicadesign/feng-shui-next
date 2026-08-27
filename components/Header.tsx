@@ -27,14 +27,30 @@ const C_PREVIEW_ROUTES: Record<string, string> = {
   '/about': '/o-meni-c',
 };
 
+// Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
+// izbačeni, pa se ista navigacija seli u padajući meni pod „Škola".
+// Otvara se na klik, ne na prelazak mišem, kako klijent traži.
+const C_SKOLA_SIDRA: { to: string; label: string }[] = [
+  { to: '/skola-c#program', label: 'Program' },
+  { to: '/skola-c#za-koga', label: 'Za koga je' },
+  { to: '/skola-c#rezultati', label: 'Rezultati' },
+  { to: '/skola-c#o-meni', label: 'O meni' },
+  /* „Upis" je posle „Pitanja" jer je spajanjem blokova 11 i 13 ta sekcija
+     otišla na dno strane, iza FAQ-a. Meni prati redosled na strani. */
+  { to: '/skola-c#faq', label: 'Pitanja' },
+  { to: '/skola-c#upis', label: 'Upis' },
+];
+
 const Header = ({ content, webinar }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [mobileExpandedNav, setMobileExpandedNav] = useState<string | null>(null);
+  const [skolaOpen, setSkolaOpen] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const skolaRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout, isAdmin } = useAuth();
@@ -89,6 +105,26 @@ const Header = ({ content, webinar }: HeaderProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Padajući meni „Škola" se otvara na klik, pa mora i da se zatvori:
+  // klikom izvan njega i tasterom Escape.
+  useEffect(() => {
+    if (!skolaOpen) return;
+    const naKlik = (e: MouseEvent) => {
+      if (skolaRef.current && !skolaRef.current.contains(e.target as Node)) {
+        setSkolaOpen(false);
+      }
+    };
+    const naTaster = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSkolaOpen(false);
+    };
+    document.addEventListener('mousedown', naKlik);
+    document.addEventListener('keydown', naTaster);
+    return () => {
+      document.removeEventListener('mousedown', naKlik);
+      document.removeEventListener('keydown', naTaster);
+    };
+  }, [skolaOpen]);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleNavMouseEnter = (label: string) => {
@@ -117,13 +153,51 @@ const Header = ({ content, webinar }: HeaderProps) => {
       >
         <Link href={cHref('/')}>
           <span className="flex items-center gap-2 px-3">
-            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            {/* Zlatni znak ima providnu pozadinu; stari `logo-transparent.png`
+                je uprkos imenu bez alfa kanala, odatle beli kvadrat iza znaka.
+                Za sada samo na `-c` stranama, da stari sajt ostane isti. */}
+            <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
             <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
           </span>
         </Link>
 
         {navLinksResolved.map((link) => (
-          link.children ? (
+          isCPreview && link.to === '/skola-c' ? (
+            /* „Škola" na `-c` stranama nosi padajući meni sa sidrima koja su
+               ranije bili bež krugovi ispod heroja. Otvara se na klik. */
+            <div key={link.to} className="relative" ref={skolaRef}>
+              <button
+                type="button"
+                aria-expanded={skolaOpen}
+                aria-haspopup="true"
+                onClick={() => setSkolaOpen((o) => !o)}
+                className={`text-sm font-body font-medium px-3 py-1.5 rounded-full transition-all duration-300 ease-out-expo inline-flex items-center gap-1 cursor-pointer ${
+                  pathname === link.to ? 'text-navy-500 bg-navy-50' : 'text-charcoal-500 hover:text-navy-500'
+                }`}
+              >
+                {link.label}
+                <ChevronDown size={14} className={`transition-transform duration-200 ${skolaOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <div
+                className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-card py-2 transition-all duration-200 ${
+                  skolaOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}
+              >
+                {C_SKOLA_SIDRA.map((s) => (
+                  <Link
+                    key={s.to}
+                    href={s.to}
+                    onClick={() => setSkolaOpen(false)}
+                    className="block px-4 py-2.5 text-sm text-charcoal-500 hover:text-navy-500 hover:bg-navy-50 transition-colors duration-200"
+                  >
+                    {s.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : link.children ? (
             <div
               key={link.to}
               className="relative"
@@ -218,7 +292,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
       >
         <Link href={cHref('/')}>
           <span className="flex items-center gap-2 px-3">
-            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
             <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
           </span>
         </Link>
