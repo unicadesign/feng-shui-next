@@ -29,8 +29,9 @@ const C_PREVIEW_ROUTES: Record<string, string> = {
 
 // Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
 // izbačeni, pa se ista navigacija seli u padajući meni pod „Škola".
-// Otvara se na prelazak mišem, kao i ostali padajući meniji u navigaciji.
-// Klik i dalje radi, zbog tastature i dodira gde prelaska mišem nema.
+// Meni se otvara na prelazak mišem, kao i ostali padajući meniji u
+// navigaciji, a strelica pored naziva ga otvara klikom — zbog tastature
+// i dodira, gde prelaska mišem nema. Klik na sam naziv vodi na /skola-c.
 const C_SKOLA_SIDRA: { to: string; label: string }[] = [
   { to: '/skola-c#program', label: 'Program' },
   { to: '/skola-c#za-koga', label: 'Za koga je' },
@@ -52,6 +53,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const skolaRef = useRef<HTMLDivElement>(null);
+  const skolaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout, isAdmin } = useAuth();
@@ -142,6 +144,31 @@ const Header = ({ content, webinar }: HeaderProps) => {
     }, 150);
   };
 
+  const otkaziZatvaranjeSkole = () => {
+    if (skolaTimeoutRef.current) {
+      clearTimeout(skolaTimeoutRef.current);
+      skolaTimeoutRef.current = null;
+    }
+  };
+  const otvoriSkolu = () => {
+    otkaziZatvaranjeSkole();
+    setSkolaOpen(true);
+  };
+  /* Zatvaranje ide sa odlaganjem. Bez njega je meni bio praktično
+     neupotrebljiv: put od naziva „Škola" do stavke u panelu ide
+     dijagonalno i usput na tren izađe iz oba elementa, pa se meni
+     zatvarao pre nego što klik stigne. 260ms je taman da pokrije
+     taj prelaz, a da meni ne visi kad se miš stvarno skloni. */
+  const zatvoriSkoluSaOdlaganjem = () => {
+    otkaziZatvaranjeSkole();
+    skolaTimeoutRef.current = setTimeout(() => setSkolaOpen(false), 260);
+  };
+  const zatvoriSkoluOdmah = () => {
+    otkaziZatvaranjeSkole();
+    setSkolaOpen(false);
+  };
+  useEffect(() => otkaziZatvaranjeSkole, []);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pt-5">
       <div className="flex flex-col items-center w-full px-4 md:w-auto md:px-0">
@@ -165,43 +192,59 @@ const Header = ({ content, webinar }: HeaderProps) => {
         {navLinksResolved.map((link) => (
           isCPreview && link.to === '/skola-c' ? (
             /* „Škola" na `-c` stranama nosi padajući meni sa sidrima koja su
-               ranije bili bež krugovi ispod heroja. Otvara se na klik. */
+               ranije bili bež krugovi ispod heroja. Naziv je link i vodi na
+               stranu škole; padajući meni otvara strelica pored njega, kao i
+               prelazak mišem. Jedan element ne može oboje — klik bi ili
+               navigirao ili otvarao meni, ne oba. */
             <div
               key={link.to}
               className="relative"
               ref={skolaRef}
-              onMouseEnter={() => setSkolaOpen(true)}
-              onMouseLeave={() => setSkolaOpen(false)}
+              onMouseEnter={otvoriSkolu}
+              onMouseLeave={zatvoriSkoluSaOdlaganjem}
             >
-              <button
-                type="button"
-                aria-expanded={skolaOpen}
-                aria-haspopup="true"
-                onClick={() => setSkolaOpen((o) => !o)}
-                className={`text-sm font-body font-medium px-3 py-1.5 rounded-full transition-all duration-300 ease-out-expo inline-flex items-center gap-1 cursor-pointer ${
+              <span
+                className={`text-sm font-body font-medium pl-3 pr-2 py-1.5 rounded-full transition-all duration-300 ease-out-expo inline-flex items-center gap-0.5 ${
                   pathname === link.to ? 'text-navy-500 bg-navy-50' : 'text-charcoal-500 hover:text-navy-500'
                 }`}
               >
-                {link.label}
-                <ChevronDown size={14} className={`transition-transform duration-200 ${skolaOpen ? 'rotate-180' : ''}`} />
-              </button>
+                <Link href={link.to} onClick={zatvoriSkoluOdmah} className="cursor-pointer">
+                  {link.label}
+                </Link>
+                <button
+                  type="button"
+                  aria-expanded={skolaOpen}
+                  aria-haspopup="true"
+                  aria-label={`${link.label}: otvori podmeni`}
+                  onClick={() => (skolaOpen ? zatvoriSkoluOdmah() : otvoriSkolu())}
+                  className="cursor-pointer inline-flex items-center p-1 -m-1"
+                >
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${skolaOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </span>
+              {/* Razmak do panela je `pt-2` UNUTAR ovog omotača, a ne `mt-2`
+                  spolja. Spoljna margina nije ničiji element, pa je miš na
+                  putu nadole prelazio preko 8px praznine, izlazio iz oba
+                  elementa i rušio hover. Ovako je put neprekidan. */}
               <div
-                className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-card py-2 transition-all duration-200 ${
+                className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200 ${
                   skolaOpen
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-2 pointer-events-none'
                 }`}
               >
-                {C_SKOLA_SIDRA.map((s) => (
-                  <Link
-                    key={s.to}
-                    href={s.to}
-                    onClick={() => setSkolaOpen(false)}
-                    className="block px-4 py-2.5 text-sm text-charcoal-500 hover:text-navy-500 hover:bg-navy-50 transition-colors duration-200"
-                  >
-                    {s.label}
-                  </Link>
-                ))}
+                <div className="w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-card py-2">
+                  {C_SKOLA_SIDRA.map((s) => (
+                    <Link
+                      key={s.to}
+                      href={s.to}
+                      onClick={zatvoriSkoluOdmah}
+                      className="block px-4 py-2.5 text-sm text-charcoal-500 hover:text-navy-500 hover:bg-navy-50 transition-colors duration-200"
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           ) : link.children ? (
