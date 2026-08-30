@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MapPin, MessageSquare } from 'lucide-react';
 import type { GlobalContent } from '@/types/content';
+import NewsletterForm from './NewsletterForm';
 
 // Lucide v1 dropped brand icons (trademark concerns) — re-inlining the
 // original outline-style SVGs so footer styling stays identical.
@@ -40,6 +41,29 @@ const InstagramIcon = ({ size = 18, className = '' }: { size?: number; className
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
     <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </svg>
+);
+
+/* Oznake uz naslove kolona: kvadrat / krug / trougao iz brend simbola.
+   Geometrija je IZMERENA iz `public/logo/simbol-20.png`, ne crtana od oka:
+   krug je upisan u kvadrat (odnos prečnika i stranice 1,0000), a trougao je
+   jednakostraničan i upisan u krug, temenom nagore (osnovica na 0,7495
+   stranice, široka 0,8666 — teorijski 0,7500 i 0,8660). Trougao je pomeren
+   naniže da mu okvir optički stoji u sredini pored druge dve forme. */
+const Oznaka = ({ oblik }: { oblik: 'kvadrat' | 'krug' | 'trougao' }) => (
+  <svg
+    width={13}
+    height={13}
+    viewBox="0 0 14 14"
+    fill="none"
+    stroke="#6B5518"
+    strokeWidth={1}
+    className="flex-none"
+    aria-hidden="true"
+  >
+    {oblik === 'kvadrat' && <rect x="1.5" y="1.5" width="11" height="11" />}
+    {oblik === 'krug' && <circle cx="7" cy="7" r="5.5" />}
+    {oblik === 'trougao' && <polygon points="7,2.88 11.76,11.12 2.24,11.12" />}
   </svg>
 );
 
@@ -93,30 +117,49 @@ const Footer = ({ content }: FooterProps) => {
                 <span className="text-2xl font-heading font-bold text-[#3E2A1E]">Dragana Jović</span>
               </span>
               {/* Opis („Harmonizacija domova…") je izbačen na zahtev. */}
-              <div className="flex space-x-4 mt-6">
+              <div className="flex gap-3.5 mt-6">
                 <a
                   href={siteConfig.socialLinks.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#6B5518] hover:text-[#3E2A1E] transition-colors duration-300"
+                  className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-[#DCC5A6] text-[#6B5518] hover:text-[#3E2A1E] hover:border-[#6B5518] transition-colors duration-300"
                   aria-label="Facebook"
                 >
-                  <FacebookIcon size={18} className="stroke-[1.5px]" />
+                  <FacebookIcon size={17} className="stroke-[1.6px]" />
                 </a>
                 <a
                   href={siteConfig.socialLinks.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-[#6B5518] hover:text-[#3E2A1E] transition-colors duration-300"
+                  className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-[#DCC5A6] text-[#6B5518] hover:text-[#3E2A1E] hover:border-[#6B5518] transition-colors duration-300"
                   aria-label="Instagram"
                 >
-                  <InstagramIcon size={18} className="stroke-[1.5px]" />
+                  <InstagramIcon size={17} className="stroke-[1.6px]" />
                 </a>
+              </div>
+
+              {/* Prijava na newsletter stoji baš ovde: ova kolona drži
+                  `md:col-span-2`, dakle pola širine podnožja, a logotip i
+                  dve ikonice popunjavaju oko 200x100px. Podnožje nije
+                  delovalo siromašno zato što ima malo sadržaja, nego zato
+                  što mu je leva polovina bila prazna. */}
+              <div className="mt-8 max-w-[420px] border-t border-[#DCC5A6] pt-6">
+                <h3 className="flex items-center gap-2.5 text-sm font-heading font-semibold text-[#3E2A1E] uppercase tracking-[0.15em]">
+                  <Oznaka oblik="trougao" />
+                  Newsletter
+                </h3>
+                <p className="mt-3 text-sm text-[#665243] leading-relaxed">
+                  Povremeno, saveti o protoku energije, ritualima i usklađenom životu.
+                </p>
+                <div className="mt-4">
+                  <NewsletterForm />
+                </div>
               </div>
             </div>
 
             <div>
-              <h3 className="text-sm font-heading font-semibold text-[#3E2A1E] uppercase tracking-[0.15em] mb-6">
+              <h3 className="flex items-center gap-2.5 text-sm font-heading font-semibold text-[#3E2A1E] uppercase tracking-[0.15em] mb-6">
+                <Oznaka oblik="kvadrat" />
                 {footer.exploreHeading}
               </h3>
               <ul className="space-y-1">
@@ -131,7 +174,8 @@ const Footer = ({ content }: FooterProps) => {
             </div>
 
             <div>
-              <h3 className="text-sm font-heading font-semibold text-[#3E2A1E] uppercase tracking-[0.15em] mb-6">
+              <h3 className="flex items-center gap-2.5 text-sm font-heading font-semibold text-[#3E2A1E] uppercase tracking-[0.15em] mb-6">
+                <Oznaka oblik="krug" />
                 {footer.connectHeading}
               </h3>
               <ul className="space-y-3">
