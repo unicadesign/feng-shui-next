@@ -53,33 +53,103 @@ const PocetnaCContent = () => {
   return (
     <div className="fs-c">
       {/* HERO */}
-      <header className="hero">
+      <header className="hero hero-pocetna">
+        {/* Originalna fotografija, sa svojom svetlom studijskom pozadinom.
+            Zelenu preko leve polovine crta `.hero-bg::after` iz CSS-a, ne
+            slika, da se preliv sam prilagodi širini ekrana.
+            Desktop platno je 2200x1000: portret je uspravan, pa je zid
+            levo od nje razvučen iz čistog pojasa (0..134 skalirane slike,
+            levo od njene ivice na 148). Ogledanje tog pojasa je u prvom
+            pokušaju uhvatilo i nju i po zidu su se videli njeni duhovi. */}
+        <picture className="hero-bg hero-foto">
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet="/images/pocetna-c-hero-bela-mobile.avif"
+          />
+          <source
+            media="(max-width: 767px)"
+            srcSet="/images/pocetna-c-hero-bela-mobile.jpg"
+          />
+          {/* Uski desktop dobija svoje platno: ono široko (odnos 1,9) je na
+              768px `cover` sekao za 634px sleva i Dragana je klizila u
+              sredinu, pravo preko naslova. Tablet platno je skoro kvadratno
+              (1,10), pa jedva da se seče i ona stoji stabilno na 56–59%. */}
+          <source
+            media="(max-width: 1199px)"
+            type="image/avif"
+            srcSet="/images/pocetna-c-hero-bela-tablet.avif"
+          />
+          <source
+            media="(max-width: 1199px)"
+            srcSet="/images/pocetna-c-hero-bela-tablet.jpg"
+          />
+          <source type="image/avif" srcSet="/images/pocetna-c-hero-bela.avif" />
+          <img
+            src="/images/pocetna-c-hero-bela.jpg"
+            alt="Dragana Jović, Feng Shui konsultant"
+            fetchPriority="high"
+          />
+        </picture>
         <div className="hero-in">
           <div className="hero-body stack g24">
-            <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
-              Uređenje prostora
-            </span>
-            <h1>Feng Shui: put ka miru i radosti</h1>
-            <p className="lead" style={{ color: 'var(--navy-300)' }}>
+            <h1>Feng Shui - da vam se život konačno pokrene.</h1>
+            {/* Boju vodi `.hero-pocetna .lead` iz CSS-a; hero je sada beo,
+                pa bež iz vremena zelene podloge više ne važi. */}
+            <p className="lead">
               Oko 1000 osoba je osetilo promenu u odnosima, napretku i
               svakodnevnom miru uz pomoć naše Feng Shui konsultacije. Vaš dom je
               sledeći.
             </p>
-            <div className="stack g8">
-              <Link className="btn btn-accent" href="/skola-c">
-                Saznajte više o školi
-              </Link>
-              <button
-                className="btn btn-white"
-                onClick={open('konsultacije')}
-              >
+            {/* Upis vodi pravo u modal, isto kao „Sačuvaj svoje mesto" u
+                navigaciji: prijava se otvara na licu mesta. Zbog toga je
+                puno belo dugme, a konsultacija ostaje kontura. */}
+            <div className="stack g8 hero-cta">
+              <button className="btn btn-zlatno" onClick={open('prijava')}>
+                Upis u Feng Shui školu
+              </button>
+              <button className="btn btn-braon-linija" onClick={open('konsultacije')}>
                 Zakažite besplatnu konsultaciju
               </button>
-              <span className="micro">Besplatno. Bez obaveze.</span>
             </div>
           </div>
         </div>
       </header>
+
+      {/* KPI — traka odmah ispod heroa. Zlatna podloga iza nje je blago
+          zarotirana i viri gore i dole; crta je `.kpi::before`, pa nema
+          dodatnog elementa u HTML-u.
+          Geometrija formi je IZMERENA iz `public/logo/simbol-20.png`, ne
+          crtana od oka: krug je upisan u kvadrat (odnos prečnika i
+          stranice 1,0000), a trougao je jednakostraničan i upisan u krug,
+          temenom nagore — osnovica na 0,7495 stranice i široka 0,8666
+          (teorijski 0,7500 i 0,8660). Trougao je pomeren 3,88 naniže da
+          mu okvir optički stoji u sredini pored druge dve forme. */}
+      <section className="kpi" aria-label="Feng Shui u brojkama">
+        <div className="wrap kpi-in">
+          <div>
+            <svg className="kpi-ikona" viewBox="0 0 40 40" aria-hidden="true">
+              <rect x="4.5" y="4.5" width="31" height="31" />
+            </svg>
+            <b>1000+</b>
+            <span>Projekata</span>
+          </div>
+          <div>
+            <svg className="kpi-ikona" viewBox="0 0 40 40" aria-hidden="true">
+              <circle cx="20" cy="20" r="15.5" />
+            </svg>
+            <b>25+</b>
+            <span>Godina iskustva</span>
+          </div>
+          <div>
+            <svg className="kpi-ikona" viewBox="0 0 40 40" aria-hidden="true">
+              <polygon points="20,8.38 33.42,31.62 6.58,31.62" />
+            </svg>
+            <b>180+</b>
+            <span>Radionica</span>
+          </div>
+        </div>
+      </section>
 
       {/* USLUGE — krugovi */}
       <section className="card c-cream" id="usluge">
@@ -165,17 +235,12 @@ const PocetnaCContent = () => {
       {/* KONTAKT */}
       <section className="card c-accent" id="kontakt">
         <div className="wrap stack g24">
-          <h2>Zakažite besplatnu konsultaciju</h2>
-          <p className="lead">
-            Trideset minuta, onlajn, bez obaveze, da vidimo šta vaš prostor
-            traži.
-          </p>
-          <div className="stack g8">
-            <button className="btn btn-white" onClick={open('konsultacije')}>
-              Popuni formu
-            </button>
-            <span className="micro">Otvara se ovde, bez napuštanja stranice.</span>
-          </div>
+          <h2>
+            Saznajte kako Feng Shui može da Vam pomogne kroz razgovor sa mnom.
+          </h2>
+          <button className="btn btn-white" onClick={open('konsultacije')}>
+            Zakažite besplatnu konsultaciju
+          </button>
         </div>
       </section>
 
