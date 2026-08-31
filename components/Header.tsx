@@ -25,6 +25,7 @@ const C_PREVIEW_ROUTES: Record<string, string> = {
   '/': '/pocetna-c',
   '/school': '/skola-c',
   '/about': '/o-meni-c',
+  '/upitnik': '/kontakt-c',
 };
 
 // Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
@@ -36,11 +37,9 @@ const C_SKOLA_SIDRA: { to: string; label: string }[] = [
   { to: '/skola-c#program', label: 'Program' },
   { to: '/skola-c#za-koga', label: 'Za koga je' },
   { to: '/skola-c#rezultati', label: 'Rezultati' },
-  { to: '/skola-c#o-meni', label: 'O meni' },
-  /* „Upis" je posle „Pitanja" jer je spajanjem blokova 11 i 13 ta sekcija
-     otišla na dno strane, iza FAQ-a. Meni prati redosled na strani. */
+  /* „O meni" i „Upis" su izbačeni 31.08.: te dve sekcije su sakrivene na
+     strani, pa bi sidra vodila u prazno. Vraćaju se zajedno sa sekcijama. */
   { to: '/skola-c#faq', label: 'Pitanja' },
-  { to: '/skola-c#upis', label: 'Upis' },
 ];
 
 const Header = ({ content, webinar }: HeaderProps) => {
@@ -72,14 +71,41 @@ const Header = ({ content, webinar }: HeaderProps) => {
     ? filteredNav
     : [{ to: '/school', label: 'Škola', children: undefined }, ...filteredNav];
   const isCPreview = pathname?.endsWith('-c') ?? false;
+  /**
+   * Modal za prijavu živi u komponenti strane, a Header ga doziva
+   * događajem (`enrollTrigger`). Nemaju ga sve `-c` strane: `/uplata-c`
+   * i `/hvala-c` se otvaraju POSLE prijave i modal ne renderuju, pa bi
+   * na njima dugme „Sačuvaj svoje mesto" slalo događaj koji niko ne
+   * sluša. Tamo isto dugme vodi na stranicu škole.
+   *
+   * Provera je po spisku, ne po nastavku imena: obe nove rute se takođe
+   * završavaju na `-c`, pa ih `isCPreview` hvata.
+   */
+  const imaModalZaPrijavu =
+    pathname === '/pocetna-c' || pathname === '/skola-c' || pathname === '/o-meni-c';
   const cHref = (to: string) => (isCPreview ? (C_PREVIEW_ROUTES[to] ?? to) : to);
+  /**
+   * „Početna" u navigaciji. Dodaje se ovde a ne u admin panelu jer panel
+   * po dogovoru čeka da klijent odobri redizajn, a `content.navigation`
+   * dele živa i `-c` verzija sajta.
+   *
+   * Samo na `-c` stranama: na živom sajtu do početne vodi naziv
+   * „Dragana Jović" pored znaka, a on je na `-c` stranama izbačen. Bez
+   * ovoga bi se tamo na početnu moglo samo preko znaka.
+   *
+   * `cHref` ispod prevodi `/` u `/pocetna-c`.
+   */
+  const navLinksSaPocetnom =
+    isCPreview && !navLinks.some((link) => link.to === '/')
+      ? [{ to: '/', label: 'Početna', children: undefined }, ...navLinks]
+      : navLinks;
   const navLinksResolved = isCPreview
-    ? navLinks.map((link) => ({
+    ? navLinksSaPocetnom.map((link) => ({
         ...link,
         to: cHref(link.to),
         children: link.children?.map((child) => ({ ...child, to: cHref(child.to) })),
       }))
-    : navLinks;
+    : navLinksSaPocetnom;
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
@@ -180,12 +206,21 @@ const Header = ({ content, webinar }: HeaderProps) => {
         }`}
       >
         <Link href={cHref('/')}>
-          <span className="flex items-center gap-2 px-3">
+          {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
+              ne pomeri raspored: negativna margina poništi dodati prostor.
+              Pošto je naziv pored znaka izbačen, znak je ostao jedina
+              prečica do početne i mora da se pogodi prstom. */}
+          <span className="flex items-center gap-2 px-3 py-2 -my-2">
             {/* Zlatni znak ima providnu pozadinu; stari `logo-transparent.png`
                 je uprkos imenu bez alfa kanala, odatle beli kvadrat iza znaka.
                 Za sada samo na `-c` stranama, da stari sajt ostane isti. */}
             <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+            {/* Naziv se na `-c` stranama izbacuje na zahtev; ostaje samo znak.
+                Link i dalje vodi na početnu, a pristupačno ime mu daje
+                `alt` na slici, pa link ne ostaje bezimen. */}
+            {!isCPreview && (
+              <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+            )}
           </span>
         </Link>
 
@@ -316,13 +351,24 @@ const Header = ({ content, webinar }: HeaderProps) => {
              posetilac ne napušta prodajnu stranu. Samo desktop — na telefonu
              tu ulogu već ima lepljiva traka pri dnu. Natpis je za sada u
              kodu; kada C preuzme prave rute, ide u admin uz ostale (Izmena 03). */
-          <button
-            type="button"
-            onClick={requestFsCEnroll}
-            className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
-          >
-            Sačuvaj svoje mesto
-          </button>
+          imaModalZaPrijavu ? (
+            <button
+              type="button"
+              onClick={requestFsCEnroll}
+              className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
+            >
+              Sačuvaj svoje mesto
+            </button>
+          ) : (
+            /* Strane posle prijave (`/uplata-c`, `/hvala-c`) nemaju modal,
+               pa isto dugme vodi na školu umesto da ne radi ništa. */
+            <Link
+              href="/skola-c"
+              className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
+            >
+              Sačuvaj svoje mesto
+            </Link>
+          )
         ) : (
           <Link
             href="/login"
@@ -341,9 +387,18 @@ const Header = ({ content, webinar }: HeaderProps) => {
         }`}
       >
         <Link href={cHref('/')}>
-          <span className="flex items-center gap-2 px-3">
+          {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
+              ne pomeri raspored: negativna margina poništi dodati prostor.
+              Pošto je naziv pored znaka izbačen, znak je ostao jedina
+              prečica do početne i mora da se pogodi prstom. */}
+          <span className="flex items-center gap-2 px-3 py-2 -my-2">
             <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+            {/* Naziv se na `-c` stranama izbacuje na zahtev; ostaje samo znak.
+                Link i dalje vodi na početnu, a pristupačno ime mu daje
+                `alt` na slici, pa link ne ostaje bezimen. */}
+            {!isCPreview && (
+              <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+            )}
           </span>
         </Link>
 
@@ -416,9 +471,9 @@ const Header = ({ content, webinar }: HeaderProps) => {
 
             {user ? (
               <>
-                <MobileNavLink to="/dashboard" index={navLinks.length}>{headerLabels.myCoursesLabel}</MobileNavLink>
+                <MobileNavLink to="/dashboard" index={navLinksResolved.length}>{headerLabels.myCoursesLabel}</MobileNavLink>
                 {isAdmin && (
-                  <MobileNavLink to="/admin" index={navLinks.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
+                  <MobileNavLink to="/admin" index={navLinksResolved.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
                 )}
                 <button
                   onClick={() => { setIsMenuOpen(false); handleLogout(); }}
@@ -426,7 +481,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                   style={{
                     opacity: 0,
                     transform: 'translateY(24px)',
-                    animation: `mobileNavFadeIn 0.4s ease-out ${(navLinks.length + (isAdmin ? 2 : 1)) * 0.07 + 0.1}s forwards`,
+                    animation: `mobileNavFadeIn 0.4s ease-out ${(navLinksResolved.length + (isAdmin ? 2 : 1)) * 0.07 + 0.1}s forwards`,
                   }}
                 >
                   {headerLabels.logoutLabel}

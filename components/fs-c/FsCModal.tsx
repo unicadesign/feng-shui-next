@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase/client';
-import type { InquiryInsert } from '@/types/inquiry';
+import { useRouter } from 'next/navigation';
 
 interface FsCModalProps {
   open: boolean;
@@ -17,6 +16,19 @@ interface FsCModalProps {
    */
   serviceType: string;
   heardFrom: string;
+  /**
+   * Upis u školu ili razgovor. Odlučuje da li posle prijave ide mejl
+   * sa podacima za uplatu. Server ne veruje ovome na reč za bilo šta
+   * osim za izbor mejla — iznos i broj računa dolaze sa servera.
+   */
+  intent: 'prijava' | 'konsultacije';
+  /**
+   * Stranica na koju se ide posle uspešne prijave. Kada je zadata,
+   * modal ne prikazuje svoju poruku o uspehu nego preusmerava — zato
+   * što ta stranica ima svoj link, pa se konverzija meri u analitici.
+   * Bez nje se ponaša po starom, sa porukom unutar modala.
+   */
+  redirectTo?: string;
 }
 
 const goalOptions = [
@@ -49,7 +61,10 @@ const FsCModal = ({
   subtitle,
   serviceType,
   heardFrom,
+  intent,
+  redirectTo,
 }: FsCModalProps) => {
+  const router = useRouter();
   const [form, setForm] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -107,29 +122,44 @@ const FsCModal = ({
 
     setIsSubmitting(true);
 
-    const payload: InquiryInsert = {
-      full_name: form.fullName.trim(),
-      email: form.email.trim(),
-      phone: form.phone.trim() || null,
-      preferred_contact: 'email',
-      preferred_time: null,
-      service_type: serviceType,
-      home_type: null,
-      main_goals: form.goal ? [form.goal] : [],
-      challenges: null,
-      heard_from: heardFrom,
-      additional_info: null,
-    };
+    let odgovor: Response;
+    try {
+      odgovor = await fetch('/api/prijava', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.fullName.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim() || null,
+          goal: form.goal || null,
+          service_type: serviceType,
+          heard_from: heardFrom,
+          intent,
+        }),
+      });
+    } catch {
+      setIsSubmitting(false);
+      setError('Nema veze sa internetom. Pokušajte ponovo.');
+      return;
+    }
 
-    const { error: dbError } = await supabase.from('inquiries').insert([payload]);
+    if (!odgovor.ok) {
+      setIsSubmitting(false);
+      const podaci = await odgovor.json().catch(() => null);
+      setError(podaci?.error || 'Došlo je do greške. Pokušajte ponovo.');
+      return;
+    }
+
+    if (redirectTo) {
+      // NAMERNO ostaje `isSubmitting` dok traje prelaz: dugme je i dalje
+      // zaključano, pa se prijava ne može poslati dvaput dok se stranica
+      // učitava. Modal nestaje kada se komponenta stranice odmontira.
+      router.push(redirectTo);
+      return;
+    }
 
     setIsSubmitting(false);
-
-    if (dbError) {
-      setError(dbError.message || 'Došlo je do greške. Pokušajte ponovo.');
-    } else {
-      setSuccess(true);
-    }
+    setSuccess(true);
   };
 
   return (

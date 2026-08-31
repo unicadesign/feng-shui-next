@@ -7,15 +7,32 @@ import '../fs-c/fs-c.css';
 
 type ModalIntent = 'prijava' | 'konsultacije';
 
-const modalCopy: Record<ModalIntent, { title: string; subtitle: string }> = {
+/**
+ * Dva modala, dve različite stvari.
+ *
+ * `serviceType` je do 31.08. bio jedan te isti za oba („Feng Shui škola
+ * (kurs)"), pa se u admin pregledu NIJE videlo ko se upisao u školu a ko
+ * traži besplatan razgovor. Sada svaki nosi svoju oznaku.
+ *
+ * `redirectTo` vodi na zasebnu stranicu sa svojim linkom, da bi svaka
+ * konverzija mogla da se meri odvojeno u analitici.
+ */
+const modalCopy: Record<
+  ModalIntent,
+  { title: string; subtitle: string; serviceType: string; redirectTo: string }
+> = {
   prijava: {
     title: 'Prijava za feng shui školu',
-    subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+    subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
+    serviceType: 'Feng Shui škola (kurs)',
+    redirectTo: '/uplata-c',
   },
   konsultacije: {
     title: 'Zakažite konsultaciju',
     subtitle:
       'Ostavite podatke i dogovaramo besplatan razgovor o vašem prostoru.',
+    serviceType: 'Besplatna konsultacija',
+    redirectTo: '/hvala-c',
   },
 };
 
@@ -64,38 +81,49 @@ const SkolaCContent = () => {
       {/* BLOK 1 — HERO */}
       <header className="hero">
         {/*
-          Pozadina je art-directed: desktop verzija ima praznu levu trećinu,
-          mobilna praznu gornju polovinu — tekst u oba slučaja stoji na
-          praznini, a Dragana ostaje neisečena. <picture> je namerno umesto
-          next/image jer garantuje da se skida samo jedna od dve slike.
+          Pozadina je kompozit, po istom principu kao hero Početne: leva
+          strana je RAVNA zelena — ista #0B2B28 koju `.fs-c .hero` ima kao
+          CSS pozadinu, pa se ne vidi gde slika prestaje — a preko
+          fotografije ide preliv te iste zelene koji se gasi udesno.
+
+          Preliv je UPEČEN U SLIKU, ne CSS zastor kao ranije. Razlog: `cover`
+          seče kadar drugačije na svakoj širini, pa se CSS zastor i Dragana
+          pomeraju jedno u odnosu na drugo. Upečen preliv drži isti odnos
+          prema njoj na svakoj širini.
+
+          Tri kadra, svaki isečen u TAČNOM odnosu svog okvira, pa `cover`
+          nema šta dodatno da doseca. Redosled je bitan: pregledač uzima
+          prvi `source` koji odgovara, pa mobilni ide pre tableta, tablet
+          pre desktopa, a AVIF pre JPEG-a. Skida se tačno jedan fajl.
         */}
-        <picture className="hero-bg">
-          {/* Redosled je bitan: pregledač uzima prvi `source` koji odgovara,
-              pa mobilne varijante moraju pre desktop varijanti, a AVIF pre
-              JPEG-a. Skida se tačno jedan fajl. AVIF je upola lakši od
-              JPEG-a pri istom kvalitetu (66 KB naspram 129 KB na desktopu),
-              a JPEG ostaje za starije pregledače, pre svega Edge ispod 121. */}
+        <picture className="hero-bg hero-zeleni">
           <source
             media="(max-width: 767px)"
             type="image/avif"
-            srcSet="/images/skola-c-hero-mobile.avif"
+            srcSet="/images/skola-c-hero-zeleni-mobile.avif"
           />
           <source
             media="(max-width: 767px)"
-            srcSet="/images/skola-c-hero-mobile.jpg"
+            srcSet="/images/skola-c-hero-zeleni-mobile.jpg"
           />
-          <source type="image/avif" srcSet="/images/skola-c-hero-desktop.avif" />
+          <source
+            media="(max-width: 1199px)"
+            type="image/avif"
+            srcSet="/images/skola-c-hero-zeleni-tablet.avif"
+          />
+          <source
+            media="(max-width: 1199px)"
+            srcSet="/images/skola-c-hero-zeleni-tablet.jpg"
+          />
+          <source type="image/avif" srcSet="/images/skola-c-hero-zeleni.avif" />
           <img
-            src="/images/skola-c-hero-desktop.jpg"
-            alt="Dragana Jović, Feng Shui"
+            src="/images/skola-c-hero-zeleni.jpg"
+            alt="Dragana Jović sa laptopom, uz prozor"
             fetchPriority="high"
           />
         </picture>
         <div className="hero-in">
           <div className="hero-body stack g24">
-            <span className="eyebrow" style={{ color: 'var(--gold-200)' }}>
-              Online program · dostupan uvek i svuda
-            </span>
             <div className="stack g12">
               <h1>
                 Feng Shui
@@ -175,30 +203,49 @@ const SkolaCContent = () => {
         </div>
       </section>
 
-      {/* BLOK 4 — CITAT + PRIJAVA */}
-      <section className="card c-sand" id="prijava">
-        <div className="wrap stack g32">
-          <h2
-            style={{
-              fontSize: 'clamp(1.5rem,5.4vw,2.4rem)',
-              fontWeight: 600,
-              lineHeight: 1.3,
-            }}
-          >
-            „Nije potrebno da sve u vašem domu promenite kada znate šta ugrožava
-            vašu energiju i kako da precizno primenite feng shui&rdquo;
-          </h2>
-          <div className="stack g24">
-            <div className="stack g12">
-              <h3>Program se održava online.</h3>
-              <p className="lead">
-                Broj mesta je ograničen kako bi svaki od učesnika dobio punu
-                pažnju i konkretna rešenja za svoj prostor.
+      {/* BLOK 4 je izbačen 31.08. na zahtev: citat „Nije potrebno da sve
+          u vašem domu promenite…" sa pratećom prijavom. Na njegovo mesto je
+          pomeren blok „Za koga je", pa redosled više ne prati numeraciju. */}
+      {/* BLOK 6 — ZA KOGA JE */}
+      <section className="card c-cream" id="za-koga">
+        <div className="wrap">
+          <div className="whofor">
+            <div className="whofor-aside">
+              <div>
+                <h2>Feng shui online škola je za vas ako&hellip;</h2>
+              </div>
+              <p className="whofor-note">
+                Predznanje nije potrebno. Ponesite otvoren um i spremnost da
+                svoj prostor vidite drugačije.
               </p>
             </div>
-            <button className="btn btn-white" onClick={open('prijava')}>
-              Prijavi se
-            </button>
+            <ul className="whofor-list">
+              <li>
+                <span>Volite sami da uređujete svoj dom i želite da znate kako
+                da kroz prostor unosite poboljšanje za sebe i svoju
+                porodicu.</span>
+              </li>
+              <li>
+                <span>Čuli ste za feng shui, ali ne znate odakle da počnete da
+                ga primenjujete u svom domu.</span>
+              </li>
+              <li>
+                <span>Želite jasan smer umesto razbacanih saveta sa interneta i
+                „srećnih predmeta&rdquo;.</span>
+              </li>
+              <li>
+                <span>Radite na sebi, ali osećate da ulažete veliki napor a
+                rezultati su mali.</span>
+              </li>
+              <li>
+                <span>Želite korekcije koje se mogu primeniti i bez velikih
+                renoviranja i skupih predmeta.</span>
+              </li>
+              <li>
+                <span>Selite se, gradite ili renovirate i želite da to odmah uradite
+                kako treba.</span>
+              </li>
+            </ul>
           </div>
         </div>
       </section>
@@ -207,7 +254,6 @@ const SkolaCContent = () => {
       <section className="card c-navy">
         <div className="wrap stack g32">
           <div className="emap-head stack g12">
-            <span className="eyebrow">Zašto prostor utiče na vas</span>
             <h2>Vaš prostor ima energetsku mapu</h2>
             <p className="lead">
               Feng shui se bavi životnom energijom Chi i kako se ona kreće.
@@ -253,55 +299,10 @@ const SkolaCContent = () => {
         </div>
       </section>
 
-      {/* BLOK 6 — ZA KOGA JE */}
-      <section className="card c-cream" id="za-koga">
-        <div className="wrap">
-          <div className="whofor">
-            <div className="whofor-aside">
-              <div>
-                <h2>Feng shui online škola je za vas ako&hellip;</h2>
-              </div>
-              <p className="whofor-note">
-                Predznanje nije potrebno. Ponesite otvoren um i spremnost da
-                svoj prostor vidite drugačije.
-              </p>
-            </div>
-            <ul className="whofor-list">
-              <li>
-                <span>Volite sami da uređujete svoj dom i želite da znate kako
-                da kroz prostor unosite poboljšanje za sebe i svoju
-                porodicu.</span>
-              </li>
-              <li>
-                <span>Čuli ste za feng shui, ali ne znate odakle da počnete da
-                ga primenjujete u svom domu.</span>
-              </li>
-              <li>
-                <span>Želite jasan smer umesto razbacanih saveta sa interneta i
-                „srećnih predmeta&rdquo;.</span>
-              </li>
-              <li>
-                <span>Radite na sebi, ali osećate da ulažete veliki napor a
-                rezultati su mali.</span>
-              </li>
-              <li>
-                <span>Želite korekcije koje se mogu primeniti i bez velikih
-                renoviranja i skupih predmeta.</span>
-              </li>
-              <li>
-                <span>Selite se, gradite ili renovirate i želite da to odmah uradite
-                kako treba.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* BLOK 7 — ŠTA ĆETE NAUČITI */}
       <section className="card c-sand">
         <div className="wrap stack g32">
           <div className="stack g12">
-            <span className="eyebrow">Ishod</span>
             <h2>Tokom programa ćete naučiti</h2>
           </div>
 
@@ -386,10 +387,6 @@ const SkolaCContent = () => {
             </div>
           </div>
 
-          <p className="course-note">
-            Feng shui postaje korisniji kada znate šta tražite i zašto je
-            potrebna određena korekcija.
-          </p>
         </div>
       </section>
 
@@ -442,10 +439,15 @@ const SkolaCContent = () => {
         </div>
       </section>
 
-      {/* BLOK 10 — O MENI */}
+      {/* SAKRIVENO 31.08. na zahtev: sekcija „O meni" (Dragana Jović)
+          Nije obrisano nego zakomentarisano — traženo je „sakrij", pa se
+          vraća skidanjem komentara ispod. Sidro „o-meni" je istovremeno
+          izbačeno iz padajućeg menija u Header.tsx, da ne vodi u prazno.
+
+      {/ * BLOK 10 — O MENI * /}
       <section className="card c-navy about" id="o-meni">
         <div className="about-bg">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/ * eslint-disable-next-line @next/next/no-img-element * /}
           <img
             src="/images/skola-c-o-meni.jpg"
             alt="Dragana Jović"
@@ -487,6 +489,8 @@ const SkolaCContent = () => {
           </div>
         </div>
       </section>
+
+      */}
 
       {/* BLOK 12 — FAQ */}
       <section className="card c-cream" id="faq">
@@ -548,13 +552,25 @@ const SkolaCContent = () => {
               </p>
             </details>
           </div>
+
+          {/* Dodato 31.08. Pošto je blok „Mesto se rezerviše prijavom" sakriven,
+              ovo je sada POSLEDNJA prilika za prijavu na strani — pre njega
+              najbliža je bila daleko gore, kod plana obuke. */}
+          <button className="btn btn-gold faq-cta" onClick={open('prijava')}>
+            Prijavi se
+          </button>
         </div>
       </section>
 
-      {/* BLOK 11 — UPIS I ZATVARANJE (spojeni 27.08.)
+      {/* SAKRIVENO 31.08. na zahtev: sekcija „Mesto se rezerviše prijavom"
+          Nije obrisano nego zakomentarisano — traženo je „sakrij", pa se
+          vraća skidanjem komentara ispod. Sidro „upis" je istovremeno
+          izbačeno iz padajućeg menija u Header.tsx, da ne vodi u prazno.
+
+      {/ * BLOK 11 — UPIS I ZATVARANJE (spojeni 27.08.)
           Terakota sekcija „Upis" i zatvaranje pred footerom bile su dva
           bloka koja su govorila istu stvar. Sada su jedan zeleni: osnovne
-          informacije, poziv na prijavu i tri brojke. */}
+          informacije, poziv na prijavu i tri brojke. * /}
       <section className="card c-navy" id="upis">
         <div className="wrap close">
           <span className="eyebrow">Upis</span>
@@ -564,8 +580,8 @@ const SkolaCContent = () => {
             pristupa kursu.
           </p>
 
-          {/* PAŽNJA: datum i vreme su IZMIŠLJENI, na zahtev, dok ne stigne
-              tačan termin. Menjaju se ovde i nigde više. */}
+          {/ * PAŽNJA: datum i vreme su IZMIŠLJENI, na zahtev, dok ne stigne
+              tačan termin. Menjaju se ovde i nigde više. * /}
           <div className="upis-fakti">
             <div>
               <span className="lbl">Program kreće</span>
@@ -617,6 +633,8 @@ const SkolaCContent = () => {
         </div>
       </section>
 
+      */}
+
       {/* Lepljiva traka (mobilno) */}
       <div className="sticky">
         <div className="meta">
@@ -633,8 +651,12 @@ const SkolaCContent = () => {
         onClose={() => setModal(null)}
         title={modal ? modalCopy[modal].title : undefined}
         subtitle={modal ? modalCopy[modal].subtitle : undefined}
-        serviceType="Feng Shui škola (kurs)"
+        serviceType={
+          modal ? modalCopy[modal].serviceType : 'Feng Shui škola (kurs)'
+        }
         heardFrom="Škola (verzija C)"
+        intent={modal ?? 'konsultacije'}
+        redirectTo={modal ? modalCopy[modal].redirectTo : undefined}
       />
     </div>
   );

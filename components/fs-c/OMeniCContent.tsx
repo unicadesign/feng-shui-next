@@ -6,45 +6,39 @@ import { useFsCEnrollTrigger } from './enrollTrigger';
 import './fs-c.css';
 
 /**
- * O meni — verzija C ("Mobilna kartica"), ugrađena u Next.js app.
- * Sadržaj i dizajn-jezik su porat iz prototipa design/o-meni/verzija-c.html.
- * Nav i footer daje (site) layout (Header/Footer). Kontakt = deljeni modal.
- * Blok "Šta izdvaja moj pristup" koristi ikone (bez foto placeholder-a) dok
- * ne stignu prave slike.
+ * O meni — verzija C, „naizmenične trake".
+ *
+ * Strana je 31.08. napisana ispočetka na klijentov zahtev: sve što je bilo
+ * (blok „Šta izdvaja moj pristup", „Obuka i put", brojke 25 godina i 1000+
+ * projekata, pomen fakulteta i Mastery Academy) je izbačeno, a tekst je nov
+ * i prenet doslovno. Zadržani su nadnaslov i zeleni CTA blok na dnu.
+ *
+ * Zbog toga strana više NIGDE ne pominje obrazovanje ni godine iskustva.
+ *
+ * Raspored: naslov i prvi pasus na kremu, pa fotografija preko cele širine,
+ * pa drugi pasus na bež i treći na kremu — isti ritam naizmeničnih traka
+ * koji već ide kroz Školu i Početnu.
  */
 
-const pristup = [
-  {
-    ico: '✧',
-    h: 'Personalizacija',
-    p: 'Nijedna dva čoveka, pa ni dva doma, nisu ista. Slušam vaš prostor i vašu priču da bih oblikovala rešenja koja odražavaju vašu energiju, ciljeve i ritam života.',
-  },
-  {
-    ico: '☯',
-    h: 'Harmonija',
-    p: 'Povezujem drevnu kinesku mudrost sa modernom realnošću, spajajući metafizički uvid sa praktičnim dizajnom za bezvremeno, negujuće okruženje.',
-  },
-  {
-    ico: '❁',
-    h: 'Transformacija',
-    p: 'Feng Shui nije u vezi sa nameštajem. Radi se o energiji. Koristim prostor kao alat za isceljenje, usklađivanje i lični razvoj, iznutra ka spolja.',
-  },
-  {
-    ico: '◈',
-    h: 'Ukorenjeno u pravoj tradiciji',
-    p: 'Godine posvećenog učenja kod priznatih Feng Shui majstora znače da dobijate autentičnu mudrost, a ne razvodnjene internet koncepte.',
-  },
-  {
-    ico: '◉',
-    h: 'Praksa, ne teorija',
-    p: 'Polaznice ne uče samo koncepte, već vide opipljive promene u svojim domovima. Metoda se oslanja na praktičnu primenu sa merljivim rezultatima.',
-  },
-  {
-    ico: '⟡',
-    h: 'Istočnjačka mudrost, naši domovi',
-    p: 'Prevođenje drevnih principa u moderne domove našeg regiona, sa njegovim arhitektonskim i energetskim obrascima, a ne uopštenim savetima.',
-  },
-];
+/* Forme uz nadnaslove su iz brend simbola. Geometrija je IZMERENA iz
+   `public/logo/simbol-20.png`, ne crtana od oka: krug je upisan u kvadrat
+   (odnos 1,0000), a trougao je jednakostraničan i upisan u krug, temenom
+   nagore. Trougao je pomeren naniže da mu okvir optički stoji u sredini. */
+const Oznaka = ({ oblik }: { oblik: 'krug' | 'trougao' }) => (
+  <svg
+    width={14}
+    height={14}
+    viewBox="0 0 14 14"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1}
+    className="omeni-oznaka"
+    aria-hidden="true"
+  >
+    {oblik === 'krug' && <circle cx="7" cy="7" r="5.5" />}
+    {oblik === 'trougao' && <polygon points="7,2.88 11.76,11.12 2.24,11.12" />}
+  </svg>
+);
 
 const OMeniCContent = () => {
   // Dva povoda za isti modal: dugmad na strani zovu na razgovor, a
@@ -55,129 +49,118 @@ const OMeniCContent = () => {
     modal === 'prijava'
       ? {
           title: 'Prijava za feng shui školu',
-          subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+          subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
           serviceType: 'Feng Shui škola',
+          intent: 'prijava' as const,
+          // Upis u školu vodi na podatke za uplatu, razgovor na zahvalnicu.
+          redirectTo: '/uplata-c',
         }
       : {
           title: 'Zakažite besplatan razgovor',
           subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
           serviceType: 'Feng Shui razgovor (O meni)',
+          intent: 'konsultacije' as const,
+          redirectTo: '/hvala-c',
         };
 
   useFsCEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
-      {/* HERO — tekst + portret */}
-      <section className="card c-cream">
-        <div className="wrap stack g24">
-          <span className="eyebrow">O Dragani</span>
-          <h1>Vaš vodič na putu ka prostoru koji vas podržava</h1>
-          <p className="lead">
-            Dragana Jović, 25 godina iskustva, preko 1000 projekata, i jedno
-            uverenje: kada se prostor uskladi sa vama, sve u životu počinje da
-            teče.
-          </p>
-          <div className="portrait">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/dragana-joivc.webp" alt="Dragana Jović" />
+      {/* TRAKA 1 — naslov i prvi pasus, na kremu */}
+      <section className="card c-cream omeni-vrh">
+        <div className="wrap stack g32">
+          {/* Brend znak kao vodeni žig, da desna strana pored naslova ne
+              ostane prazna. Ukras, ne sadržaj — otud `aria-hidden` i prazan
+              element umesto slike sa opisom. Jačina je ista kao vodeni žig
+              upečen u hero Početne: tamo znak obara podlogu za 11,4%
+              (izmereno, 255 -> 226), pa je ovde `opacity: .114`. */}
+          <span className="omeni-znak" aria-hidden="true" />
+          <div className="stack g12">
+            <span className="eyebrow">O Dragani</span>
+            <h1 className="omeni-naslov">
+              Vaš vodič na putu ka prostoru koji vas podržava
+            </h1>
           </div>
+          <p className="lead omeni-pasus">
+            Razlog moje zaljubljenosti u feng shui leži u tome što sam kroz ovu
+            metodu dobila potvrdu da je istina ono što sam celog života osećala.
+            A to je da je sve povezano, i na makro i na mikro planu. Sve što nam
+            se dešava ima smisla i nije puka slučajnost. Naše je samo da
+            otkrijemo način kako da bolje prepoznajemo poruke koje nam stižu
+            nekad kroz drage ljude a nekada kroz bolesti i neprijatne događaje.
+            Feng Shui mi je pomogao da shvatim povezanost između uzroka i
+            posledice na najjednostavniji način, kroz svoj dom.
+          </p>
         </div>
       </section>
 
-      {/* BIOGRAFIJA + CITAT */}
+      {/* FOTOGRAFIJA preko cele širine, deli pripovest na pola.
+          `<picture>` sa art-direkcijom, ne next/image: na telefonu je traka
+          znatno uspravnija (odnos 1,3 naspram 2,571), pa se seče poseban
+          kadar da Dragana ne ostane sićušna u širokom. Oba su isečena u
+          TAČNOM odnosu svog okvira, pa `cover` nema šta dodatno da doseca —
+          u prvoj verziji je odsecao vrh glave. */}
+      <div className="omeni-traka">
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            type="image/avif"
+            srcSet="/images/o-meni-c-traka-mobile.avif"
+          />
+          <source
+            media="(max-width: 767px)"
+            srcSet="/images/o-meni-c-traka-mobile.jpg"
+          />
+          <source type="image/avif" srcSet="/images/o-meni-c-traka.avif" />
+          <img
+            src="/images/o-meni-c-traka.jpg"
+            alt="Dragana Jović u svom radnom prostoru"
+          />
+        </picture>
+      </div>
+
+      {/* TRAKA 2 — drugi pasus, na bež */}
       <section className="card c-sand">
         <div className="wrap stack g24">
-          <p className="lead" style={{ maxWidth: 'none' }}>
-            Moj put je počeo daleko od Feng Shui, na Tehničko-metalurškom
-            fakultetu u Beogradu. Ali ta osnova u strukturi i nauci dala mi je
-            nešto dragoceno: sposobnost da vidim prostor ne samo kao estetiku,
-            već kao sistem koji utiče na sve oko sebe.
+          <span className="eyebrow omeni-nad">
+            <Oznaka oblik="trougao" />
+            Promena je počela od mog doma
+          </span>
+          <p className="lead omeni-pasus omeni-pasus-bez">
+            Menjajući svoje mikro okruženje, nastajale su promene u meni koje su
+            me vodile do samospoznaje i pravih mogućnosti za korišćenje svega
+            što sam dobila po rođenju. Kroz Feng Shui sam uspela da svoj život
+            zavolim na potpuno drugačiji način, da mu dam dublji smisao i
+            probudim radost koja je bila zatrpana gomilom dnevnih obaveza i
+            bespotrebnih briga.
           </p>
-          <p className="lead" style={{ maxWidth: 'none' }}>
-            Intenzivne studije na Mastery Academy of Chinese Metaphysics otvorile
-            su mi potpuno novu dimenziju. Shvatila sam da drevna mudrost nije
-            suprotna nauci, već njena dopuna. To me je inspirisalo da kreiram
-            sopstvenu metodologiju, prilagođenu energetskim potrebama našeg
-            regiona i naših domova.
-          </p>
-          <p className="lead" style={{ maxWidth: 'none' }}>
-            Danas, nakon 25 godina i više od 1000 projekata, moja praksa spaja
-            tradicionalni Feng Shui sa radiestezijom, kristalnom terapijom,
-            svetom geometrijom i holističkim dizajnom. Ali ono što me zaista
-            pokreće nije tehnika, već trenutak kada klijentkinja kaže: „Konačno
-            se osećam kao kod kuće u sopstvenom domu.&rdquo;
-          </p>
-          <h2
-            style={{
-              fontSize: 'clamp(1.4rem,5vw,2rem)',
-              fontWeight: 600,
-              lineHeight: 1.35,
-            }}
-          >
-            „Vibracije prostora, misli i hrane duboko oblikuju kvalitet života.
-            Njihova harmonizacija je temelj istinske radosti.&rdquo;
-          </h2>
         </div>
       </section>
 
-      {/* ŠTA IZDVAJA MOJ PRISTUP */}
+      {/* TRAKA 3 — treći pasus, nazad na krem */}
       <section className="card c-cream">
-        <div className="wrap stack g32">
-          <div className="stack g12">
-            <span className="eyebrow">Pristup</span>
-            <h2>Šta izdvaja moj pristup</h2>
-          </div>
-          <div className="six">
-            {pristup.map((it) => (
-              <div className="it6" key={it.h}>
-                <div className="ico" aria-hidden="true">
-                  {it.ico}
-                </div>
-                <div>
-                  <h3>{it.h}</h3>
-                  <p>{it.p}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* KVALIFIKACIJE */}
-      <section className="card c-navy">
         <div className="wrap stack g24">
-          <span className="eyebrow">Kvalifikacije</span>
-          <h2>Obuka i put</h2>
-          <ul className="big-list">
-            <li>
-              Tehničko-metalurški fakultet, Beograd: temelj u nauci i strukturi
-            </li>
-            <li>
-              Mastery Academy of Chinese Metaphysics: međunarodno priznata obuka
-            </li>
-            <li>Kreator autorske Feng Shui metode: prilagođene našem regionu</li>
-            <li>TV i medijski nastupi: prepoznata stručnost</li>
-            <li>Holistička Akademija Maya: kontinuirano usavršavanje</li>
-          </ul>
-          <div className="stats">
-            <div>
-              <b>25</b>
-              <span>godina iskustva</span>
-            </div>
-            <div>
-              <b>1000+</b>
-              <span>projekata</span>
-            </div>
-            <div>
-              <b>180+</b>
-              <span>radionica</span>
-            </div>
-          </div>
+          <span className="eyebrow omeni-nad">
+            <Oznaka oblik="krug" />
+            Stotine porodica
+          </span>
+          <p className="lead omeni-pasus">
+            Moja želja da pomažem ljudima je dobila jasnu formu, kroz Feng Shui
+            uspela sam da dođem do stotine porodica čiji je život doživeo
+            boljitak u svim segmentima. Moji klijenti i ja zajedno otkrivamo
+            njihove skrivene talente, nalazimo puteve do isceljenja tela i duše.
+            Imati hrabrost i krenuti u nepoznata znanja i promene nije uvek
+            lako, ali uvek donosi dobrobit za one koji imaju hrabrosti da krenu
+            napred, bez obzira na sve, i na iskustva, i na težinu sadašnjeg
+            trenutka, i na godine sa verom da smo rođeni sa razlogom i da je
+            život divna igra koju može da prođe u radosti i sreći ako smo
+            dovoljno otvoreni za to.
+          </p>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — zadržan sa prethodne verzije strane */}
       <section className="card c-accent" id="kontakt">
         <div className="wrap stack g24">
           <h2>Vaš sledeći korak počinje sa namerom</h2>
@@ -185,12 +168,9 @@ const OMeniCContent = () => {
             Bilo da ste spremni da promenite energiju u svom domu ili da
             produbite znanje kroz školu, tu sam.
           </p>
-          <div className="stack g8">
-            <button className="btn btn-white" onClick={() => setModal('razgovor')}>
-              Zakažite besplatan razgovor
-            </button>
-            <span className="micro">Otvara se ovde, bez napuštanja stranice.</span>
-          </div>
+          <button className="btn btn-white" onClick={() => setModal('razgovor')}>
+            Zakažite besplatan razgovor
+          </button>
         </div>
       </section>
 
@@ -198,7 +178,7 @@ const OMeniCContent = () => {
       <div className="sticky">
         <div className="meta">
           <b>Dragana Jović</b>
-          <span>25 godina · 1000+ projekata</span>
+          <span>Feng Shui konsultant</span>
         </div>
         <button className="btn btn-accent" onClick={() => setModal('razgovor')}>
           Zakažite poziv
@@ -212,6 +192,8 @@ const OMeniCContent = () => {
         subtitle={modalCopy.subtitle}
         serviceType={modalCopy.serviceType}
         heardFrom="O meni (verzija C)"
+        intent={modalCopy.intent}
+        redirectTo={modalCopy.redirectTo}
       />
     </div>
   );

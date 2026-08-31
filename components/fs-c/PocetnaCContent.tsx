@@ -8,32 +8,51 @@ import './fs-c.css';
 
 type ModalIntent = 'konsultacije' | 'nekretnina' | 'radionice' | 'prijava';
 
+/**
+ * Samo `prijava` je upis u školu: jedina vodi na podatke za uplatu i
+ * jedina pokreće mejl sa instrukcijama. Ostale tri su upiti na koje se
+ * Dragana javlja lično, pa idu na zajedničku stranicu zahvalnice.
+ */
 const modalCopy: Record<
   ModalIntent,
-  { title: string; subtitle: string; serviceType: string }
+  {
+    title: string;
+    subtitle: string;
+    serviceType: string;
+    intent: 'prijava' | 'konsultacije';
+    redirectTo: string;
+  }
 > = {
   konsultacije: {
     title: 'Zakažite besplatnu konsultaciju',
     subtitle:
       'Ostavite podatke i dogovaramo razgovor o vašem prostoru, bez obaveze.',
     serviceType: 'Individualne konsultacije',
+    intent: 'konsultacije',
+    redirectTo: '/hvala-c',
   },
   nekretnina: {
     title: 'Asistencija pri izboru nekretnine',
     subtitle: 'Ostavite podatke i javljamo se sa detaljima procene prostora.',
     serviceType: 'Asistencija pri izboru nekretnine',
+    intent: 'konsultacije',
+    redirectTo: '/hvala-c',
   },
   radionice: {
     title: 'Radionice',
     subtitle: 'Ostavite podatke i obavestićemo vas čim otvorimo nove termine.',
     serviceType: 'Radionice',
+    intent: 'konsultacije',
+    redirectTo: '/hvala-c',
   },
   /* Otvara ga „Sačuvaj svoje mesto" iz navigacije. Natpis obećava upis u
      školu, pa i modal mora da govori o školi, a ne o konsultacijama. */
   prijava: {
     title: 'Prijava za feng shui školu',
-    subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
+    subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
     serviceType: 'Feng Shui škola',
+    intent: 'prijava',
+    redirectTo: '/uplata-c',
   },
 };
 
@@ -262,6 +281,8 @@ const PocetnaCContent = () => {
         subtitle={modal ? modalCopy[modal].subtitle : undefined}
         serviceType={modal ? modalCopy[modal].serviceType : 'Feng Shui (opšti upit)'}
         heardFrom="Početna (verzija C)"
+        intent={modal ? modalCopy[modal].intent : 'konsultacije'}
+        redirectTo={modal ? modalCopy[modal].redirectTo : undefined}
       />
     </div>
   );
