@@ -1580,3 +1580,95 @@ body:has(.fs-c) {
      4rem je footerov `py-16` iz Tailwind-a; na njega se dodaje visina trake. */
   body:has(.fs-c .sticky) .fs-c ~ footer { padding-bottom: calc(4rem + 68px); }
 }
+
+/* ================= RUNDA 01.09. =========================================
+   Tri sitna pravila uz klijentove izmene; sadržaj je u komponentama.
+   ------------------------------------------------------------------------ */
+
+/* Do sekcije se stiže sidrom iz kruga „Individualne konsultacije". Opšti
+   `.card` ostavlja 64px iznad sidra, a plutajući navbar na telefonu je
+   visok 76px sa razmakom od vrha, pa bi naslov seo pod njega. */
+.fs-c .tri-koraka { scroll-margin-top: 96px; }
+
+/* Imena polaznica krupnija, na zahtev 01.09. Bila su .82rem; tada je
+   podebljanje i tamnija boja nosila razliku jer je veličina bila sitna. */
+.fs-c .tst .who { font-size: 1.05rem; }
+
+
+/* ================= TRI KORAKA: „Nit" ====================================
+   Tri bela kruga sa zelenim obrubom na zelenoj niti. Mere su iz platna
+   (Markov izbor 01.09.), ali platno je imalo fiksne piksele, a sekcija
+   mora da radi od 320px naviše i pri uvećanom fontu u pregledaču.
+
+   SVE MERE SU U REM, NE U PX: krug, padding, ikonica i tekst rastu zajedno
+   kad korisnik poveća osnovni font, pa tekst ostaje unutra. Prva verzija je
+   bila u px i pri 16px je već imala NULA slobodnog prostora u drugom krugu
+   na desktopu, a pri Chrome-ovom „Large" (20px) tekst je izlazio preko
+   obruba na bež. Krug ima `min-height` a ne `height`: ako sadržaj ipak
+   preraste, krug se izduži u oval umesto da tekst ispadne. Prelomna tačka
+   je u `em` iz istog razloga — red od tri kruga se pali tek kad stane.
+
+   `flex: none` na ikonici je obavezno: u koloni fiksne visine flex prvo
+   stiska ono što sme, a ikonica je bila jedino takvo — u drugom krugu je
+   bila stisnuta na 0px i nije se videla.
+
+   - od 62,5em (1000px pri 16px) krugovi su 17,5rem (280px) u redu,
+     razmaknuti `space-between`, nit je vodoravna, rastegnuta na širinu
+     kolone (957–997px) i visinu 20rem;
+   - ispod toga krugovi su 17rem (272px) jedan ispod drugog, nit uspravna,
+     a ceo sklop je ograničen na 21,6875rem (347px) i centriran — inače bi
+     se na 768px uspravna nit rastegla preko cele širine i vijugala daleko
+     van krugova. Na 320px krug (272) staje u kolonu od 277px.
+
+   `preserveAspectRatio="none"` rasteže krivulju po širini; do 1040px je to
+   najviše 4%, nevidljivo. `vector-effect: non-scaling-stroke` drži liniju
+   na 2px i kad se rastegne. Tačkice nemaju taj efekat pa se i one blago
+   rastegnu, što na 5px nije uočljivo.
+
+   `width: 100%` na `.nit` je obavezno: `margin: 0 auto` na flex detetu
+   gasi `stretch` i svodi ga na širinu sadržaja, a na desktopu bi ta širina
+   bila nula — krugovi su se stiskali na 171px.
+   ------------------------------------------------------------------------ */
+.fs-c .nit { position: relative; width: 100%; max-width: 21.6875rem; margin: 0 auto; }
+.fs-c .nit-linija {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: var(--navy-700); stroke: var(--navy-700); stroke-width: 2; stroke-linecap: round;
+  pointer-events: none;
+}
+.fs-c .nit-linija path { fill: none; vector-effect: non-scaling-stroke; }
+.fs-c .nit-linija-siroka { display: none; }
+
+.fs-c .nit-krugovi {
+  position: relative; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3rem;
+}
+.fs-c .nit-krug {
+  flex: none; width: min(17rem, 100%); min-height: 17rem; box-sizing: border-box; border-radius: 50%;
+  background: #fff; border: 2px solid var(--navy-700); box-shadow: var(--shadow);
+  padding: 1.875rem 1.75rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: .4rem;
+}
+.fs-c .nit-oznaka { flex: none; width: 1.125rem; height: 1.125rem; fill: none; stroke: var(--gold-700); stroke-width: 1.2; stroke-linejoin: round; }
+/* Opšti h3 je 22,4px; u krugu je to pretesno za tri reda. */
+.fs-c .nit-krug h3 { font-size: 1.125rem; line-height: 1.15; }
+.fs-c .nit-krug p { font-size: .85rem; line-height: 1.45; color: var(--charcoal-500); }
+
+@media (min-width: 62.5em) {
+  .fs-c .nit { max-width: none; min-height: 20rem; }
+  .fs-c .nit-linija-siroka { display: block; }
+  .fs-c .nit-linija-uska { display: none; }
+  /* Red je u toku (ne apsolutan), sa 1,25rem odozgo umesto `top: 20px`:
+     tako `.nit` sme da naraste ako se neki krug izduži, a nit iza njega
+     se rastegne sa njim. */
+  .fs-c .nit-krugovi {
+    flex-direction: row; justify-content: space-between; align-items: flex-start;
+    gap: 0; padding-top: 1.25rem;
+  }
+  /* `min(…, 30%)` je zaštita od uvećanog fonta: pri 20px osnovnog fonta krug
+     bi bio 350px, a tri takva ne staju u kolonu od 997px (kolona je u px i
+     ne raste). Pri 16px 30% je 299px pa pobeđuje 17,5rem — ništa se ne menja. */
+  .fs-c .nit-krug { width: min(17.5rem, 30%); min-height: 17.5rem; padding: 2.25rem 2rem; gap: .5rem; }
+  .fs-c .nit-krug h3 { font-size: 1.25rem; }
+  .fs-c .nit-krug p { font-size: .9rem; line-height: 1.45; }
+}

@@ -53,7 +53,7 @@ const HvalaCContent = () => (
       <div className="wrap stack g24">
         <h2>Dok čekate</h2>
         <p className="lead">
-          Ako razmišljate i o tome da feng shui naučite sami, program online
+          Ako razmišljate i o tome da Feng Shui naučite sami, program online
           škole i termini su na stranici škole.
         </p>
         <div className="uplata-dno">

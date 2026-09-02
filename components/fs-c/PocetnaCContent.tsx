@@ -48,7 +48,7 @@ const modalCopy: Record<
   /* Otvara ga „Sačuvaj svoje mesto" iz navigacije. Natpis obećava upis u
      školu, pa i modal mora da govori o školi, a ne o konsultacijama. */
   prijava: {
-    title: 'Prijava za feng shui školu',
+    title: 'Prijava za Feng Shui školu',
     subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
     serviceType: 'Feng Shui škola',
     intent: 'prijava',
@@ -112,23 +112,26 @@ const PocetnaCContent = () => {
         </picture>
         <div className="hero-in">
           <div className="hero-body stack g24">
-            <h1>Feng Shui - da vam se život konačno pokrene.</h1>
+            {/* Naslov u dva reda, sa tačkom posle „Feng Shui." — klijent,
+                01.09. Prelom je tvrd, ne prepušten širini. */}
+            <h1>
+              Feng Shui.
+              <br />
+              Da vam se život konačno pokrene.
+            </h1>
             {/* Boju vodi `.hero-pocetna .lead` iz CSS-a; hero je sada beo,
                 pa bež iz vremena zelene podloge više ne važi. */}
             <p className="lead">
-              Oko 1000 osoba je osetilo promenu u odnosima, napretku i
-              svakodnevnom miru uz pomoć naše Feng Shui konsultacije. Vaš dom je
-              sledeći.
+              Milioni širom sveta već osećaju blagodeti Feng Shui-ja. Više
+              napretka, sklada i mira. Vaš dom je sledeći.
             </p>
-            {/* Upis vodi pravo u modal, isto kao „Sačuvaj svoje mesto" u
-                navigaciji: prijava se otvara na licu mesta. Zbog toga je
-                puno belo dugme, a konsultacija ostaje kontura. */}
+            {/* Samo upis. „Zakažite besplatnu konsultaciju" je iz heroja
+                izbačeno 01.09. na klijentov zahtev: uz upis je delovalo kao
+                da se analiza deli besplatno. Ostaje u zelenoj sekciji pred
+                kraj i u lepljivoj traci, po Markovoj odluci istog dana. */}
             <div className="stack g8 hero-cta">
               <button className="btn btn-zlatno" onClick={open('prijava')}>
                 Upis u Feng Shui školu
-              </button>
-              <button className="btn btn-braon-linija" onClick={open('konsultacije')}>
-                Zakažite besplatnu konsultaciju
               </button>
             </div>
           </div>
@@ -202,9 +205,12 @@ const PocetnaCContent = () => {
                 <span className="lbl">
                   <i>za vaš dom</i>
                   <b>Individualne konsultacije</b>
-                  <button className="pill" onClick={open('konsultacije')}>
+                  {/* Ne otvara modal nego vodi na „Tri koraka" ispod: klijent
+                      hoće da posetilac prvo vidi kako proces ide, pa tek
+                      onda obrazac. Sidro, ne dugme — to je navigacija. */}
+                  <a className="pill" href="#tri-koraka">
                     Saznajte više
-                  </button>
+                  </a>
                 </span>
               </div>
               <p>
@@ -248,6 +254,105 @@ const PocetnaCContent = () => {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* TRI KORAKA — prenet sa žive početne 01.09. na klijentov zahtev, a
+          istog dana prerađen u pravac „B — Nit" koji je Marko izabrao od tri
+          predloga: tri bela kruga sa zelenim obrubom na zelenoj niti koja
+          talasa iza njih. Krugovi su isti motiv kao zlatni krugovi usluga
+          iznad, samo beli da se ne pomešaju sa njima.
+
+          Tekst je pročitan IZ BAZE (`site_content`, strana `home`, ključ
+          `thePlan`), ne iz `data/defaultContent.ts`: admin ga je menjao i
+          verzija u kodu je zastarela.
+
+          Dugme vodi na `/kontakt-c`, kao što živo vodi na `/upitnik` — prvi
+          korak i glasi „Popunite upitnik". Sitan red „Besplatno. Bez
+          obaveze." ispod dugmeta sa žive verzije je IZOSTAVLJEN: klijent ga
+          je 30.08. već izbacio iz heroja iz istog razloga zbog kog sada
+          sklanja i besplatnu konsultaciju.
+
+          Nit su dve SVG krivulje, vodoravna za desktop i uspravna za telefon;
+          CSS pokazuje jednu od dve. `preserveAspectRatio="none"` ih rasteže
+          na širinu kontejnera, a `vector-effect` drži liniju na 2px i kada
+          se rastegne. Koraci su `<ol>`, jer jesu redosled. */}
+      <section className="card c-sand tri-koraka" id="tri-koraka">
+        <div className="wrap stack g32">
+          <div className="stack g12">
+            <span className="eyebrow">Kako funkcioniše</span>
+            <h2>Tri koraka do doma koji vas podržava</h2>
+            <p className="lead">
+              Jednostavan, jasan proces - bez komplikacija, bez nagađanja.
+            </p>
+          </div>
+
+          <div className="nit">
+            <svg
+              className="nit-linija nit-linija-siroka"
+              viewBox="0 0 996 320"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path d="M -40 236 C 140 236 140 84 319 84 S 498 236 677 236 S 856 84 1040 84" />
+              <circle cx="319" cy="84" r="5" />
+              <circle cx="677" cy="236" r="5" />
+            </svg>
+            <svg
+              className="nit-linija nit-linija-uska"
+              viewBox="0 0 347 876"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <path d="M 60 -20 C 60 140 287 140 287 308 S 60 476 60 616 S 287 784 287 900" />
+              <circle cx="287" cy="308" r="5" />
+              <circle cx="60" cy="616" r="5" />
+            </svg>
+
+            {/* `role="list"` uz `list-style: none`: WebKit (Safari, VoiceOver)
+                listu bez vidljivih markera izlaže kao običnu grupu, pa bez
+                ovoga ne kaže „lista, 3 stavke". Chrome i NVDA je zadrže. */}
+            <ol className="nit-krugovi" role="list">
+              <li className="nit-krug">
+                <svg className="nit-oznaka" viewBox="0 0 16 16" aria-hidden="true">
+                  <rect x="1.5" y="1.5" width="13" height="13" />
+                </svg>
+                <span className="eyebrow">Korak 01</span>
+                <h3>Popunite upitnik</h3>
+                <p>
+                  Ispričajte nam o svom domu, ciljevima i izazovima. Saradnja
+                  počinje sa razumevanjem.
+                </p>
+              </li>
+              <li className="nit-krug">
+                <svg className="nit-oznaka" viewBox="0 0 16 16" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.3" />
+                </svg>
+                <span className="eyebrow">Korak 02</span>
+                <h3>Dobijate personalizovanu analizu</h3>
+                <p>
+                  Dragana čita energetsku matricu vašeg prostora i kreira
+                  poseban plan za vas - sa konkretnim koracima za
+                  transformaciju.
+                </p>
+              </li>
+              <li className="nit-krug">
+                <svg className="nit-oznaka" viewBox="0 0 16 16" aria-hidden="true">
+                  <polygon points="8,3.29 13.44,12.71 2.56,12.71" />
+                </svg>
+                <span className="eyebrow">Korak 03</span>
+                <h3>Osetite promenu</h3>
+                <p>
+                  Primenjujete preporuke, prostor se menja. Uz 3 meseca podrške,
+                  jasnoća i opuštenost postaju nova svakodnevica.
+                </p>
+              </li>
+            </ol>
+          </div>
+
+          <Link href="/kontakt-c" className="btn btn-accent">
+            Započnite proces
+          </Link>
         </div>
       </section>
 

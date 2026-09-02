@@ -22,7 +22,7 @@ const modalCopy: Record<
   { title: string; subtitle: string; serviceType: string; redirectTo: string }
 > = {
   prijava: {
-    title: 'Prijava za feng shui školu',
+    title: 'Prijava za Feng Shui školu',
     subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
     serviceType: 'Feng Shui škola (kurs)',
     redirectTo: '/uplata-c',
@@ -156,7 +156,7 @@ const SkolaCContent = () => {
             blokiraju dotok bogatstva, dobre odnose i zdravlje.
           </p>
           <p className="lead">
-            Feng shui vam pomaže da otkrijete na koji način vaš prostor može da
+            Feng Shui vam pomaže da otkrijete na koji način vaš prostor može da
             podržava vaš napredak i kako da izbegnete zamke u prostoru koje
             život čini težim.
           </p>
@@ -167,7 +167,7 @@ const SkolaCContent = () => {
       <section className="card c-navy" id="program">
         <div className="wrap stack g32">
           <div className="stack g12">
-            <span className="eyebrow">Feng shui online program</span>
+            <span className="eyebrow">Feng Shui online program</span>
             <h2>Plan za 8 nedelja obuke</h2>
           </div>
           <div className="steps steps-4">
@@ -194,10 +194,12 @@ const SkolaCContent = () => {
           </div>
           <p className="lead">
             Svaka sesija se nadovezuje na prethodnu. Počećete sa ulogom Chi-ja,
-            ispitati feng shui plan prostora, locirati moguće izvore blokada i
+            ispitati Feng Shui plan prostora, locirati moguće izvore blokada i
             videti kako se biraju korekcije.
           </p>
-          <button className="btn btn-gold" onClick={open('prijava')}>
+          {/* Vodi na konsultaciju, ne na upis — klijent, 01.09. Natpis
+              obećava uvid u sopstveni prostor, a to je razgovor, ne kurs. */}
+          <button className="btn btn-gold" onClick={open('konsultacije')}>
             Pokaži mi kako moj prostor utiče na moj život
           </button>
         </div>
@@ -212,11 +214,12 @@ const SkolaCContent = () => {
           <div className="whofor">
             <div className="whofor-aside">
               <div>
-                <h2>Feng shui online škola je za vas ako&hellip;</h2>
+                <h2>Feng Shui online škola je za vas ako&hellip;</h2>
               </div>
+              {/* „Predznanje nije potrebno." izbačeno 01.09. na zahtev. */}
               <p className="whofor-note">
-                Predznanje nije potrebno. Ponesite otvoren um i spremnost da
-                svoj prostor vidite drugačije.
+                Ponesite otvoren um i spremnost da svoj prostor vidite
+                drugačije.
               </p>
             </div>
             <ul className="whofor-list">
@@ -226,7 +229,7 @@ const SkolaCContent = () => {
                 porodicu.</span>
               </li>
               <li>
-                <span>Čuli ste za feng shui, ali ne znate odakle da počnete da
+                <span>Čuli ste za Feng Shui, ali ne znate odakle da počnete da
                 ga primenjujete u svom domu.</span>
               </li>
               <li>
@@ -256,7 +259,7 @@ const SkolaCContent = () => {
           <div className="emap-head stack g12">
             <h2>Vaš prostor ima energetsku mapu</h2>
             <p className="lead">
-              Feng shui se bavi životnom energijom Chi i kako se ona kreće.
+              Feng Shui se bavi životnom energijom Chi i kako se ona kreće.
             </p>
           </div>
 
@@ -282,7 +285,7 @@ const SkolaCContent = () => {
           </div>
 
           <p className="emap-p">
-            Feng shui vam daje sistem za otklanjanje ovih obrazaca.
+            Feng Shui vam daje sistem za otklanjanje ovih obrazaca.
           </p>
           <p className="emap-p is-muted">
             Videćete kako se oblici, forme, sektori i oblasti koriste zajedno za
@@ -290,9 +293,10 @@ const SkolaCContent = () => {
             odlučivanje na šta je prvo potrebno obratiti pažnju.
           </p>
 
+          {/* Isto kao dugme u „Plan za 8 nedelja": konsultacija, ne upis. */}
           <button
             className="btn btn-gold emap-cta"
-            onClick={open('prijava')}
+            onClick={open('konsultacije')}
           >
             Pokaži mi kako moj prostor utiče na moj život
           </button>
@@ -391,7 +395,10 @@ const SkolaCContent = () => {
       </section>
 
       {/* BLOK 9 — UTISCI */}
-      <section className="card c-sand" id="rezultati">
+      {/* Zelena podloga od 01.09. na zahtev; ranije bež. Kartice ostaju
+          bele, pa im se kontrast ne menja. Boju naslova i nadnaslova daju
+          postojeća `.c-navy` pravila. */}
+      <section className="card c-navy" id="rezultati">
         <div className="wrap stack g32">
           <div className="stack g12">
             <span className="eyebrow">Rezultati</span>
@@ -505,7 +512,7 @@ const SkolaCContent = () => {
               ponasanje, gde ostaju svi otvoreni. */}
           <div className="faq">
             <details name="faq" open>
-              <summary>Da li mi treba prethodno znanje o feng shui-ju?</summary>
+              <summary>Da li mi treba prethodno znanje o Feng Shui-ju?</summary>
               <p>
                 Nije potrebno. Program počinje od osnova i postepeno gradi
                 naprednije koncepte. Pristupačan je potpunim početnicima, a i

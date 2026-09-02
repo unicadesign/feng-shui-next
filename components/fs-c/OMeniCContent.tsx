@@ -8,47 +8,36 @@ import './fs-c.css';
 /**
  * O meni — verzija C, „naizmenične trake".
  *
- * Strana je 31.08. napisana ispočetka na klijentov zahtev: sve što je bilo
- * (blok „Šta izdvaja moj pristup", „Obuka i put", brojke 25 godina i 1000+
- * projekata, pomen fakulteta i Mastery Academy) je izbačeno, a tekst je nov
- * i prenet doslovno. Zadržani su nadnaslov i zeleni CTA blok na dnu.
+ * Tekst je 01.09. ponovo napisan ispočetka na klijentov zahtev: osam pasusa
+ * umesto tri, prenetih doslovno. Time se VRAĆA ono što je 31.08. bilo
+ * izbačeno — fakultet, Mastery Academy, 25 godina i 1000 porodica — i to
+ * je klijentova svesna odluka („bio si u pravu, tekst mora da se menja").
+ * Beleška iz prethodne verzije da strana nigde ne pominje obrazovanje ni
+ * iskustvo više NE VAŽI.
  *
- * Zbog toga strana više NIGDE ne pominje obrazovanje ni godine iskustva.
+ * Nadnaslova nema: ni „O Dragani" ni ona dva uz trake. Sva tri su izbačena
+ * na isti zahtev, a naslov je samo „Dragana Jović".
  *
- * Raspored: naslov i prvi pasus na kremu, pa fotografija preko cele širine,
- * pa drugi pasus na bež i treći na kremu — isti ritam naizmeničnih traka
- * koji već ide kroz Školu i Početnu.
+ * Četiri odstupanja od doslovnog prenosa, sva namerna:
+ *  - „korak po karak" -> „korak po korak", očigledna greška u kucanju
+ *  - dupli razmak u „svom  najbližem" je skinut
+ *  - padež je svuda „Feng Shui-ja" sa crticom: klijent ga tako piše na dva
+ *    od tri mesta, treće („Feng Shuija") je izjednačeno
+ *  - emođi na kraju šestog pasusa je izostavljen, po Markovoj odluci
+ *
+ * Raspored, Markov izbor 01.09.: naslov i prva dva pasusa na kremu,
+ * fotografija preko cele širine, pa tri pasusa na bež i tri na kremu — isti
+ * ritam naizmeničnih traka koji ide kroz Školu i Početnu.
  */
-
-/* Forme uz nadnaslove su iz brend simbola. Geometrija je IZMERENA iz
-   `public/logo/simbol-20.png`, ne crtana od oka: krug je upisan u kvadrat
-   (odnos 1,0000), a trougao je jednakostraničan i upisan u krug, temenom
-   nagore. Trougao je pomeren naniže da mu okvir optički stoji u sredini. */
-const Oznaka = ({ oblik }: { oblik: 'krug' | 'trougao' }) => (
-  <svg
-    width={14}
-    height={14}
-    viewBox="0 0 14 14"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={1}
-    className="omeni-oznaka"
-    aria-hidden="true"
-  >
-    {oblik === 'krug' && <circle cx="7" cy="7" r="5.5" />}
-    {oblik === 'trougao' && <polygon points="7,2.88 11.76,11.12 2.24,11.12" />}
-  </svg>
-);
-
 const OMeniCContent = () => {
-  // Dva povoda za isti modal: dugmad na strani zovu na razgovor, a
-  // „Sačuvaj svoje mesto" iz navigacije na upis u školu. Natpis obećava
-  // različite stvari, pa i modal mora da govori različito.
+  // Dva povoda za isti modal: dugmad na strani zovu na razgovor ili na
+  // upis, a „Sačuvaj svoje mesto" iz navigacije na upis u školu. Natpis
+  // obećava različite stvari, pa i modal mora da govori različito.
   const [modal, setModal] = useState<'razgovor' | 'prijava' | null>(null);
   const modalCopy =
     modal === 'prijava'
       ? {
-          title: 'Prijava za feng shui školu',
+          title: 'Prijava za Feng Shui školu',
           subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
           serviceType: 'Feng Shui škola',
           intent: 'prijava' as const,
@@ -67,7 +56,7 @@ const OMeniCContent = () => {
 
   return (
     <div className="fs-c">
-      {/* TRAKA 1 — naslov i prvi pasus, na kremu */}
+      {/* TRAKA 1 — naslov i prva dva pasusa, na kremu */}
       <section className="card c-cream omeni-vrh">
         <div className="wrap stack g32">
           {/* Brend znak kao vodeni žig, da desna strana pored naslova ne
@@ -76,22 +65,22 @@ const OMeniCContent = () => {
               upečen u hero Početne: tamo znak obara podlogu za 11,4%
               (izmereno, 255 -> 226), pa je ovde `opacity: .114`. */}
           <span className="omeni-znak" aria-hidden="true" />
-          <div className="stack g12">
-            <span className="eyebrow">O Dragani</span>
-            <h1 className="omeni-naslov">
-              Vaš vodič na putu ka prostoru koji vas podržava
-            </h1>
+          <h1 className="omeni-naslov">Dragana Jović</h1>
+          <div className="stack g24">
+            <p className="lead omeni-pasus">
+              Kada razmišljam o tome kada je krenulo moje izučavanje Feng
+              Shui-ja, shvatam da je to bilo još za vreme studija. Učeći o
+              prelasku energije iz jednog oblika u drugi, i o prenosu energije
+              - već tada sam gradila temelje za ono čime se danas bavim.
+            </p>
+            <p className="lead omeni-pasus">
+              Posle Tehnološko-metalurškog fakulteta i rada u prosveti, sasvim
+              „slučajno&rdquo; otkrila sam svet Feng Shui-ja. Vrlo brzo sam
+              upisala Mastery Academy of Chinese Metaphysics. Tu sam počela da
+              spoznajem energije koje se osećaju i vide mnogo suptilnijim
+              čulima: za koje do tada nisam ni znala da postoje.
+            </p>
           </div>
-          <p className="lead omeni-pasus">
-            Razlog moje zaljubljenosti u feng shui leži u tome što sam kroz ovu
-            metodu dobila potvrdu da je istina ono što sam celog života osećala.
-            A to je da je sve povezano, i na makro i na mikro planu. Sve što nam
-            se dešava ima smisla i nije puka slučajnost. Naše je samo da
-            otkrijemo način kako da bolje prepoznajemo poruke koje nam stižu
-            nekad kroz drage ljude a nekada kroz bolesti i neprijatne događaje.
-            Feng Shui mi je pomogao da shvatim povezanost između uzroka i
-            posledice na najjednostavniji način, kroz svoj dom.
-          </p>
         </div>
       </section>
 
@@ -120,57 +109,68 @@ const OMeniCContent = () => {
         </picture>
       </div>
 
-      {/* TRAKA 2 — drugi pasus, na bež */}
+      {/* TRAKA 2 — tri pasusa, na bež */}
       <section className="card c-sand">
         <div className="wrap stack g24">
-          <span className="eyebrow omeni-nad">
-            <Oznaka oblik="trougao" />
-            Promena je počela od mog doma
-          </span>
           <p className="lead omeni-pasus omeni-pasus-bez">
-            Menjajući svoje mikro okruženje, nastajale su promene u meni koje su
-            me vodile do samospoznaje i pravih mogućnosti za korišćenje svega
-            što sam dobila po rođenju. Kroz Feng Shui sam uspela da svoj život
-            zavolim na potpuno drugačiji način, da mu dam dublji smisao i
-            probudim radost koja je bila zatrpana gomilom dnevnih obaveza i
-            bespotrebnih briga.
+            Zatim je došla radiestezija, kojom sam upotpunila Feng Shui analizu
+            prostora. Uz pomoć viska, naučila sam da otkrijem uticaje poput
+            elektro-magnetnih zračenja, podzemnih voda ili negativnih promena u
+            tlu, uglavnom izazvanih ljudskim delovanjem.
+          </p>
+          <p className="lead omeni-pasus omeni-pasus-bez">
+            Potom je u moj rad ušla i ornamentika specifična za Balkan, ona
+            kroz koju se povezujemo sa svojim korenima i iskonskom snagom. Jer
+            kroz tradiciju dobijamo stabilnost i utemeljenost u ono što jesmo.
+          </p>
+          <p className="lead omeni-pasus omeni-pasus-bez">
+            Znanja o proporciji i sakralnoj geometriji dala su poslednji deo
+            slagalice: kako prostor u kom čovek boravi može biti podsticaj za
+            njegov život, u miru sa sobom i svime što ga okružuje.
           </p>
         </div>
       </section>
 
-      {/* TRAKA 3 — treći pasus, nazad na krem */}
+      {/* TRAKA 3 — tri pasusa, nazad na krem */}
       <section className="card c-cream">
         <div className="wrap stack g24">
-          <span className="eyebrow omeni-nad">
-            <Oznaka oblik="krug" />
-            Stotine porodica
-          </span>
           <p className="lead omeni-pasus">
-            Moja želja da pomažem ljudima je dobila jasnu formu, kroz Feng Shui
-            uspela sam da dođem do stotine porodica čiji je život doživeo
-            boljitak u svim segmentima. Moji klijenti i ja zajedno otkrivamo
-            njihove skrivene talente, nalazimo puteve do isceljenja tela i duše.
-            Imati hrabrost i krenuti u nepoznata znanja i promene nije uvek
-            lako, ali uvek donosi dobrobit za one koji imaju hrabrosti da krenu
-            napred, bez obzira na sve, i na iskustva, i na težinu sadašnjeg
-            trenutka, i na godine sa verom da smo rođeni sa razlogom i da je
-            život divna igra koju može da prođe u radosti i sreći ako smo
-            dovoljno otvoreni za to.
+            Feng Shui online školu sa holističkim i autorskim pristupom sam
+            kreirala nakon 25 godina rada i primenjene edukacije sa sjajnim
+            rezultatima u preko 1000 porodica.
+          </p>
+          <p className="lead omeni-pasus">
+            Svaki put kada mi klijenti podele svoja poboljšanja u životu,
+            pomislim: još ljudi treba da otkrije ova znanja, da ih primeni i
+            time obogati sopstveni život.
+          </p>
+          <p className="lead omeni-pasus">
+            Zato sam osmislila Feng Shui online školu u kojoj korak po korak
+            saznajete kako da poboljšate svoj život korekcijama u svom
+            najbližem okruženju, u svom domu. Kroz program dolazite do
+            konkretnih usklađivanja vašeg prostora. A kada uvedete te promene,
+            počinjete da živite ispunjen život u blagostanju.
           </p>
         </div>
       </section>
 
-      {/* CTA — zadržan sa prethodne verzije strane */}
+      {/* ZAVRŠNICA — jedna rečenica u veličini naslova, bez pasusa ispod,
+          po klijentovom zahtevu 01.09. Rečenica imenuje dva puta,
+          konsultacije i učenje, pa oba dobijaju dugme (Markov izbor). */}
       <section className="card c-accent" id="kontakt">
         <div className="wrap stack g24">
-          <h2>Vaš sledeći korak počinje sa namerom</h2>
-          <p className="lead">
-            Bilo da ste spremni da promenite energiju u svom domu ili da
-            produbite znanje kroz školu, tu sam.
-          </p>
-          <button className="btn btn-white" onClick={() => setModal('razgovor')}>
-            Zakažite besplatan razgovor
-          </button>
+          <h2>
+            Ako ste spremni za promenu, proverite energiju doma kroz
+            konsultacije ili kroz učenje Feng Shui-ja, tu sam za vas.
+          </h2>
+          <div className="uplata-dno">
+            <button className="btn btn-white" onClick={() => setModal('razgovor')}>
+              Zakažite besplatan razgovor
+            </button>
+            <button className="btn btn-line" onClick={() => setModal('prijava')}>
+              Upis u Feng Shui školu
+            </button>
+          </div>
         </div>
       </section>
 

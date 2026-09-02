@@ -36,7 +36,7 @@ const goalOptions = [
   'Napredak u poslu i prihodima',
   'Odnosi u porodici',
   'Zdravlje',
-  'Želim sama da naučim feng shui',
+  'Želim sama da naučim Feng Shui',
   'Još uvek ne znam',
 ];
 
