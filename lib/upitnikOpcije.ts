@@ -6,12 +6,12 @@
  * srpski preko svojih mapa. Promena ijedne šifre ovde znači da se stari
  * redovi u admin pregledu prikažu kao goli engleski tekst.
  *
- * ISTE VREDNOSTI POSTOJE NA JOŠ DVA MESTA:
- *   `components/upitnik/UpitnikContent.tsx`     — živa strana /upitnik
+ * ISTE VREDNOSTI POSTOJE I U ADMIN PANELU:
  *   `components/admin/AdminInquiriesContent.tsx` — mape za prikaz
- * Nijedno nije dirano: prvo je živi sajt, drugo je admin panel koji po
- * dogovoru čeka da klijent odobri redizajn. Kada C preuzme prave rute,
- * oba treba da uvoze odavde i tri kopije postaju jedna.
+ * Admin po dogovoru čeka svoju fazu (PLAN-PRELAZAK.md, faza 11); tada
+ * treba da uvozi odavde i dve kopije postaju jedna. Treća kopija, stari
+ * upitnik u `components/upitnik/`, više nije ni na jednoj ruti i briše se
+ * u komitu K4 prelaska.
  *
  * Redosled i tekstovi su preneti doslovno sa žive strane.
  */

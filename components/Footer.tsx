@@ -76,8 +76,9 @@ interface FooterProps {
 const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija', '/vaza-izobilja'];
 
 /* Paleta podnožja stoji doslovno u klasama, ne preko Tailwind tokena i ne
-   preko konstanti: tokeni su na `-c` stranama preusmereni na novu paletu a
-   na starim stranama nose staru, pa bi podnožje ispalo dvojako; a konstante
+   preko konstanti: tokeni su na javnim stranama (`.fs-c`) preusmereni na
+   novu paletu a na login, dashboard i admin stranama nose staru, pa bi
+   podnožje ispalo dvojako; a konstante
    ne bi radile jer Tailwind klase čita iz izvornog teksta i ne vidi ime
    sastavljeno kroz šablon.
      #3E2A1E  naslovi i ime            13,51:1 na beloj

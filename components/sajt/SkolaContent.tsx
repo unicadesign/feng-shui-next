@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import FsCModal from '../fs-c/FsCModal';
-import { useFsCEnrollTrigger } from '../fs-c/enrollTrigger';
-import '../fs-c/fs-c.css';
+import PrijavaModal from './PrijavaModal';
+import { useEnrollTrigger } from './enrollTrigger';
+import { UPLATA } from '@/lib/uplata';
+import './fs-c.css';
 
 type ModalIntent = 'prijava' | 'konsultacije';
 
@@ -25,14 +26,14 @@ const modalCopy: Record<
     title: 'Prijava za Feng Shui školu',
     subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
     serviceType: 'Feng Shui škola (kurs)',
-    redirectTo: '/uplata-c',
+    redirectTo: '/uplata',
   },
   konsultacije: {
     title: 'Zakažite konsultaciju',
     subtitle:
       'Ostavite podatke i dogovaramo besplatan razgovor o vašem prostoru.',
     serviceType: 'Besplatna konsultacija',
-    redirectTo: '/hvala-c',
+    redirectTo: '/hvala',
   },
 };
 
@@ -64,17 +65,18 @@ const ishodi = [
 ];
 
 /**
- * Feng Shui Škola — verzija C ("Mobilna kartica"), ugrađena u Next.js app.
- * Sadržaj i dizajn-jezik su porat iz prototipa design/skola/verzija-c.html.
+ * Feng Shui Škola ("Mobilna kartica"), ugrađena u Next.js app.
+ * Sadržaj i dizajn-jezik potiču iz HTML prototipa „verzija C" (obrisan iz
+ * repoa pri prelasku 09.2026.; u istoriji: design/skola/verzija-c.html).
  * Nav i footer NE renderujemo ovde — daje ih (site) layout (Header/Footer).
- * Kontakt = modal (SkolaCModal) umesto inline formi iz prototipa.
+ * Kontakt = modal (PrijavaModal) umesto inline formi iz prototipa.
  */
-const SkolaCContent = () => {
+const SkolaContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
   const open = (intent: ModalIntent) => () => setModal(intent);
 
   // „Sačuvaj svoje mesto" iz navigacije otvara istu prijavu kao dugmad na strani.
-  useFsCEnrollTrigger(() => setModal('prijava'));
+  useEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
@@ -328,7 +330,7 @@ const SkolaCContent = () => {
 
             <aside className="learn-price">
               <span className="lp-label">Cena programa</span>
-              <span className="lp-value">289 &euro;</span>
+              <span className="lp-value">{UPLATA.iznosEur}</span>
               <p className="lp-note">
                 Broj mesta je ograničen. Rezervišite svoje mesto na vreme.
               </p>
@@ -653,7 +655,7 @@ const SkolaCContent = () => {
         </button>
       </div>
 
-      <FsCModal
+      <PrijavaModal
         open={modal !== null}
         onClose={() => setModal(null)}
         title={modal ? modalCopy[modal].title : undefined}
@@ -661,7 +663,7 @@ const SkolaCContent = () => {
         serviceType={
           modal ? modalCopy[modal].serviceType : 'Feng Shui škola (kurs)'
         }
-        heardFrom="Škola (verzija C)"
+        heardFrom="Škola"
         intent={modal ?? 'konsultacije'}
         redirectTo={modal ? modalCopy[modal].redirectTo : undefined}
       />
@@ -669,4 +671,4 @@ const SkolaCContent = () => {
   );
 };
 
-export default SkolaCContent;
+export default SkolaContent;

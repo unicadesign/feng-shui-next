@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import WebinarNavbarBar from '@/components/WebinarNavbarBar';
-import { requestFsCEnroll } from '@/components/fs-c/enrollTrigger';
+import { requestEnroll } from '@/components/sajt/enrollTrigger';
 import type { GlobalContent, HomeContent } from '@/types/content';
 
 interface HeaderProps {
@@ -17,29 +17,18 @@ interface HeaderProps {
 
 const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
 
-// Preview-only shim: while the "C" redesign lives on parallel `-c` routes,
-// rewrite shared-header links to their C equivalents so the preview navigates
-// within itself instead of bouncing back to the live pages. Inert on every
-// other (live) route — removed at cutover when C replaces the real routes.
-const C_PREVIEW_ROUTES: Record<string, string> = {
-  '/': '/pocetna-c',
-  '/school': '/skola-c',
-  '/about': '/o-meni-c',
-  '/upitnik': '/kontakt-c',
-};
-
 // Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
 // izbačeni, pa se ista navigacija seli u padajući meni pod „Škola".
 // Meni se otvara na prelazak mišem, kao i ostali padajući meniji u
 // navigaciji, a strelica pored naziva ga otvara klikom — zbog tastature
-// i dodira, gde prelaska mišem nema. Klik na sam naziv vodi na /skola-c.
-const C_SKOLA_SIDRA: { to: string; label: string }[] = [
-  { to: '/skola-c#program', label: 'Program' },
-  { to: '/skola-c#za-koga', label: 'Za koga je' },
-  { to: '/skola-c#rezultati', label: 'Rezultati' },
+// i dodira, gde prelaska mišem nema. Klik na sam naziv vodi na /school.
+const SKOLA_SIDRA: { to: string; label: string }[] = [
+  { to: '/school#program', label: 'Program' },
+  { to: '/school#za-koga', label: 'Za koga je' },
+  { to: '/school#rezultati', label: 'Rezultati' },
   /* „O meni" i „Upis" su izbačeni 31.08.: te dve sekcije su sakrivene na
      strani, pa bi sidra vodila u prazno. Vraćaju se zajedno sa sekcijama. */
-  { to: '/skola-c#faq', label: 'Pitanja' },
+  { to: '/school#faq', label: 'Pitanja' },
 ];
 
 const Header = ({ content, webinar }: HeaderProps) => {
@@ -70,42 +59,23 @@ const Header = ({ content, webinar }: HeaderProps) => {
   const navLinks = filteredNav.some((link) => link.to === '/school')
     ? filteredNav
     : [{ to: '/school', label: 'Škola', children: undefined }, ...filteredNav];
-  const isCPreview = pathname?.endsWith('-c') ?? false;
   /**
    * Modal za prijavu živi u komponenti strane, a Header ga doziva
-   * događajem (`enrollTrigger`). Nemaju ga sve `-c` strane: `/uplata-c`
-   * i `/hvala-c` se otvaraju POSLE prijave i modal ne renderuju, pa bi
-   * na njima dugme „Sačuvaj svoje mesto" slalo događaj koji niko ne
-   * sluša. Tamo isto dugme vodi na stranicu škole.
-   *
-   * Provera je po spisku, ne po nastavku imena: obe nove rute se takođe
-   * završavaju na `-c`, pa ih `isCPreview` hvata.
+   * događajem (`enrollTrigger`). Nemaju ga sve strane: `/uplata` i `/hvala`
+   * se otvaraju POSLE prijave, a `/upitnik` ima sopstveni obrazac, pa bi na
+   * njima dugme „Sačuvaj svoje mesto" slalo događaj koji niko ne sluša.
+   * Tamo isto dugme vodi na stranicu škole.
    */
-  const imaModalZaPrijavu =
-    pathname === '/pocetna-c' || pathname === '/skola-c' || pathname === '/o-meni-c';
-  const cHref = (to: string) => (isCPreview ? (C_PREVIEW_ROUTES[to] ?? to) : to);
+  const imaModalZaPrijavu = pathname === '/' || pathname === '/school' || pathname === '/about';
   /**
-   * „Početna" u navigaciji. Dodaje se ovde a ne u admin panelu jer panel
-   * po dogovoru čeka da klijent odobri redizajn, a `content.navigation`
-   * dele živa i `-c` verzija sajta.
-   *
-   * Samo na `-c` stranama: na živom sajtu do početne vodi naziv
-   * „Dragana Jović" pored znaka, a on je na `-c` stranama izbačen. Bez
-   * ovoga bi se tamo na početnu moglo samo preko znaka.
-   *
-   * `cHref` ispod prevodi `/` u `/pocetna-c`.
+   * „Početna" u navigaciji. Dodaje se ovde a ne u admin panelu jer admin
+   * po dogovoru čeka svoju fazu (PLAN-PRELAZAK.md, faza 11). Potrebna je
+   * jer je naziv „Dragana Jović" pored znaka izbačen na zahtev klijenta,
+   * pa bi se bez nje na početnu moglo samo preko znaka.
    */
-  const navLinksSaPocetnom =
-    isCPreview && !navLinks.some((link) => link.to === '/')
-      ? [{ to: '/', label: 'Početna', children: undefined }, ...navLinks]
-      : navLinks;
-  const navLinksResolved = isCPreview
-    ? navLinksSaPocetnom.map((link) => ({
-        ...link,
-        to: cHref(link.to),
-        children: link.children?.map((child) => ({ ...child, to: cHref(child.to) })),
-      }))
-    : navLinksSaPocetnom;
+  const navLinksResolved = navLinks.some((link) => link.to === '/')
+    ? navLinks
+    : [{ to: '/', label: 'Početna', children: undefined }, ...navLinks];
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
@@ -205,28 +175,24 @@ const Header = ({ content, webinar }: HeaderProps) => {
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
         }`}
       >
-        <Link href={cHref('/')}>
+        <Link href="/">
           {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
               ne pomeri raspored: negativna margina poništi dodati prostor.
               Pošto je naziv pored znaka izbačen, znak je ostao jedina
               prečica do početne i mora da se pogodi prstom. */}
           <span className="flex items-center gap-2 px-3 py-2 -my-2">
             {/* Zlatni znak ima providnu pozadinu; stari `logo-transparent.png`
-                je uprkos imenu bez alfa kanala, odatle beli kvadrat iza znaka.
-                Za sada samo na `-c` stranama, da stari sajt ostane isti. */}
-            <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            {/* Naziv se na `-c` stranama izbacuje na zahtev; ostaje samo znak.
+                je uprkos imenu bio bez alfa kanala, odatle beli kvadrat iza znaka. */}
+            <Image src="/logo/logo-zlatni.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            {/* Naziv pored znaka je izbačen na zahtev klijenta; ostaje samo znak.
                 Link i dalje vodi na početnu, a pristupačno ime mu daje
                 `alt` na slici, pa link ne ostaje bezimen. */}
-            {!isCPreview && (
-              <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
-            )}
           </span>
         </Link>
 
         {navLinksResolved.map((link) => (
-          isCPreview && link.to === '/skola-c' ? (
-            /* „Škola" na `-c` stranama nosi padajući meni sa sidrima koja su
+          link.to === '/school' ? (
+            /* „Škola" nosi padajući meni sa sidrima koja su
                ranije bili bež krugovi ispod heroja. Naziv je link i vodi na
                stranu škole; padajući meni otvara strelica pored njega, kao i
                prelazak mišem. Jedan element ne može oboje — klik bi ili
@@ -269,7 +235,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                 }`}
               >
                 <div className="w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-card py-2">
-                  {C_SKOLA_SIDRA.map((s) => (
+                  {SKOLA_SIDRA.map((s) => (
                     <Link
                       key={s.to}
                       href={s.to}
@@ -345,37 +311,31 @@ const Header = ({ content, webinar }: HeaderProps) => {
               </div>
             )}
           </div>
-        ) : isCPreview ? (
-          /* Na `-c` stranama gornji poziv na akciju vodi u prijavu za kurs,
-             a ne na /login: prijava se otvara kao modal, na licu mesta, pa
-             posetilac ne napušta prodajnu stranu. Samo desktop — na telefonu
-             tu ulogu već ima lepljiva traka pri dnu. Natpis je za sada u
-             kodu; kada C preuzme prave rute, ide u admin uz ostale (Izmena 03). */
+        ) : (
+          /* Gornji poziv na akciju vodi u prijavu za kurs, a ne na /login:
+             prijava se otvara kao modal, na licu mesta, pa posetilac ne
+             napušta prodajnu stranu. Samo desktop — na telefonu tu ulogu ima
+             lepljiva traka pri dnu. Natpis je u kodu; u admin ide u admin
+             fazi (PLAN-PRELAZAK.md, faza 11). Polaznice do /login stižu iz
+             mobilnog menija ili kucanjem adrese (odluka 0.3, pravilo 1:1). */
           imaModalZaPrijavu ? (
             <button
               type="button"
-              onClick={requestFsCEnroll}
+              onClick={requestEnroll}
               className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
             >
               Sačuvaj svoje mesto
             </button>
           ) : (
-            /* Strane posle prijave (`/uplata-c`, `/hvala-c`) nemaju modal,
-               pa isto dugme vodi na školu umesto da ne radi ništa. */
+            /* Strane bez modala (`/upitnik`, `/uplata`, `/hvala`): isto dugme
+               vodi na školu umesto da ne radi ništa. */
             <Link
-              href="/skola-c"
+              href="/school"
               className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
             >
               Sačuvaj svoje mesto
             </Link>
           )
-        ) : (
-          <Link
-            href="/login"
-            className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
-          >
-            {headerLabels.loginButton}
-          </Link>
         )}
       </nav>
 
@@ -386,19 +346,16 @@ const Header = ({ content, webinar }: HeaderProps) => {
             : 'bg-cream-50/80 backdrop-blur-xl border-sand-200/50 shadow-soft'
         }`}
       >
-        <Link href={cHref('/')}>
+        <Link href="/">
           {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
               ne pomeri raspored: negativna margina poništi dodati prostor.
               Pošto je naziv pored znaka izbačen, znak je ostao jedina
               prečica do početne i mora da se pogodi prstom. */}
           <span className="flex items-center gap-2 px-3 py-2 -my-2">
-            <Image src={isCPreview ? '/logo/logo-zlatni.png' : '/logo/logo-transparent.png'} alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            {/* Naziv se na `-c` stranama izbacuje na zahtev; ostaje samo znak.
+            <Image src="/logo/logo-zlatni.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            {/* Naziv pored znaka je izbačen na zahtev klijenta; ostaje samo znak.
                 Link i dalje vodi na početnu, a pristupačno ime mu daje
                 `alt` na slici, pa link ne ostaje bezimen. */}
-            {!isCPreview && (
-              <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
-            )}
           </span>
         </Link>
 
@@ -494,7 +451,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                 style={{
                   opacity: 0,
                   transform: 'translateY(24px)',
-                  animation: `mobileNavFadeIn 0.4s ease-out ${navLinks.length * 0.07 + 0.1}s forwards`,
+                  animation: `mobileNavFadeIn 0.4s ease-out ${navLinksResolved.length * 0.07 + 0.1}s forwards`,
                 }}
               >
                 {headerLabels.loginButton}

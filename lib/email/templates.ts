@@ -14,11 +14,10 @@ const BRAND = 'Dragana Jović';
 const ACCENT = '#1f3a5f'; // navy-ish, matches site palette
 
 /**
- * Zelena iz redizajna (--navy-700 iz `components/fs-c/fs-c.css`).
- * Postojeći mejlovi (newsletter, vebinar) namerno OSTAJU na staroj
- * plavoj: oni idu sa živog sajta i nisu deo redizajna. Novi mejlovi
- * vezani za `-c` stranice nose brend zelenu. Kada klijent odobri
- * redizajn, `ACCENT` se menja u ovu vrednost i sve se izjednači.
+ * Zelena iz redizajna (--navy-700 iz `components/sajt/fs-c.css`). Mejlovi
+ * prijave i upita je nose od početka. Newsletter i vebinar mejl još nose
+ * staru plavu `ACCENT`; prelaze na zelenu u komitu K3 prelaska
+ * (PLAN-PRELAZAK.md, 6.1), kada `ACCENT` postaje ova vrednost.
  */
 const BREND_ZELENA = '#12403C';
 
@@ -240,7 +239,7 @@ export interface SkolaPrijavaObavestenjeData {
   email: string;
   phone?: string | null;
   goal?: string | null;
-  /** Sa koje `-c` stranice je prijava stigla. */
+  /** Sa koje stranice je prijava stigla (Početna, Škola, O meni). */
   heardFrom?: string | null;
 }
 

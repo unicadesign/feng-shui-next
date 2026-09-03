@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import UplataCContent from '@/components/fs-c/UplataCContent';
+import UplataContent from '@/components/sajt/UplataContent';
 
 /**
  * Zasebna ruta da bi konverzija „prijavio se za školu" imala svoj link
@@ -17,6 +17,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function UplataCPage() {
-  return <UplataCContent />;
+export default function UplataPage() {
+  return <UplataContent />;
 }

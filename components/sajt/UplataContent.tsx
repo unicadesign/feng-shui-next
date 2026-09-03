@@ -6,7 +6,7 @@ import { UPLATA, svrhaUplate, ibanZaPrikaz } from '@/lib/uplata';
 import './fs-c.css';
 
 /**
- * Stranica sa podacima za uplatu školarine — `/uplata-c`.
+ * Stranica sa podacima za uplatu školarine — `/uplata`.
  *
  * Otvara se posle uspešne prijave za školu, ali NIJE zaključana: Marko
  * je 31.08. izabrao da ostane javna i samo neindeksirana, da bi link bio
@@ -119,7 +119,7 @@ const Red = ({ naziv, vrednost, kopija, opisKopije, istaknuto }: RedProps) => {
   );
 };
 
-const UplataCContent = () => {
+const UplataContent = () => {
   const primalac = `${UPLATA.primalac}, ${UPLATA.mesto}`;
 
   return (
@@ -208,7 +208,7 @@ const UplataCContent = () => {
             pristupnim podacima za platformu.
           </p>
           <div className="uplata-dno">
-            <Link href="/skola-c" className="btn btn-white">
+            <Link href="/school" className="btn btn-white">
               Vrati se na školu
             </Link>
             <a className="micro uplata-telefon" href={`tel:${UPLATA.telefonZaLink}`}>
@@ -221,4 +221,4 @@ const UplataCContent = () => {
   );
 };
 
-export default UplataCContent;
+export default UplataContent;

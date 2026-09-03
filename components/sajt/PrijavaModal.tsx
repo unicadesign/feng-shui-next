@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface FsCModalProps {
+interface PrijavaModalProps {
   open: boolean;
   onClose: () => void;
   /** Naslov modala — zavisi od toga koji CTA ga je otvorio. */
@@ -50,11 +50,11 @@ const initialState = {
 const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 /**
- * Deljeni kontakt-modal za sve "verzija C" stranice ("Markov upitnik",
+ * Deljeni kontakt-modal za Početnu, Školu i O meni ("Markov upitnik",
  * skraćen). Piše u isti Supabase `inquiries` table kao pun /upitnik
  * obrazac, pa se sve prijave vide u istom admin pregledu.
  */
-const FsCModal = ({
+const PrijavaModal = ({
   open,
   onClose,
   title,
@@ -63,7 +63,7 @@ const FsCModal = ({
   heardFrom,
   intent,
   redirectTo,
-}: FsCModalProps) => {
+}: PrijavaModalProps) => {
   const router = useRouter();
   const [form, setForm] = useState(initialState);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -275,4 +275,4 @@ const FsCModal = ({
   );
 };
 
-export default FsCModal;
+export default PrijavaModal;

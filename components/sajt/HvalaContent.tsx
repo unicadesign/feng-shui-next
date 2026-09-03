@@ -4,7 +4,7 @@ import { UPLATA } from '@/lib/uplata';
 import './fs-c.css';
 
 /**
- * Zahvalnica za sve upite koji NISU upis u školu — `/hvala-c`.
+ * Zahvalnica za sve upite koji NISU upis u školu — `/hvala`.
  *
  * Pokriva besplatnu konsultaciju sa Škole i O meni, i konsultacije,
  * nekretninu i radionice sa Početne. Zato je tekst namerno opšti: ne
@@ -13,7 +13,7 @@ import './fs-c.css';
  * TEKST JE MOJ, nije klijentov — nije ga bilo, a stranica je izabrana
  * 31.08. umesto poruke unutar modala. Traži pregled.
  *
- * Kao i `/uplata-c`: javna, neindeksirana, stalan link zbog analitike,
+ * Kao i `/uplata`: javna, neindeksirana, stalan link zbog analitike,
  * bez zavisnosti od toga šta je korisnik pre nje uradio.
  */
 
@@ -33,7 +33,7 @@ const Oznaka = () => (
   </svg>
 );
 
-const HvalaCContent = () => (
+const HvalaContent = () => (
   <div className="fs-c">
     <section className="card c-cream uplata-vrh">
       <div className="wrap stack g24">
@@ -57,10 +57,10 @@ const HvalaCContent = () => (
           škole i termini su na stranici škole.
         </p>
         <div className="uplata-dno">
-          <Link href="/skola-c" className="btn btn-white">
+          <Link href="/school" className="btn btn-white">
             Pogledajte školu
           </Link>
-          <Link href="/pocetna-c" className="btn btn-line">
+          <Link href="/" className="btn btn-line">
             Nazad na početnu
           </Link>
         </div>
@@ -72,4 +72,4 @@ const HvalaCContent = () => (
   </div>
 );
 
-export default HvalaCContent;
+export default HvalaContent;

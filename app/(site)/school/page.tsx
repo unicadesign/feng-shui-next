@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { getContent } from '@/lib/content';
-import SchoolContent from '@/components/school/SchoolContent';
+import SkolaContent from '@/components/sajt/SkolaContent';
 
 export const metadata: Metadata = {
   title: 'Feng Shui škola',
   description:
-    '4-mesečni online program Feng Shui obrazovanja sa ličnim mentorstvom, sertifikacijom i živim Q&A susretima — od osnovnih principa do primene na realnim prostorima.',
+    'Dvomesečni online Feng Shui kurs sa Draganom Jović — od osnovnih principa do primene na sopstvenom prostoru. Prijava i besplatne konsultacije.',
 };
 
-export default async function SchoolPage() {
-  const school = await getContent('school');
-  return <SchoolContent content={school} />;
+export default function SkolaPage() {
+  return <SkolaContent />;
 }

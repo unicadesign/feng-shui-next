@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import HvalaCContent from '@/components/fs-c/HvalaCContent';
+import HvalaContent from '@/components/sajt/HvalaContent';
 
 /**
  * Zahvalnica za upite koji nisu upis u školu. Zaseban link da bi se ta
- * konverzija merila odvojeno od `/uplata-c`. Neindeksirana istim
+ * konverzija merila odvojeno od `/uplata`. Neindeksirana istim
  * postupkom kao i ona (meta oznaka, ne robots.txt).
  */
 export const metadata: Metadata = {
@@ -12,6 +12,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function HvalaCPage() {
-  return <HvalaCContent />;
+export default function HvalaPage() {
+  return <HvalaContent />;
 }

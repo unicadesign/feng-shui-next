@@ -12,8 +12,8 @@ import React, { useState } from 'react';
  * dobije grešku) i šalje dobrodošlicu.
  *
  * Boje stoje doslovno, iz istog razloga kao u ostatku podnožja: tokeni su
- * na `-c` stranama preusmereni na novu paletu a na starim nose staru, pa
- * bi podnožje ispalo dvojako.
+ * na javnim stranama (`.fs-c`) preusmereni na novu paletu a na login,
+ * dashboard i admin stranama nose staru, pa bi podnožje ispalo dvojako.
  *   #6B5518  dugme i naglasak     7,15:1 sa belim slovima
  *   #665243  tekst                7,36:1 na beloj
  *   #DCC5A6  ivica polja

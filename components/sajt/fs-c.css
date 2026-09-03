@@ -1,8 +1,9 @@
 /* ============================================================
-   Feng Shui — Verzija C, deljena dizajn-osnova za ceo sajt.
-   Koriste je Škola / Početna / O meni. Sve je skopirano pod
-   `.fs-c` da NE curi na ostatak sajta (globals.css / druge rute).
-   Tokeni + dizajn-jezik iz design/tokens.css + design/css/v-c.css.
+   Feng Shui, deljena dizajn-osnova javnog sajta (nastala kao „verzija C"
+   redizajna, 08.-09.2026.). Koristi je svih šest javnih strana. Sve je
+   skopirano pod `.fs-c` da NE curi na login, dashboard i admin, koji
+   ostaju na staroj paleti iz globals.css. Ime klase je ostalo iz vremena
+   redizajna: menjati ga kroz 1.600 linija nema svrhe.
    Boje/tekst od klijenta se menjaju u :root delu ispod — na
    JEDNOM mestu za sve tri stranice.
    ============================================================ */
@@ -108,7 +109,7 @@
 .fs-c h1, .fs-c h2, .fs-c h3 {
   margin: 0; line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
 }
-/* Naslov strane ima JEDNU veličinu na sve tri `-c` strane. Ranije je
+/* Naslov strane ima JEDNU veličinu na svim stranama. Ranije je
    ovo pravilo služilo samo „O meni" (2,35–4,5rem), dok su hero naslovi
    Početne i Škole imali svoje (2,5–4,2rem), pa je „O meni" na mobilnom
    bio 2,4px manji a na desktopu 4,8px veći od ostalih. Sada je mera
@@ -641,7 +642,7 @@
 .fs-c .sticky .btn { flex: 1; padding: .85rem 1rem; font-size: .95rem; min-height: 46px; }
 @media (min-width: 900px) { .fs-c .sticky { display: none; } }
 
-/* ================= KRUGOVI USLUGA (Početna) — jezik verzije C =================
+/* ================= KRUGOVI USLUGA (Početna) ==================================
    Mobilno prvo: vodoravni snap-carousel, krupni krugovi u boji, jak kontrast.
    Na desktopu se razvija u red. Bez foto placeholder-a: disk je pun ton +
    label; kad stignu prave slike usluga, dodaje se <img> ispod .tint. */
@@ -1013,20 +1014,20 @@
   color: var(--navy-300);
 }
 
-/* ====== HEADER I FOOTER NA `-c` STRANAMA ==========================
+/* ====== HEADER I FOOTER NA JAVNIM STRANAMA ========================
    Zaglavlje i podnožje dolaze iz zajedničkog layouta i nose staru
    paletu, pa bi na zelenoj strani ostala plava pilula „Prijava" i
    plave ikonice u footeru.
 
-   `body:has(.fs-c)` pogađa sve `-c` strane, jer samo one renderuju
-   `.fs-c` omotač. Bilo ih je tri kad je blok pisan, sada ih je šest
-   (dodate su Kontakt, Uplata i Hvala). Redefinišu se Tailwind-ove promenljive
+   `body:has(.fs-c)` pogađa svih šest javnih strana, jer samo one renderuju
+   `.fs-c` omotač; login, dashboard i admin ostaju na staroj paleti iz
+   globals.css. Redefinišu se Tailwind-ove promenljive
    (`--color-*`), a njegove klase (`.bg-navy-500` i slične) su
    definisane kao `var(--color-navy-500)` pa se povlače za njima.
-   Stari sajt ne oseća ništa: promenljive se nigde drugde ne menjaju,
-   nijedan HTML nije diran.
+   Te strane ne osećaju ništa: promenljive se nigde drugde ne menjaju.
 
-   Kad ceo sajt pređe na novu paletu (Izmena 03), ovaj blok se briše.
+   Blok se briše tek kad i login, dashboard i admin pređu na novu paletu
+   (admin faza, PLAN-PRELAZAK.md).
    ================================================================== */
 body:has(.fs-c) {
   /* svetle površine zaglavlja */
@@ -1167,8 +1168,8 @@ body:has(.fs-c) {
 @media (min-width: 640px) { .fs-c .faq-cta { align-self: flex-start; } }
 
 /* ================= UPLATA I ZAHVALNICA ==================================
-   Strane `/uplata-c` i `/hvala-c`. Obe su javne ali neindeksirane, i obe
-   se otvaraju posle prijave — vidi `app/(site)/uplata-c/page.tsx`.
+   Strane `/uplata` i `/hvala`. Obe su javne ali neindeksirane, i obe
+   se otvaraju posle prijave — vidi `app/(site)/uplata/page.tsx`.
    ------------------------------------------------------------------------ */
 
 
@@ -1239,23 +1240,23 @@ body:has(.fs-c) {
 .fs-c .uplata-dno { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; }
 .fs-c .uplata-telefon { text-decoration: none; }
 .fs-c .uplata-telefon:hover { text-decoration: underline; }
-/* Na `/uplata-c` telefon stoji uz dugme pa ga hvata pravilo `.btn + .micro`,
-   a na `/hvala-c` je ispod reda sa dugmadima i ostajao bi centriran nasred
+/* Na `/uplata` telefon stoji uz dugme pa ga hvata pravilo `.btn + .micro`,
+   a na `/hvala` je ispod reda sa dugmadima i ostajao bi centriran nasred
    sekcije. Isti red mora da izgleda isto na obe strane. */
 @media (min-width: 640px) {
   .fs-c .uplata-telefon { text-align: left; align-self: flex-start; }
 }
 
 /* Vidljivo samo čitaču ekrana. Koristi ga potvrda „Kopirano" na
-   `/uplata-c`: natpis dugmeta je `aria-hidden`, pa promena mora da
+   `/uplata`: natpis dugmeta je `aria-hidden`, pa promena mora da
    stigne kroz zasebno polje sa `role="status"`. */
 .fs-c .samo-citac {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 
-/* ================= KONTAKT UPITNIK (/kontakt-c) =========================
-   Blizanac žive strane `/upitnik`: ista četiri koraka, isti podaci, novo
+/* ================= KONTAKT UPITNIK (/upitnik) =========================
+   Naslednik starog upitnika na istoj adresi: ista četiri koraka, isti podaci, novo
    ruho. Sve je novo osim rasporeda, koji je namerno ostao isti da se
    ponašanje ne menja zajedno sa izgledom.
    ------------------------------------------------------------------------ */
@@ -1328,7 +1329,7 @@ body:has(.fs-c) {
   box-shadow: 0 0 0 3px rgba(18, 64, 60, .14);
 }
 .fs-c .upit-unos-greska { border-color: #9B2C1F; }
-/* Jedina boja van palete na celom `-c` sajtu. Greška mora da se razlikuje
+/* Jedina boja van palete na celom sajtu. Greška mora da se razlikuje
    od svega ostalog, a braon i zlatna se ovde ne razlikuju dovoljno.
    #9B2C1F na belom daje 7,08:1. */
 .fs-c .upit-greska { font-size: .85rem; color: #9B2C1F; }

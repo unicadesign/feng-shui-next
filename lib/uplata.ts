@@ -1,5 +1,5 @@
 /**
- * Podaci za uplatu školarine — JEDNO mesto za stranicu `/uplata-c` i za
+ * Podaci za uplatu školarine — JEDNO mesto za stranicu `/uplata` i za
  * email koji ide posle prijave.
  *
  * Namerno u zajedničkom modulu. Da iznos i broj računa stoje na dva
@@ -13,13 +13,12 @@
  * od klijenta su na jednom mestu (u tekstu mejla) imale skraćen oblik
  * bez kontrolne dvocifre; ovde stoji pun, jer je taj tačan.
  *
- * ─── ČEKA POTVRDU ───────────────────────────────────────────────────
- * SWIFT `AAAARSBG` je formalno ispravan BIC (4 slova + RS + BG), ali
- * četiri ista slova za kod banke je obrazac koji liči na popunu iz
- * šablona, a ne na pravi kod banke 115. Nije provereno ni izmišljano.
- * Pogrešan SWIFT znači da uplata iz inostranstva ne prođe.
+ * SWIFT `AAAARSBG`: Marko je 04.09.2026. potvrdio da je to kod koji je
+ * klijent dostavio. (Ranija sumnja: četiri ista slova liče na popunu iz
+ * šablona; ostaje zabeleženo, vrednost nije menjana.)
  *
- * Isto tako, strane banke uz IBAN po pravilu traže NAZIV I ADRESU
+ * ─── ČEKA PODATKE ───────────────────────────────────────────────────
+ * Strane banke uz IBAN po pravilu traže NAZIV I ADRESU
  * BANKE, kojih u instrukcijama nema. Kada stignu, idu u `bankaNaziv` i
  * `bankaAdresa` ispod i same se pojave na stranici i u mejlu.
  *

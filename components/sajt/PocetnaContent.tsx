@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import FsCModal from './FsCModal';
-import { useFsCEnrollTrigger } from './enrollTrigger';
+import PrijavaModal from './PrijavaModal';
+import { useEnrollTrigger } from './enrollTrigger';
 import './fs-c.css';
 
 type ModalIntent = 'konsultacije' | 'nekretnina' | 'radionice' | 'prijava';
@@ -29,21 +29,21 @@ const modalCopy: Record<
       'Ostavite podatke i dogovaramo razgovor o vašem prostoru, bez obaveze.',
     serviceType: 'Individualne konsultacije',
     intent: 'konsultacije',
-    redirectTo: '/hvala-c',
+    redirectTo: '/hvala',
   },
   nekretnina: {
     title: 'Asistencija pri izboru nekretnine',
     subtitle: 'Ostavite podatke i javljamo se sa detaljima procene prostora.',
     serviceType: 'Asistencija pri izboru nekretnine',
     intent: 'konsultacije',
-    redirectTo: '/hvala-c',
+    redirectTo: '/hvala',
   },
   radionice: {
     title: 'Radionice',
     subtitle: 'Ostavite podatke i obavestićemo vas čim otvorimo nove termine.',
     serviceType: 'Radionice',
     intent: 'konsultacije',
-    redirectTo: '/hvala-c',
+    redirectTo: '/hvala',
   },
   /* Otvara ga „Sačuvaj svoje mesto" iz navigacije. Natpis obećava upis u
      školu, pa i modal mora da govori o školi, a ne o konsultacijama. */
@@ -52,22 +52,23 @@ const modalCopy: Record<
     subtitle: 'Popunite podatke i odmah dobijate instrukcije za uplatu.',
     serviceType: 'Feng Shui škola',
     intent: 'prijava',
-    redirectTo: '/uplata-c',
+    redirectTo: '/uplata',
   },
 };
 
 /**
- * Početna — verzija C ("Mobilna kartica"), ugrađena u Next.js app.
- * Sadržaj i dizajn-jezik su porat iz prototipa design/pocetna/verzija-c.html.
+ * Početna ("Mobilna kartica"), ugrađena u Next.js app.
+ * Sadržaj i dizajn-jezik potiču iz HTML prototipa „verzija C" (obrisan iz
+ * repoa pri prelasku 09.2026.; u istoriji: design/pocetna/verzija-c.html).
  * Nav i footer daje (site) layout (Header/Footer). Kontakt = deljeni modal.
  * Uslovni video ("Zašto Feng Shui") i iskakanje ebooka su izostavljeni dok
  * ne stigne materijal/odluka klijenta (vidi tabla → Backlog).
  */
-const PocetnaCContent = () => {
+const PocetnaContent = () => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
   const open = (intent: ModalIntent) => () => setModal(intent);
 
-  useFsCEnrollTrigger(() => setModal('prijava'));
+  useEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
@@ -187,7 +188,7 @@ const PocetnaCContent = () => {
                 <span className="lbl">
                   <i>naučite sami</i>
                   <b>Feng Shui Škola</b>
-                  <Link className="pill" href="/skola-c">
+                  <Link className="pill" href="/school">
                     Saznajte više
                   </Link>
                 </span>
@@ -267,7 +268,7 @@ const PocetnaCContent = () => {
           `thePlan`), ne iz `data/defaultContent.ts`: admin ga je menjao i
           verzija u kodu je zastarela.
 
-          Dugme vodi na `/kontakt-c`, kao što živo vodi na `/upitnik` — prvi
+          Dugme vodi na `/upitnik`, kao i na starom sajtu — prvi
           korak i glasi „Popunite upitnik". Sitan red „Besplatno. Bez
           obaveze." ispod dugmeta sa žive verzije je IZOSTAVLJEN: klijent ga
           je 30.08. već izbacio iz heroja iz istog razloga zbog kog sada
@@ -350,7 +351,7 @@ const PocetnaCContent = () => {
             </ol>
           </div>
 
-          <Link href="/kontakt-c" className="btn btn-accent">
+          <Link href="/upitnik" className="btn btn-accent">
             Započnite proces
           </Link>
         </div>
@@ -379,13 +380,13 @@ const PocetnaCContent = () => {
         </button>
       </div>
 
-      <FsCModal
+      <PrijavaModal
         open={modal !== null}
         onClose={() => setModal(null)}
         title={modal ? modalCopy[modal].title : undefined}
         subtitle={modal ? modalCopy[modal].subtitle : undefined}
         serviceType={modal ? modalCopy[modal].serviceType : 'Feng Shui (opšti upit)'}
-        heardFrom="Početna (verzija C)"
+        heardFrom="Početna"
         intent={modal ? modalCopy[modal].intent : 'konsultacije'}
         redirectTo={modal ? modalCopy[modal].redirectTo : undefined}
       />
@@ -393,4 +394,4 @@ const PocetnaCContent = () => {
   );
 };
 
-export default PocetnaCContent;
+export default PocetnaContent;

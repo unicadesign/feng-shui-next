@@ -9,9 +9,9 @@ import {
 import type { InquiryInsert } from '@/types/inquiry';
 
 /**
- * Prijave i upiti sa „verzija C" stranica (Škola / Početna / O meni / Kontakt).
+ * Prijave i upiti sa javnih strana (Škola / Početna / O meni / Kontakt).
  *
- * ZAŠTO POSTOJI: i `FsCModal` i upitnik su upisivali red u Supabase direktno
+ * ZAŠTO POSTOJI: i `PrijavaModal` i upitnik su upisivali red u Supabase direktno
  * iz pretraživača. To radi, ali iz pretraživača se ne može poslati mejl, pa
  * je i prijava za školu i kontakt upit ostajao bez ijedne pisane potvrde.
  * Upis je prebačen ovamo da bi uz njega mogla da ide i pošta.

@@ -12,18 +12,18 @@ import {
 import './fs-c.css';
 
 /**
- * Kontakt upitnik — verzija C, `/kontakt-c`.
+ * Kontakt upitnik, `/upitnik`.
  *
- * Blizanac žive strane `/upitnik`, koja ostaje netaknuta. Ista četiri
- * koraka, ista polja, iste šifre koje idu u bazu; menja se samo dizajn,
- * po odluci od 31.08.
+ * Naslednik starog upitnika na istoj adresi (stari je obrisan pri prelasku
+ * na novi dizajn, 09.2026.). Ista četiri koraka, ista polja, iste šifre
+ * koje idu u bazu; promenjen je samo dizajn, po odluci od 31.08.
  *
- * Tri stvari rade drugačije nego na živoj strani, sve tri namerno:
+ * Tri stvari rade drugačije nego stari upitnik, sve tri namerno:
  *
  *  1. UPIS IDE PREKO SERVERA (`/api/prijava`, namera `upit`), ne direktno
  *     iz pretraživača. Samo tako uz upis može da ode i mejl: potvrda
- *     pošiljaocu i obaveštenje Dragani. Živa strana ne šalje ništa.
- *  2. POSLE SLANJA vodi na `/hvala-c`, istu zahvalnicu na koju vode i
+ *     pošiljaocu i obaveštenje Dragani. Stari upitnik nije slao ništa.
+ *  2. POSLE SLANJA vodi na `/hvala`, istu zahvalnicu na koju vode i
  *     modali, da bi se konverzija merila na jednom linku.
  *  3. SAGLASNOST se proverava u JavaScript-u, jer obrazac ima `noValidate`
  *     pa se poruke drže istog jezika kao ostale greške na sajtu. I dalje
@@ -110,7 +110,7 @@ const Strelica = ({ nazad = false }: { nazad?: boolean }) => (
   </svg>
 );
 
-const KontaktCContent = () => {
+const KontaktContent = () => {
   const router = useRouter();
   const [korak, setKorak] = useState(1);
   const [obrazac, setObrazac] = useState<Obrazac>(pocetno);
@@ -247,7 +247,7 @@ const KontaktCContent = () => {
 
     // `salje` NAMERNO ostaje uključeno dok traje prelaz: dugme je
     // zaključano, pa se upitnik ne može poslati dvaput.
-    router.push('/hvala-c');
+    router.push('/hvala');
   };
 
   const poljeKlase = (ime?: string) =>
@@ -644,4 +644,4 @@ const KontaktCContent = () => {
   );
 };
 
-export default KontaktCContent;
+export default KontaktContent;

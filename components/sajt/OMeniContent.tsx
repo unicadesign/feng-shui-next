@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import FsCModal from './FsCModal';
-import { useFsCEnrollTrigger } from './enrollTrigger';
+import PrijavaModal from './PrijavaModal';
+import { useEnrollTrigger } from './enrollTrigger';
 import './fs-c.css';
 
 /**
- * O meni — verzija C, „naizmenične trake".
+ * O meni, „naizmenične trake".
  *
  * Tekst je 01.09. ponovo napisan ispočetka na klijentov zahtev: osam pasusa
  * umesto tri, prenetih doslovno. Time se VRAĆA ono što je 31.08. bilo
@@ -29,7 +29,7 @@ import './fs-c.css';
  * fotografija preko cele širine, pa tri pasusa na bež i tri na kremu — isti
  * ritam naizmeničnih traka koji ide kroz Školu i Početnu.
  */
-const OMeniCContent = () => {
+const OMeniContent = () => {
   // Dva povoda za isti modal: dugmad na strani zovu na razgovor ili na
   // upis, a „Sačuvaj svoje mesto" iz navigacije na upis u školu. Natpis
   // obećava različite stvari, pa i modal mora da govori različito.
@@ -42,17 +42,17 @@ const OMeniCContent = () => {
           serviceType: 'Feng Shui škola',
           intent: 'prijava' as const,
           // Upis u školu vodi na podatke za uplatu, razgovor na zahvalnicu.
-          redirectTo: '/uplata-c',
+          redirectTo: '/uplata',
         }
       : {
           title: 'Zakažite besplatan razgovor',
           subtitle: 'Ostavite podatke i Dragana će vam se javiti. Bez obaveze.',
           serviceType: 'Feng Shui razgovor (O meni)',
           intent: 'konsultacije' as const,
-          redirectTo: '/hvala-c',
+          redirectTo: '/hvala',
         };
 
-  useFsCEnrollTrigger(() => setModal('prijava'));
+  useEnrollTrigger(() => setModal('prijava'));
 
   return (
     <div className="fs-c">
@@ -185,13 +185,13 @@ const OMeniCContent = () => {
         </button>
       </div>
 
-      <FsCModal
+      <PrijavaModal
         open={modal !== null}
         onClose={() => setModal(null)}
         title={modalCopy.title}
         subtitle={modalCopy.subtitle}
         serviceType={modalCopy.serviceType}
-        heardFrom="O meni (verzija C)"
+        heardFrom="O meni"
         intent={modalCopy.intent}
         redirectTo={modalCopy.redirectTo}
       />
@@ -199,4 +199,4 @@ const OMeniCContent = () => {
   );
 };
 
-export default OMeniCContent;
+export default OMeniContent;
