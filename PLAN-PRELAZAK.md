@@ -293,7 +293,7 @@ preskoči.
 
 ## 6. Mejlovi i API
 
-- [ ] 6.1 [templates.ts:14](lib/email/templates.ts#L14): `ACCENT` (stara plava
+- [x] 6.1 [templates.ts:14](lib/email/templates.ts#L14): `ACCENT` (stara plava (K3 bef965e)
       `#1f3a5f`) → `BREND_ZELENA`; newsletter i vebinar mejlovi prelaze na
       zelenu, kao što komentar predviđa.
 - [x] 6.2 [app/api/prijava/route.ts](app/api/prijava/route.ts): samo komentar (K1 3d1c477)
@@ -499,6 +499,7 @@ komit, sa proverama koje su prošle pre guranja.
 | K0 | `ca6d5ce` | 04.09. | plan | |
 | K1 | `3d1c477` | 04.09. | 3.1 do 3.6, 4.1 do 4.6, 4.8 do 4.11, 5.1 do 5.3, 5.5, 5.6, 5.8, 6.2, SWIFT iz 6.3, 2.5 | tsc čist; `next build` čist; šest ruta 200, stare `-c` 404; vidljivi tekst identičan zamrznutom preview-u na 18 od 18 kombinacija (jedina razlika naslov Škole, Z2); piksel poređenje 0 različitih piksela na 18 od 18; tokovi prijave, konsultacija, kontakta i greške servera 9 od 9 sa presretnutim `/api/prijava`; nezavisni pregled (3 čitača + provera): 1 stvaran nalaz o kompletnosti komita i 1 o zastarelim komentarima, oba ispravljena pre komita |
 | K2 | `608b301` | 04.09. | 3.7, 3.9, 3.11 | tsc čist; 11 preusmerenja 308 sa tačnim odredištem; sitemap četiri adrese; šest ruta 200 |
+| K3 | `bef965e` | 04.09. | 6.1 | tsc čist; stara plava više nigde u šablonima |
 
 ## Zatečeno, van obima
 
