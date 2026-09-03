@@ -269,7 +269,9 @@ preskoči.
 - [x] 5.1 Preimenovanje po 0.2 (fajlovi, izvozi, uvozi; `tsc` posle). (K1 3d1c477)
 - [x] 5.2 Svi linkovi na `-c` rute: PocetnaC 32, 39, 46, 55, 190, 353; OMeniC (K1 3d1c477)
       45, 52; SkolaC 28, 35; UplataC 211; HvalaC 60, 63; KontaktC 250.
-      Provera: `grep -rn "\-c['\"#/]" app components lib` daje nula.
+      Provera: grep za `/pocetna-c`, `/skola-c`, `/o-meni-c`, `/kontakt-c`,
+      `/uplata-c` i `/hvala-c` u `app`, `components`, `lib` daje nula
+      (klasa `fs-c` namerno ostaje).
 - [x] 5.3 `heardFrom` koji ide u bazu i u Draganin mejl: „Početna (verzija C)" (K1 3d1c477)
       → „Početna", „Škola (verzija C)" → „Škola", „O meni (verzija C)" →
       „O meni" (PocetnaC 388, SkolaC 664, OMeniC 194). Redovi već upisani
@@ -419,9 +421,9 @@ jednom u celini na kraju.
 - [ ] 10.0 **Uslov za spajanje:** 1.4 postavljeno na Vercelu i 1.2 potvrđeno
       (ili klijent svesno pušta bez potvrde, upisano u 1.2). Ostalo iz faze 1
       ne čeka se: pod 1:1 tekst ide kakav je na preview-u.
-- [ ] 10.1 PR `feat/prelazak` → `main`: opis šta se menja za posetioce, šta za
+- [x] 10.1 PR `feat/prelazak` → `main`: opis šta se menja za posetioce, šta za (otvoren 04.09.: https://github.com/unicadesign/feng-shui-next/pull/11)
       Draganu (tekst do admin faze ide preko Marka), kako se vraća.
-- [ ] 10.2 Pre klika zabeležiti trenutni produkcioni deployment
+- [x] 10.2 Pre klika zabeležiti trenutni produkcioni deployment (zabeleženo, vidi tekst koraka)
       `dpl_r6vNxQ8xBjK4AmxSaB9g7tpBmo6e` (komit `daa2eb6`, 18.06.). Povratak:
       Vercel → Deployments → taj deployment → „Promote to Production", traje
       sekunde, ne dira git.
@@ -484,6 +486,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K3 | mejlovi na zelenu | 6.1, 6.2 |
 | K4 | brisanje starog koda i mrtvih fajlova | 7.1 do 7.9 |
 | K5 | čišćenje repoa | 8.1 do 8.4 |
+| pregled | `5735752` | 04.09. | faza 9 | nezavisni pregled cele grane naspram `main` (4 čitača + provera): 0 stvarnih nalaza od 5 kandidata |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
 K1 je jedini koji ne sme da se deli: rute i Header idu zajedno. Od K6 pre
