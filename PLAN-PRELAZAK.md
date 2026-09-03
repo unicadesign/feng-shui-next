@@ -352,16 +352,16 @@ login i API: `Button`, `CmsImage`, `lib/animations` (deo), `lib/content`,
 
 ## 8. Čišćenje radnog stabla i repoa
 
-- [ ] 8.1 28 netrackovanih fajlova iz `public/` premestiti van repoa, npr. u
+- [x] 8.1 28 netrackovanih fajlova iz `public/` premestiti van repoa, npr. u (K5 347e184)
       `~/Documents/____wbsites/feng-shui-izvori/` (2 fotografije, 26 PNG iz
       brend paketa); `git status` čist.
-- [ ] 8.2 [.gitignore](.gitignore): pravila koja štite `public/` od originala
+- [x] 8.2 [.gitignore](.gitignore): pravila koja štite `public/` od originala (K5 347e184)
       (`public/images/IMG_*.jpg`, `public/images/*-hero.jpg`,
       `public/logo/LOGO GAGA*`, `public/logo/prvenc*`, `public/logo/Paleta*`,
       `public/logo/Logo bez linija*`). Danas ih ništa ne štiti od `git add`.
-- [ ] 8.3 `design/` obrisati po 0.7; tri komentara koja ga citiraju su u 5.6.
-- [ ] 8.4 `PLAN-IZMENA.md`, `PROMENE-02.md`, `PROMENE-03.md` po 0.7.
-- [ ] 8.5 Provereno: u repou nema scratch skripti, `.env*` nikad nije
+- [x] 8.3 `design/` obrisati po 0.7; tri komentara koja ga citiraju su u 5.6. (K5 347e184)
+- [x] 8.4 `PLAN-IZMENA.md`, `PROMENE-02.md`, `PROMENE-03.md` po 0.7. (K5 347e184)
+- [x] 8.5 Provereno: u repou nema scratch skripti, `.env*` nikad nije (K5 347e184)
       procureo, nema stash-a. Ništa za raditi.
 
 ## 9. Provera pre spajanja
@@ -501,6 +501,7 @@ komit, sa proverama koje su prošle pre guranja.
 | K2 | `608b301` | 04.09. | 3.7, 3.9, 3.11 | tsc čist; 11 preusmerenja 308 sa tačnim odredištem; sitemap četiri adrese; šest ruta 200 |
 | K3 | `bef965e` | 04.09. | 6.1 | tsc čist; stara plava više nigde u šablonima |
 | K4 | `285d35f` | 04.09. | 7.1 do 7.9, 5.4 (sakriveni blok obrisan; traka ostaje) | tsc čist; build čist (17 ruta, bez ugašenih); grep bez zaostalih referenci; rute 200 i 308; vidljivi tekst identičan zamrznutom preview-u 18 od 18 |
+| K5 | `347e184` | 04.09. | 8.1 do 8.5 | radno stablo bez nepraćenih fajlova; 28 originala u ../feng-shui-izvori |
 
 ## Zatečeno, van obima
 
