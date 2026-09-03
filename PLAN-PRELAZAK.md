@@ -221,7 +221,7 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
 - [x] 3.9 [app/sitemap.ts](app/sitemap.ts): `''`, `about`, `school`, (K2 608b301)
       `upitnik`; `vaza-izobilja` izlazi. [app/robots.ts](app/robots.ts) bez
       izmene.
-- [ ] 3.10 [app/not-found.tsx](app/not-found.tsx): linkovi na `/` i `/upitnik`
+- [x] 3.10 [app/not-found.tsx](app/not-found.tsx): linkovi na `/` i `/upitnik` (provereno 04.09. na preview-u)
       ostaju tačni. Strana je u starom dizajnu; zabeležiti za admin fazu.
 - [x] 3.11 [proxy.ts:34-38](proxy.ts#L34-L38): u izuzetke matchera dodati (K2 608b301)
       `avif|mp4|ico|txt|xml`, da hero slike, sitemap i robots ne prolaze kroz
