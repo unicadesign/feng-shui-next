@@ -11,15 +11,14 @@ import {
 } from '@/lib/upitnikOpcije';
 
 const BRAND = 'Dragana Jović';
-const ACCENT = '#1f3a5f'; // navy-ish, matches site palette
 
 /**
- * Zelena iz redizajna (--navy-700 iz `components/sajt/fs-c.css`). Mejlovi
- * prijave i upita je nose od početka. Newsletter i vebinar mejl još nose
- * staru plavu `ACCENT`; prelaze na zelenu u komitu K3 prelaska
- * (PLAN-PRELAZAK.md, 6.1), kada `ACCENT` postaje ova vrednost.
+ * Brend zelena (--navy-700 iz `components/sajt/fs-c.css`). Do prelaska na
+ * novi dizajn (09.2026.) newsletter i vebinar mejl su nosili staru plavu
+ * `#1f3a5f`; od tada svi mejlovi nose istu zelenu.
  */
 const BREND_ZELENA = '#12403C';
+const ACCENT = BREND_ZELENA;
 
 function shell(title: string, bodyHtml: string, accent: string = ACCENT): string {
   return `<!DOCTYPE html>
