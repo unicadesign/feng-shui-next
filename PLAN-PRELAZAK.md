@@ -175,7 +175,7 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
       (uz 0.1 je to samo provera); ako `exploreLinks` još sadrži
       `/vaza-izobilja`, skloniti ga (Footer ga i sada filtrira, ali red u bazi
       ne treba da pokazuje na obrisanu stranu); `siteConfig.email` po 1.7.
-- [ ] 2.5 `NEXT_PUBLIC_SITE_URL=https://www.draganajovic.com` na Vercelu
+- [x] 2.5 `NEXT_PUBLIC_SITE_URL=https://www.draganajovic.com` na Vercelu (urađeno 04.09., Production i Preview)
       (Production i Preview). Sitemap danas ispisuje goli domen koji
       preusmerava na `www`; zatečeno, ali jeftino za ispraviti. Radim ja, uz
       2.1.
@@ -184,23 +184,23 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
 
 ## 3. Rute i meta podaci
 
-- [ ] 3.1 [app/(site)/page.tsx](app/(site)/page.tsx) renderuje novu početnu
+- [x] 3.1 [app/(site)/page.tsx](app/(site)/page.tsx) renderuje novu početnu (K1 3d1c477)
       (bez `getContent`); naslov i opis preneti doslovno iz `pocetna-c`
       (stari opis sa „4-mesečnu" nestaje sa tom stranom).
-- [ ] 3.2 [app/(site)/school/page.tsx](app/(site)/school/page.tsx) renderuje
+- [x] 3.2 [app/(site)/school/page.tsx](app/(site)/school/page.tsx) renderuje (K1 3d1c477)
       novu Školu; naslov „Feng Shui škola" bez „(verzija C)" (Z2); opis
       prenet doslovno iz `skola-c`.
-- [ ] 3.3 [app/(site)/about/page.tsx](app/(site)/about/page.tsx) renderuje
+- [x] 3.3 [app/(site)/about/page.tsx](app/(site)/about/page.tsx) renderuje (K1 3d1c477)
       novo O meni; naslov i opis preneti doslovno iz `o-meni-c` (ne ostaje
       staro „O nama").
-- [ ] 3.4 [app/(site)/upitnik/page.tsx](app/(site)/upitnik/page.tsx) renderuje
+- [x] 3.4 [app/(site)/upitnik/page.tsx](app/(site)/upitnik/page.tsx) renderuje (K1 3d1c477)
       novi kontakt upitnik; naslov i opis preneti doslovno iz `kontakt-c` (ne
       ostaje staro „Upitnik"); **skinuti `robots: noindex`** (stajao je samo
       da se preview ne takmiči sa živim `/upitnik`).
-- [ ] 3.5 Nove rute `app/(site)/uplata/` i `app/(site)/hvala/` iz `-c`
+- [x] 3.5 Nove rute `app/(site)/uplata/` i `app/(site)/hvala/` iz `-c` (K1 3d1c477)
       verzija; obe ostaju `noindex, nofollow` i van sitemap-a (stalni linkovi
       za analitiku, namerno).
-- [ ] 3.6 Obrisati `app/(site)/{pocetna-c,skola-c,o-meni-c,kontakt-c,uplata-c,hvala-c}/`.
+- [x] 3.6 Obrisati `app/(site)/{pocetna-c,skola-c,o-meni-c,kontakt-c,uplata-c,hvala-c}/`. (K1 3d1c477)
 - [ ] 3.7 [next.config.ts](next.config.ts) `redirects()`: šest trajnih
       preusmerenja `-c` → prava adresa. Produkcija nikad nije služila `-c`
       (404 na `www`), a preview grane nosi `x-robots-tag: noindex`, pa SEO
@@ -209,7 +209,7 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
       `/vodic`, `/galerija` → `/` (308): `/vaza-izobilja` je u živom
       sitemap-u i može da bude u Google-u, a ostale tri i danas javno vraćaju
       na `/`.
-- [ ] 3.8 Dupli sufiks u `<title>` (Z1, odluka 0.12): korenski šablon
+- [x] 3.8 Dupli sufiks u `<title>` (Z1, odluka 0.12): korenski šablon (ne radi se, 1:1; odluka 0.12 ostaje otvorena)
       `%s | Dragana Jović` dodaje sufiks na naslov koji ga već sadrži. Danas:
       Početna „Feng Shui: put ka miru i radosti | Dragana Jović | Dragana
       Jović", O meni „O meni | Dragana Jović, Feng Shui | Dragana Jović",
@@ -233,44 +233,44 @@ Sve u [components/Header.tsx](components/Header.tsx). Ovo je jedina tačka
 gde stari i novi sajt dele kod, i jedini korak koji pravi štetu ako se
 preskoči.
 
-- [ ] 4.1 Obrisati `isCPreview`, `C_PREVIEW_ROUTES`, `cHref` i mapiranje
+- [x] 4.1 Obrisati `isCPreview`, `C_PREVIEW_ROUTES`, `cHref` i mapiranje (K1 3d1c477)
       linkova (l.20-29, 73, 86, 102-108); oba logo linka na `/`.
-- [ ] 4.2 `C_SKOLA_SIDRA` → `/school#program`, `#za-koga`, `#rezultati`,
+- [x] 4.2 `C_SKOLA_SIDRA` → `/school#program`, `#za-koga`, `#rezultati`, (K1 3d1c477)
       `#faq`; uslov `link.to === '/skola-c'` → `/school` (l.36-43, 228).
       Inače padajući meni „Škola" tiho nestaje.
-- [ ] 4.3 `imaModalZaPrijavu` → `/`, `/school`, `/about` (strane koje montiraju
+- [x] 4.3 `imaModalZaPrijavu` → `/`, `/school`, `/about` (strane koje montiraju (K1 3d1c477)
       modal); rezervni `href="/skola-c"` → `/school` (l.84-85, 366).
-- [ ] 4.4 Logo `logo-zlatni.png` bezuslovno (l.217, 395); obrisati span
+- [x] 4.4 Logo `logo-zlatni.png` bezuslovno (l.217, 395); obrisati span (K1 3d1c477)
       „Dragana Jović" pored znaka u obe varijante (l.209-224, 390-403).
-- [ ] 4.5 Stavka „Početna" u navigaciji bezuslovno iz koda (l.87-101); u bazu
+- [x] 4.5 Stavka „Početna" u navigaciji bezuslovno iz koda (l.87-101); u bazu (K1 3d1c477)
       prelazi u admin fazi.
-- [ ] 4.6 [enrollTrigger.ts](components/fs-c/enrollTrigger.ts) **ostaje**:
+- [x] 4.6 [enrollTrigger.ts](components/fs-c/enrollTrigger.ts) **ostaje**: (K1 3d1c477)
       most između Header-a (van `.fs-c`) i modala u strani nije preview
       rešenje nego mehanizam. Ispraviti komentar koji tvrdi da se briše;
       preimenovati događaj bez „fs-c" po 0.2.
-- [ ] 4.7 Ulaz u login: **ne radi se** (0.3, 1:1). Ostaje u mobilnom meniju
+- [x] 4.7 Ulaz u login: **ne radi se** (0.3, 1:1). Ostaje u mobilnom meniju (ne radi se, 1:1)
       i kucanjem adrese.
-- [ ] 4.8 Sitnica: kašnjenje animacije mobilnog menija računa
+- [x] 4.8 Sitnica: kašnjenje animacije mobilnog menija računa (K1 3d1c477)
       `navLinks.length` umesto `navLinksResolved.length` (l.497).
-- [ ] 4.9 [Footer.tsx](components/Footer.tsx): bez izmena u kodu; linkovi
+- [x] 4.9 [Footer.tsx](components/Footer.tsx): bez izmena u kodu; linkovi (K1 3d1c477)
       dolaze iz baze (2.4). `HIDDEN_ROUTES` u Header-u i Footer-u ostaju kao
       zaštita od starih vrednosti u bazi.
-- [ ] 4.10 Blok `body:has(.fs-c) { --color-* }` u
+- [x] 4.10 Blok `body:has(.fs-c) { --color-* }` u (K1 3d1c477)
       [fs-c.css:1016-1061](components/fs-c/fs-c.css#L1016-L1061) **ostaje**:
       on boji Header, Footer i vebinar na novim stranama, dok `/login`,
       `/signup`, `/dashboard` i `/admin` i dalje nose staru paletu iz
       `globals.css`. Komentar koji kaže „briše se u Izmeni 03" prepraviti.
-- [ ] 4.11 Lepljiva traka: pravilo `body:has(.fs-c .sticky) .fs-c ~ footer`
+- [x] 4.11 Lepljiva traka: pravilo `body:has(.fs-c .sticky) .fs-c ~ footer` (K1 3d1c477)
       traži da `.fs-c` i `<footer>` budu braća u
       [app/(site)/layout.tsx](app/(site)/layout.tsx). Ne uvijati `{children}`.
 
 ## 5. Nove komponente
 
-- [ ] 5.1 Preimenovanje po 0.2 (fajlovi, izvozi, uvozi; `tsc` posle).
-- [ ] 5.2 Svi linkovi na `-c` rute: PocetnaC 32, 39, 46, 55, 190, 353; OMeniC
+- [x] 5.1 Preimenovanje po 0.2 (fajlovi, izvozi, uvozi; `tsc` posle). (K1 3d1c477)
+- [x] 5.2 Svi linkovi na `-c` rute: PocetnaC 32, 39, 46, 55, 190, 353; OMeniC (K1 3d1c477)
       45, 52; SkolaC 28, 35; UplataC 211; HvalaC 60, 63; KontaktC 250.
       Provera: `grep -rn "\-c['\"#/]" app components lib` daje nula.
-- [ ] 5.3 `heardFrom` koji ide u bazu i u Draganin mejl: „Početna (verzija C)"
+- [x] 5.3 `heardFrom` koji ide u bazu i u Draganin mejl: „Početna (verzija C)" (K1 3d1c477)
       → „Početna", „Škola (verzija C)" → „Škola", „O meni (verzija C)" →
       „O meni" (PocetnaC 388, SkolaC 664, OMeniC 194). Redovi već upisani
       tokom pregleda zadržavaju staru oznaku; mapa u adminu ide u fazu 11.
@@ -278,16 +278,16 @@ preskoči.
       samo ako klijent odgovori na 1.1. Sakriveni blok „Upis" (SkolaC
       572-643) sa izmišljenim datumom se **briše**: ne renderuje se, a
       ostavljen bi jednog dana bio otkomentarisan sa izmišljenim datumom.
-- [ ] 5.5 Cena „289 €" upisana dvaput u SkolaC (331, 605) → `UPLATA.iznosEur`,
+- [x] 5.5 Cena „289 €" upisana dvaput u SkolaC (331, 605) → `UPLATA.iznosEur`, (K1 3d1c477)
       jedan izvor za jedan broj; renderovani tekst identičan.
-- [ ] 5.6 Komentari koji pominju „verzija C", „preseljenje", „Izmena 03" i
+- [x] 5.6 Komentari koji pominju „verzija C", „preseljenje", „Izmena 03" i (K1 3d1c477)
       putanje `design/…` postaju trajni opisi: route.ts 12, FsCModal 53,
       PocetnaC 60-61, SkolaC 67-68, OMeniC 9, KontaktC 15-27, HvalaC 7 i 16,
       UplataC 9, fs-c.css 2, 644, 1021-1029, 1170-1171, 1242-1257,
       lib/uplata.ts 2, upitnikOpcije.ts 9-14, templates.ts 16-21 i 243.
 - [ ] 5.7 Trajanje škole (upitnikOpcije.ts 44, app/layout.tsx 19) ostaje
       „4-mesečni" (Z4); menja se samo ako klijent odgovori na 1.6.
-- [ ] 5.8 Imena slika sa `-c` (`pocetna-c-hero-bela*`, `skola-c-hero-zeleni*`,
+- [x] 5.8 Imena slika sa `-c` (`pocetna-c-hero-bela*`, `skola-c-hero-zeleni*`, (K1 3d1c477)
       `o-meni-c-traka*`, `skola-c-o-meni.jpg`) **ostaju**: vide se samo u
       URL-u slike, a preimenovanje je 16 referenci bez koristi.
 
@@ -296,7 +296,7 @@ preskoči.
 - [ ] 6.1 [templates.ts:14](lib/email/templates.ts#L14): `ACCENT` (stara plava
       `#1f3a5f`) → `BREND_ZELENA`; newsletter i vebinar mejlovi prelaze na
       zelenu, kao što komentar predviđa.
-- [ ] 6.2 [app/api/prijava/route.ts](app/api/prijava/route.ts): samo komentar
+- [x] 6.2 [app/api/prijava/route.ts](app/api/prijava/route.ts): samo komentar (K1 3d1c477)
       (5.6), bez logičkih izmena.
 - [ ] 6.3 [lib/uplata.ts](lib/uplata.ts): SWIFT po 1.2 (blokira), naziv i
       adresa banke po 1.3 (samo ako stignu).
@@ -488,6 +488,16 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 
 K1 je jedini koji ne sme da se deli: rute i Header idu zajedno. Od K6 pre
 spajanja ide samo SWIFT (10.0); ostalo može i posle, kao obična izmena.
+
+## Dnevnik komita na `feat/prelazak`
+
+Ovde se vidi dokle se stiglo, ako se sesija prekine. Svaki red je jedan
+komit, sa proverama koje su prošle pre guranja.
+
+| Komit | Heš | Datum | Zatvoreni koraci | Provere pre guranja |
+|---|---|---|---|---|
+| K0 | `ca6d5ce` | 04.09. | plan | |
+| K1 | `3d1c477` | 04.09. | 3.1 do 3.6, 4.1 do 4.6, 4.8 do 4.11, 5.1 do 5.3, 5.5, 5.6, 5.8, 6.2, SWIFT iz 6.3, 2.5 | tsc čist; `next build` čist; šest ruta 200, stare `-c` 404; vidljivi tekst identičan zamrznutom preview-u na 18 od 18 kombinacija (jedina razlika naslov Škole, Z2); piksel poređenje 0 različitih piksela na 18 od 18; tokovi prijave, konsultacija, kontakta i greške servera 9 od 9 sa presretnutim `/api/prijava`; nezavisni pregled (3 čitača + provera): 1 stvaran nalaz o kompletnosti komita i 1 o zastarelim komentarima, oba ispravljena pre komita |
 
 ## Zatečeno, van obima
 
