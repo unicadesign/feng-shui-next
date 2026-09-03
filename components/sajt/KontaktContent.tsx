@@ -73,7 +73,8 @@ const pocetno: Obrazac = {
 const jeIspravanEmail = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
 /* Forme uz nadnaslove su iz brend simbola; geometrija je izmerena iz
-   `public/logo/simbol-20.png`, ne crtana od oka. */
+   brend simbola (`simbol-20.png`, van repoa u feng-shui-izvori), ne crtana
+   od oka. */
 const Oznaka = ({ oblik }: { oblik: 'krug' | 'trougao' | 'kvadrat' }) => (
   <svg
     width={14}

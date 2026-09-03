@@ -142,7 +142,8 @@ const PocetnaContent = () => {
       {/* KPI — traka odmah ispod heroa. Zlatna podloga iza nje je blago
           zarotirana i viri gore i dole; crta je `.kpi::before`, pa nema
           dodatnog elementa u HTML-u.
-          Geometrija formi je IZMERENA iz `public/logo/simbol-20.png`, ne
+          Geometrija formi je IZMERENA iz brend simbola (`simbol-20.png`, van repoa
+          u feng-shui-izvori), ne
           crtana od oka: krug je upisan u kvadrat (odnos prečnika i
           stranice 1,0000), a trougao je jednakostraničan i upisan u krug,
           temenom nagore — osnovica na 0,7495 stranice i široka 0,8666

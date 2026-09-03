@@ -17,7 +17,7 @@ import './fs-c.css';
  * bez zavisnosti od toga šta je korisnik pre nje uradio.
  */
 
-/* Forma je iz brend simbola, geometrija izmerena iz `public/logo/simbol-20.png`. */
+/* Forma je iz brend simbola, geometrija izmerena iz `simbol-20.png` (van repoa, feng-shui-izvori). */
 const Oznaka = () => (
   <svg
     width={14}

@@ -18,7 +18,7 @@ import './fs-c.css';
  * Oba čitaju iz istog modula, pa ne mogu da se raziđu.
  */
 
-/* Forme su iz brend simbola, geometrija izmerena iz `public/logo/simbol-20.png`. */
+/* Forme su iz brend simbola, geometrija izmerena iz `simbol-20.png` (van repoa, feng-shui-izvori). */
 const Oznaka = () => (
   <svg
     width={14}

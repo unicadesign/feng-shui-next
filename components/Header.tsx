@@ -182,7 +182,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
               prečica do početne i mora da se pogodi prstom. */}
           <span className="flex items-center gap-2 px-3 py-2 -my-2">
             {/* Zlatni znak ima providnu pozadinu; stari `logo-transparent.png`
-                je uprkos imenu bio bez alfa kanala, odatle beli kvadrat iza znaka. */}
+                (obrisan 09.2026.) je uprkos imenu bio bez alfa kanala, odatle beli kvadrat iza znaka. */}
             <Image src="/logo/logo-zlatni.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
             {/* Naziv pored znaka je izbačen na zahtev klijenta; ostaje samo znak.
                 Link i dalje vodi na početnu, a pristupačno ime mu daje

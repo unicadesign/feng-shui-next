@@ -10,8 +10,8 @@
  *   `components/admin/AdminInquiriesContent.tsx` — mape za prikaz
  * Admin po dogovoru čeka svoju fazu (PLAN-PRELAZAK.md, faza 11); tada
  * treba da uvozi odavde i dve kopije postaju jedna. Treća kopija, stari
- * upitnik u `components/upitnik/`, više nije ni na jednoj ruti i briše se
- * u komitu K4 prelaska.
+ * upitnik u `components/upitnik/`, obrisan je pri prelasku na novi dizajn
+ * (09.2026.).
  *
  * Redosled i tekstovi su preneti doslovno sa žive strane.
  */

@@ -45,7 +45,8 @@ const InstagramIcon = ({ size = 18, className = '' }: { size?: number; className
 );
 
 /* Oznake uz naslove kolona: kvadrat / krug / trougao iz brend simbola.
-   Geometrija je IZMERENA iz `public/logo/simbol-20.png`, ne crtana od oka:
+   Geometrija je IZMERENA iz brend simbola (`simbol-20.png`, čuva se van
+   repoa u feng-shui-izvori), ne crtana od oka:
    krug je upisan u kvadrat (odnos prečnika i stranice 1,0000), a trougao je
    jednakostraničan i upisan u krug, temenom nagore (osnovica na 0,7495
    stranice, široka 0,8666 — teorijski 0,7500 i 0,8660). Trougao je pomeren
