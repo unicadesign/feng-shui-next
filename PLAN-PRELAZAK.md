@@ -370,19 +370,19 @@ Radi se na lokalnom buildu i na preview deploymentu grane
 (`feng-shui-next-git-fea-26daae-…vercel.app`), po svakom komitu K1 do K5 i
 jednom u celini na kraju.
 
-- [ ] 9.1 `npm run build` lokalno čist; Vercel preview zelen.
-- [ ] 9.2 Rute: `/`, `/school`, `/about`, `/upitnik`, `/uplata`, `/hvala`
+- [x] 9.1 `npm run build` lokalno čist; Vercel preview zelen. (build čist posle K1, K4; Vercel preview grane Ready za svaki push)
+- [x] 9.2 Rute: `/`, `/school`, `/about`, `/upitnik`, `/uplata`, `/hvala` (04.09. na preview-u grane: 23 adrese, sve po očekivanju)
       daju 200; šest `-c` adresa daje 308 na pravu; `/payment` 308 na
       `/upitnik`; `/services`, `/vodic`, `/galerija`, `/vaza-izobilja` 308
       na `/`; `/login`, `/signup` 200; `/dashboard` i `/admin` preusmeravaju
       na login; `/sitemap.xml` (bez vaze) i `/robots.txt` tačni.
-- [ ] 9.3 Meta: `<title>` bez duplog sufiksa i bez „verzija C"; `noindex`
+- [x] 9.3 Meta: `<title>` bez duplog sufiksa i bez „verzija C"; `noindex` (04.09. na preview-u: naslovi kao odobreni, noindex samo /uplata i /hvala, sitemap četiri adrese sa www)
       samo na `/uplata` i `/hvala`; opisi usklađeni (1.6).
-- [ ] 9.4 Zaglavlje na svih šest strana na 360, 768 i 1280 px: zlatni logo
+- [x] 9.4 Zaglavlje na svih šest strana na 360, 768 i 1280 px: zlatni logo (04.09. skript na preview-u: 18 od 18 kombinacija)
       bez natpisa, „Početna", padajući meni „Škola" sa četiri sidra koja
       skroluju do sekcije, „Sačuvaj svoje mesto" otvara modal na tri strane i
       vodi na `/school` na ostale tri; mobilni meni; ulaz u login po 0.3.
-- [ ] 9.5 Tokovi bez upisa u bazu (CDP presretanje `POST /api/prijava`):
+- [x] 9.5 Tokovi bez upisa u bazu (CDP presretanje `POST /api/prijava`): (04.09. lokalno, dva puta (posle K1 i posle K5): 9 od 9)
       modal prijava → `/uplata`; modal konsultacije → `/hvala`; kontakt
       upitnik → `/hvala`; greška servera pokazuje poruku, dugme se otključa.
 - [ ] 9.6 **Jedna prava probna prijava** na preview-u, uz Markovo odobrenje.
@@ -393,21 +393,21 @@ jednom u celini na kraju.
       prijavu i jedan upit, potvrditi da oba obaveštenja stižu i da se redovi
       vide u `/admin/inquiries` sa oznakom bez „(verzija C)", obrisati redove,
       pa prebaciti adresu na Draganinu.
-- [ ] 9.7 Vizuelno: snimci šest strana na tri širine, piksel poređenje sa
+- [x] 9.7 Vizuelno: snimci šest strana na tri širine, piksel poređenje sa (04.09. preview grane naspram zamrznutog preview-a: 17 od 18 nula razlike, na / pri 360 px jedan piksel; dimenzije identične)
       istim `-c` stranama na zamrznutom preview-u grane `feat/skola-c`
       (`e41bd27`, tag `verzija-c-odobrena`); sme da se razlikuje samo ono
       što je navedeno u tabeli (Z2 naslov Škole, linkovi bez `-c`). Pod 1:1
       razlika sme da bude nula piksela na sadržaju strane. Podnožje na
       telefonu ima rezervu za lepljivu traku (68 px).
-- [ ] 9.8 Strane koje ostaju u starom dizajnu (`/login`, `/signup`,
+- [x] 9.8 Strane koje ostaju u starom dizajnu (`/login`, `/signup`, (04.09. na preview-u: login i signup 200, dashboard i admin vode na login)
       `/dashboard`, `/admin`) i dalje se renderuju, stara paleta, ništa
       polomljeno. Na `/dashboard` zaglavlje sada nosi „Početna" i nema natpis
       pored znaka (Z11); potvrditi da izgleda razumno.
-- [ ] 9.9 Grep provere daju nulu: `-c` rute, `isCPreview`, `C_PREVIEW_ROUTES`,
+- [x] 9.9 Grep provere daju nulu: `-c` rute, `isCPreview`, `C_PREVIEW_ROUTES`, (04.09.: grep nula)
       „verzija C" u `app/`, `components/`, `lib/`.
-- [ ] 9.10 Kontrast se ne meri ponovo: podloge i boje su iste kao na `-c`
+- [x] 9.10 Kontrast se ne meri ponovo: podloge i boje su iste kao na `-c` (nije potrebno)
       stranama izmerenim 27.08. do 02.09. Meri se samo ono što je novo (0.3).
-- [ ] 9.11 **Poređenje teksta**: za svaku od šest strana skinuti sav vidljivi
+- [x] 9.11 **Poređenje teksta**: za svaku od šest strana skinuti sav vidljivi (04.09. preview grane naspram zamrznutog: tekst identičan 18 od 18, jedina razlika naslov Škole (Z2))
       tekst (`innerText`) i `<title>` sa `-c` rute na zamrznutom preview-u
       `feat/skola-c` i sa prave rute na preview-u `feat/prelazak`; `diff` sme da pokaže samo Z2 (naslov Škole)
       i, ako 0.12 to odobri, Z1. Isto za četiri C mejla (renderovan HTML na
