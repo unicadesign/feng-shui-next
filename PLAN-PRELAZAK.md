@@ -274,7 +274,7 @@ preskoči.
       → „Početna", „Škola (verzija C)" → „Škola", „O meni (verzija C)" →
       „O meni" (PocetnaC 388, SkolaC 664, OMeniC 194). Redovi već upisani
       tokom pregleda zadržavaju staru oznaku; mapa u adminu ide u fazu 11.
-- [ ] 5.4 Lepljiva traka Škole ostaje „kreće u oktobru 2026." (Z3); menja se
+- [x] 5.4 Lepljiva traka Škole ostaje „kreće u oktobru 2026." (Z3); menja se (K4 285d35f)
       samo ako klijent odgovori na 1.1. Sakriveni blok „Upis" (SkolaC
       572-643) sa izmišljenim datumom se **briše**: ne renderuje se, a
       ostavljen bi jednog dana bio otkomentarisan sa izmišljenim datumom.
@@ -310,7 +310,7 @@ uvozu), pa stari skup može u jednom potezu. Ostaje sve što dele admin, kurs,
 login i API: `Button`, `CmsImage`, `lib/animations` (deo), `lib/content`,
 `data/defaultContent` (deo), tipovi.
 
-- [ ] 7.1 Komponente koje uvoze samo stare rute (24 fajla, 5.400 linija):
+- [x] 7.1 Komponente koje uvoze samo stare rute (24 fajla, 5.400 linija): (K4 285d35f)
       `components/home/*` (HomeContent, NewsletterSignup, ServiceCard,
       TestimonialCard, WebinarCTA), `school/SchoolContent.tsx`,
       `about/AboutContent.tsx`, `upitnik/UpitnikContent.tsx`,
@@ -319,23 +319,23 @@ login i API: `Button`, `CmsImage`, `lib/animations` (deo), `lib/content`,
       `TrustBadges.tsx` i ostali iz pregleda; `vaza/VazaContent.tsx` i
       `CTASection.tsx` (poslednji korisnik je Vaza). `Button.tsx` ostaje
       (login, signup, kurs, admin).
-- [ ] 7.2 Rute `app/(site)/{services,vodic,galerija,vaza-izobilja}/`.
+- [x] 7.2 Rute `app/(site)/{services,vodic,galerija,vaza-izobilja}/`. (K4 285d35f)
       Admin uređivači „Usluge" i „Vaza" (i redovi `services`, `vaza` u bazi)
       ostaju do faze 11.
-- [ ] 7.3 [lib/animations.ts](lib/animations.ts): `staggerContainer`,
+- [x] 7.3 [lib/animations.ts](lib/animations.ts): `staggerContainer`, (K4 285d35f)
       `staggerItem`, `scrollRevealDelayed`, `fadeInScale` gube poslednjeg
       korisnika; `scrollReveal` i `viewportOnce` ostaju (kurs).
-- [ ] 7.4 [types/content.ts](types/content.ts) tipovi za `gallery` i `guide`
+- [x] 7.4 [types/content.ts](types/content.ts) tipovi za `gallery` i `guide` (K4 285d35f)
       (396-430, 462-511, ključevi 520 i 522) i njihove sekcije u
       [data/defaultContent.ts](data/defaultContent.ts) (1078-1106, 1148-1415),
       uz reference u `lib/content.ts:6` i `context/ContentContext.tsx:10`.
       Sekcije `home`, `school`, `about`, `services`, `vaza` **ostaju** do admin
       faze: admin uređivači ih tipiziraju.
-- [ ] 7.5 [app/globals.css:76-102](app/globals.css#L76-L102): `fadeIn`
+- [x] 7.5 [app/globals.css:76-102](app/globals.css#L76-L102): `fadeIn` (K4 285d35f)
       animacije (samo stari upitnik) i `grain` (bez korisnika).
-- [ ] 7.6 `react-intersection-observer` iz `package.json` (samo stara Škola i
+- [x] 7.6 `react-intersection-observer` iz `package.json` (samo stara Škola i (K4 285d35f)
       Usluge); `npm install` da se osveži lock.
-- [ ] 7.7 `public/`: `images/bg-hero.png`, `images/logo-bg.png`,
+- [x] 7.7 `public/`: `images/bg-hero.png`, `images/logo-bg.png`, (K4 285d35f)
       `logo/logo-transparent.png` (979 KB, beli kvadrat), `images/dragana-hero.avif`
       i `.webp` (nikad referencirane), `logo/Logo bez linija i pozadine-24-04.png`,
       `-24-06.png` (izvor za `logo-zlatni`, čuva se van repoa), `logo/simbol-20.png`
@@ -344,9 +344,9 @@ login i API: `Button`, `CmsImage`, `lib/animations` (deo), `lib/content`,
       `window.svg` (create-next-app), `images/dodela-diploma-2.mp4` po 0.9.
       `images/hero.jpeg` i `images/dragana-joivc.webp` **ostaju** do admin
       faze (baza i admin Početne ih još pominju).
-- [ ] 7.8 [README.md](README.md): create-next-app tekst → kratak opis
+- [x] 7.8 [README.md](README.md): create-next-app tekst → kratak opis (K4 285d35f)
       projekta (stek, env promenljive, kako se pokreće).
-- [ ] 7.9 Provera posle brisanja: `npx tsc --noEmit`, `npm run build`,
+- [x] 7.9 Provera posle brisanja: `npx tsc --noEmit`, `npm run build`, (K4 285d35f)
       `npx eslint .` bez novih grešaka (zatečeno: 60 grešaka u admin i vebinar
       fajlovima, nula u novim komponentama).
 
@@ -500,6 +500,7 @@ komit, sa proverama koje su prošle pre guranja.
 | K1 | `3d1c477` | 04.09. | 3.1 do 3.6, 4.1 do 4.6, 4.8 do 4.11, 5.1 do 5.3, 5.5, 5.6, 5.8, 6.2, SWIFT iz 6.3, 2.5 | tsc čist; `next build` čist; šest ruta 200, stare `-c` 404; vidljivi tekst identičan zamrznutom preview-u na 18 od 18 kombinacija (jedina razlika naslov Škole, Z2); piksel poređenje 0 različitih piksela na 18 od 18; tokovi prijave, konsultacija, kontakta i greške servera 9 od 9 sa presretnutim `/api/prijava`; nezavisni pregled (3 čitača + provera): 1 stvaran nalaz o kompletnosti komita i 1 o zastarelim komentarima, oba ispravljena pre komita |
 | K2 | `608b301` | 04.09. | 3.7, 3.9, 3.11 | tsc čist; 11 preusmerenja 308 sa tačnim odredištem; sitemap četiri adrese; šest ruta 200 |
 | K3 | `bef965e` | 04.09. | 6.1 | tsc čist; stara plava više nigde u šablonima |
+| K4 | `285d35f` | 04.09. | 7.1 do 7.9, 5.4 (sakriveni blok obrisan; traka ostaje) | tsc čist; build čist (17 ruta, bez ugašenih); grep bez zaostalih referenci; rute 200 i 308; vidljivi tekst identičan zamrznutom preview-u 18 od 18 |
 
 ## Zatečeno, van obima
 
