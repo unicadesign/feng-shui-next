@@ -201,7 +201,7 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
       verzija; obe ostaju `noindex, nofollow` i van sitemap-a (stalni linkovi
       za analitiku, namerno).
 - [x] 3.6 Obrisati `app/(site)/{pocetna-c,skola-c,o-meni-c,kontakt-c,uplata-c,hvala-c}/`. (K1 3d1c477)
-- [ ] 3.7 [next.config.ts](next.config.ts) `redirects()`: šest trajnih
+- [x] 3.7 [next.config.ts](next.config.ts) `redirects()`: šest trajnih (K2 608b301)
       preusmerenja `-c` → prava adresa. Produkcija nikad nije služila `-c`
       (404 na `www`), a preview grane nosi `x-robots-tag: noindex`, pa SEO
       rizika nema; ovo je da linkovi iz prepiske sa klijentom ne padnu u 404.
@@ -218,12 +218,12 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
       0.12 kaže da se ispravi: na te četiri strane `title: { absolute: '…' }`
       sa današnjim naslovom bez ponovljenog dela, ništa drugo. Škola i Uplata
       se ne diraju ni tada.
-- [ ] 3.9 [app/sitemap.ts](app/sitemap.ts): `''`, `about`, `school`,
+- [x] 3.9 [app/sitemap.ts](app/sitemap.ts): `''`, `about`, `school`, (K2 608b301)
       `upitnik`; `vaza-izobilja` izlazi. [app/robots.ts](app/robots.ts) bez
       izmene.
 - [ ] 3.10 [app/not-found.tsx](app/not-found.tsx): linkovi na `/` i `/upitnik`
       ostaju tačni. Strana je u starom dizajnu; zabeležiti za admin fazu.
-- [ ] 3.11 [proxy.ts:34-38](proxy.ts#L34-L38): u izuzetke matchera dodati
+- [x] 3.11 [proxy.ts:34-38](proxy.ts#L34-L38): u izuzetke matchera dodati (K2 608b301)
       `avif|mp4|ico|txt|xml`, da hero slike, sitemap i robots ne prolaze kroz
       osvežavanje Supabase sesije. Sitnica, ne blokira.
 
@@ -498,6 +498,7 @@ komit, sa proverama koje su prošle pre guranja.
 |---|---|---|---|---|
 | K0 | `ca6d5ce` | 04.09. | plan | |
 | K1 | `3d1c477` | 04.09. | 3.1 do 3.6, 4.1 do 4.6, 4.8 do 4.11, 5.1 do 5.3, 5.5, 5.6, 5.8, 6.2, SWIFT iz 6.3, 2.5 | tsc čist; `next build` čist; šest ruta 200, stare `-c` 404; vidljivi tekst identičan zamrznutom preview-u na 18 od 18 kombinacija (jedina razlika naslov Škole, Z2); piksel poređenje 0 različitih piksela na 18 od 18; tokovi prijave, konsultacija, kontakta i greške servera 9 od 9 sa presretnutim `/api/prijava`; nezavisni pregled (3 čitača + provera): 1 stvaran nalaz o kompletnosti komita i 1 o zastarelim komentarima, oba ispravljena pre komita |
+| K2 | `608b301` | 04.09. | 3.7, 3.9, 3.11 | tsc čist; 11 preusmerenja 308 sa tačnim odredištem; sitemap četiri adrese; šest ruta 200 |
 
 ## Zatečeno, van obima
 
