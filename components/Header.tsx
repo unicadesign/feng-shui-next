@@ -293,13 +293,18 @@ const Header = ({ content, webinar }: HeaderProps) => {
 
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-warm py-2 z-50">
-                <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-charcoal hover:bg-navy-50 transition-colors">
+                {/* Ka nejavnim stranama (/dashboard, /admin, /login) ide običan
+                    <a>, ne <Link>: puno učitavanje daje dokument bez skripti za
+                    merenje. Klijentska navigacija bi ponela gtag i pixel sa javne
+                    strane, a oni sami prate promene istorije, pa bi admin i
+                    dashboard odlazili Google-u i Meti kao posete. */}
+                <a href="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-charcoal hover:bg-navy-50 transition-colors">
                   <LayoutDashboard size={16} /> {headerLabels.myCoursesLabel}
-                </Link>
+                </a>
                 {isAdmin && (
-                  <Link href="/admin" className="flex items-center gap-2 px-4 py-2.5 text-sm text-charcoal hover:bg-navy-50 transition-colors">
+                  <a href="/admin" className="flex items-center gap-2 px-4 py-2.5 text-sm text-charcoal hover:bg-navy-50 transition-colors">
                     <Shield size={16} /> {headerLabels.adminPanelLabel}
-                  </Link>
+                  </a>
                 )}
                 <div className="border-t border-sand-200 my-1" />
                 <button
@@ -428,9 +433,9 @@ const Header = ({ content, webinar }: HeaderProps) => {
 
             {user ? (
               <>
-                <MobileNavLink to="/dashboard" index={navLinksResolved.length}>{headerLabels.myCoursesLabel}</MobileNavLink>
+                <MobileNavLink to="/dashboard" index={navLinksResolved.length} punoUcitavanje>{headerLabels.myCoursesLabel}</MobileNavLink>
                 {isAdmin && (
-                  <MobileNavLink to="/admin" index={navLinksResolved.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
+                  <MobileNavLink to="/admin" index={navLinksResolved.length + 1} punoUcitavanje>{headerLabels.adminPanelLabel}</MobileNavLink>
                 )}
                 <button
                   onClick={() => { setIsMenuOpen(false); handleLogout(); }}
@@ -445,7 +450,9 @@ const Header = ({ content, webinar }: HeaderProps) => {
                 </button>
               </>
             ) : (
-              <Link
+              /* Običan <a>, iz istog razloga kao u padajućem meniju: /login ne
+                 sme da ponese skripte za merenje sa javne strane. */
+              <a
                 href="/login"
                 className="mt-4 rounded-full bg-navy-500 text-white px-10 py-3.5 text-lg font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98] w-[80%] text-center"
                 style={{
@@ -455,7 +462,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                 }}
               >
                 {headerLabels.loginButton}
-              </Link>
+              </a>
             )}
           </nav>
 
@@ -503,11 +510,14 @@ const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) =>
   );
 };
 
-const MobileNavLink = ({ to, children, index }: { to: string; children: React.ReactNode; index: number }) => {
+const MobileNavLink = ({ to, children, index, punoUcitavanje = false }: { to: string; children: React.ReactNode; index: number; punoUcitavanje?: boolean }) => {
   const pathname = usePathname();
   const isActive = pathname === to;
+  /* `punoUcitavanje`: običan <a> umesto <Link>, za nejavne strane (vidi
+     komentar u padajućem meniju). */
+  const Tag = punoUcitavanje ? 'a' : Link;
   return (
-    <Link
+    <Tag
       href={to}
       className={`text-2xl font-heading font-semibold tracking-tight transition-all duration-300 ease-out-expo ${
         isActive ? 'text-navy-500' : 'text-charcoal'
@@ -520,7 +530,7 @@ const MobileNavLink = ({ to, children, index }: { to: string; children: React.Re
       }}
     >
       {children}
-    </Link>
+    </Tag>
   );
 };
 

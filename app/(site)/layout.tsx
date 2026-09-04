@@ -6,10 +6,13 @@ import Script from 'next/script';
 import Analitika from '@/components/Analitika';
 
 /* Merenje posete, dodato 04.09.2026. na Markov zahtev: Google Analytics 4
-   (ovde, `next/script` posle hidratacije) i Meta pixel (u `Analitika`, jer
-   mora da prati i klijentsku navigaciju). Samo na javnim stranama; login,
-   dashboard i admin ih nemaju. Preview deploymenti na Vercelu ne mere, da
-   probe ne zagade podatke; lokalni dev meri, radi provere. */
+   (ovde, `next/script` posle hidratacije) i Meta pixel (u `Analitika`).
+   Promene rute obe skripte prate same, preko history API-ja. Zato skripte
+   žive samo u dokumentu koji je počeo na javnoj strani, a linkovi ka
+   /login, /dashboard i /admin u Header-u su puna učitavanja: klijentska
+   navigacija bi ponela skripte i te strane bi se merile kao posete.
+   Preview deploymenti na Vercelu ne mere, da probe ne zagade podatke;
+   lokalni dev meri, radi provere. */
 const GA_ID = 'G-RJV846ZWZZ';
 const META_PIXEL_ID = '1411230116531391';
 const MERENJE_UKLJUCENO = process.env.VERCEL_ENV !== 'preview';

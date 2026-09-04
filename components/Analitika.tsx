@@ -1,26 +1,29 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 /**
- * Meta pixel, ceo u jednoj klijentskoj komponenti.
+ * Meta pixel: učitavanje `fbevents.js`, `init` i prvi PageView.
  *
- * Zašto ne inline snippet u layoutu: `next/script` inline skriptu izvrši
- * samo jednom po `id`-u. Kada posetilac klijentskom navigacijom ode na
- * `/login` ili `/dashboard` (van `(site)` layouta) pa se vrati, layout se
- * ponovo montira, skript se ne izvršava drugi put i taj povratak bi ostao
- * bez PageView-a. Ovde je sve idempotentno: učitavanje `fbevents.js` i
- * `init` se dese jednom po stranici (čuvari na `window`), a PageView ide
- * pri SVAKOJ promeni putanje, uključujući prvu. Time su pokrivene i
- * `/uplata` i `/hvala`, na koje se posle prijave stiže klijentskom
- * navigacijom bez novog učitavanja.
+ * Sve dalje PageView-e po ruti šalje sam `fbevents.js`: on kači
+ * `pushState`, `replaceState` i `popstate` i pri svakoj promeni adrese
+ * pošalje automatski PageView (osim ako se postavi `fbq.disablePushState`,
+ * što se ovde namerno NE radi). Time su pokrivene i `/uplata` i `/hvala`,
+ * na koje se posle prijave stiže klijentskom navigacijom. Ručni
+ * `fbq('track', 'PageView')` po ruti bi bio mrtav: posle prvog, Meta svaki
+ * dalji ne-automatski PageView za isti pixel odbacuje kao duplikat
+ * (provereno na `fbevents.js` v2.9, 04.09.2026.).
  *
  * Google Analytics 4 se učitava u layoutu i promene istorije prati sam
  * („enhanced measurement"), pa mu se odavde ništa ne šalje.
  *
- * U dev režimu React Strict Mode izvršava efekte dvaput, pa se PageView
- * pri učitavanju vidi dva puta; u produkciji jednom.
+ * Skripte se učitavaju samo u dokumentu koji je počeo na javnoj strani.
+ * Da ne bi „procurile" na `/login`, `/dashboard` i `/admin` (obe skripte
+ * prate istoriju celog dokumenta, ne samo ovog layouta), linkovi ka tim
+ * stranama u Header-u su obični `<a>`, pa je to uvek puno učitavanje.
+ *
+ * Isto što radi Metin zvanični snippet: privremeni `fbq` koji pozive stavlja
+ * u red dok se `fbevents.js` ne učita, pa ih on preuzme.
  */
 
 const META_PIXEL_ID = '1411230116531391';
@@ -42,8 +45,6 @@ declare global {
   }
 }
 
-/* Isto što radi Metin zvanični snippet: privremeni `fbq` koji pozive stavlja
-   u red dok se `fbevents.js` ne učita, pa ih on preuzme. */
 function osigurajPixel(): Fbq {
   if (window.fbq) return window.fbq;
   const n = function (...args: unknown[]) {
@@ -66,16 +67,13 @@ function osigurajPixel(): Fbq {
 }
 
 export default function Analitika() {
-  const pathname = usePathname();
-
   useEffect(() => {
+    if (window.__metaPixelInit) return;
+    window.__metaPixelInit = true;
     const fbq = osigurajPixel();
-    if (!window.__metaPixelInit) {
-      fbq('init', META_PIXEL_ID);
-      window.__metaPixelInit = true;
-    }
+    fbq('init', META_PIXEL_ID);
     fbq('track', 'PageView');
-  }, [pathname]);
+  }, []);
 
   return null;
 }
