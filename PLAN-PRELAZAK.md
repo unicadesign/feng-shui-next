@@ -116,7 +116,7 @@ Za svaku stoji predlog. Kad je odluka doneta, upisati je u kolonu i
 | 0.8 | Spajanje i grana | Marko, 04.09.: rad ide na **novoj grani `feat/prelazak`** iz `feat/skola-c`, da `feat/skola-c` ostane netaknut izvor istine za poređenje. PR `feat/prelazak` → `main`, običan merge komit (ne squash). | **Da**; grana i tag napravljeni 04.09. |
 | 0.9 | `public/images/dodela-diploma-2.mp4` (47 MB, praktično ceo repo) koristi samo stara početna | **Obrisati iz stabla.** Klon se ne smanjuje bez prepisa istorije; to nije deo ovog plana. | **Da** (Marko, 04.09.) |
 | 0.10 | Do admin faze uređivači Početna, Škola i O nama u adminu menjaju podatke koje sajt više ne čita | Jedna rečenica upozorenja na vrhu ta tri uređivača, da Dragana ne uređuje u prazno. | **Ne sada**, admin se ne dira (Z10). Klijentu se kaže rečima u 10.6; u fazu 11. |
-| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | **Marko 04.09.: Google Analytics 4 (G-8V0PQW65GG) i Meta pixel (1411230116531391), odmah.** Urađeno u K6a `ffb23d0`. |
+| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | **Marko 04.09.: Google Analytics 4 (G-RJV846ZWZZ) i Meta pixel (1411230116531391), odmah.** Urađeno u K6a `ffb23d0`. |
 | 0.12 | Z1: dupli „\| Dragana Jović" u kartici pregledača na četiri strane | Tehnička greška, jedna linija po strani. Pod 1:1 ostaje. | |
 
 - [ ] Sve odluke upisane (otvoreno: 0.12 dupli sufiks; ne blokira)
@@ -418,7 +418,7 @@ jednom u celini na kraju.
 
 ## 10. Spajanje i puštanje
 
-- [ ] 10.0 **Uslov za spajanje:** 1.4 postavljeno na Vercelu i 1.2 potvrđeno
+- [x] 10.0 **Uslov za spajanje:** 1.4 postavljeno na Vercelu i 1.2 potvrđeno (ispunjeno 04.09.: adresa na Production, SWIFT potvrđen)
       (ili klijent svesno pušta bez potvrde, upisano u 1.2). Ostalo iz faze 1
       ne čeka se: pod 1:1 tekst ide kakav je na preview-u.
 - [x] 10.1 PR `feat/prelazak` → `main`: opis šta se menja za posetioce, šta za (otvoren 04.09.: https://github.com/unicadesign/feng-shui-next/pull/11)
@@ -427,8 +427,8 @@ jednom u celini na kraju.
       `dpl_r6vNxQ8xBjK4AmxSaB9g7tpBmo6e` (komit `daa2eb6`, 18.06.). Povratak:
       Vercel → Deployments → taj deployment → „Promote to Production", traje
       sekunde, ne dira git.
-- [ ] 10.3 Merge (običan merge komit); pratiti produkcioni build do „Ready".
-- [ ] 10.4 Smoke test na `https://www.draganajovic.com`: 9.2 i 9.3 skraćeno,
+- [x] 10.3 Merge (običan merge komit); pratiti produkcioni build do „Ready". (Marko 04.09. „commit push and merge to main"; merge komit `1057d30`, produkcioni deployment `dpl_C1Pan8ee7qEMztuJZ8BhqypQD8pj`, Ready 12:57)
+- [x] 10.4 Smoke test na `https://www.draganajovic.com`: 9.2 i 9.3 skraćeno, (04.09. 13:00: 23 adrese, naslovi, noindex, sitemap sa www, gtag i pixel u HTML-u, bez runtime grešaka)
       zaglavlje na telefonu i desktopu, jedan modal otvoren bez slanja. Na
       produkciji se ništa ne šalje; 9.6 je to pokrio.
 - [ ] 10.5 Google Search Console: sitemap poslati ponovo, zatražiti
@@ -470,6 +470,15 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
 - Mrtva polja u adminu: `footer.tagline`, `home.newsletter.*`.
 - Vebinar traka, popup i modal u novom dizajnu.
 - `/login` i `/signup` nose natpis „ptPLAN"; `not-found` u starom dizajnu.
+- **Saglasnost za kolačiće.** Sajt od 04.09. meri posete (GA4 i Meta pixel)
+  bez banera za saglasnost; nezavisni pregled je to zabeležio. Tekst o
+  privatnosti na `/upitnik` govori o podacima iz obrasca (koji nikome trećem
+  ne idu), pa nije netačan, ali odluka o baneru je klijentova.
+- GA4: beleženje `/uplata` i `/hvala` (klijentska navigacija) oslanja se na
+  „Enhanced measurement: Page changes based on browser history events",
+  podrazumevano uključeno u GA nalogu; proveriti u Admin → Data streams.
+- Lokalni dev server šalje prave pogotke u GA i Metu (samo preview je
+  isključen); zanemarljivo, ali se zna.
 - 60 eslint grešaka u admin i vebinar fajlovima; engleski `aria-label`
   „Toggle menu" i „Close menu".
 

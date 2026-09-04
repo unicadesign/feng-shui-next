@@ -10,7 +10,7 @@ import Analitika from '@/components/Analitika';
    mora da prati i klijentsku navigaciju). Samo na javnim stranama; login,
    dashboard i admin ih nemaju. Preview deploymenti na Vercelu ne mere, da
    probe ne zagade podatke; lokalni dev meri, radi provere. */
-const GA_ID = 'G-8V0PQW65GG';
+const GA_ID = 'G-RJV846ZWZZ';
 const META_PIXEL_ID = '1411230116531391';
 const MERENJE_UKLJUCENO = process.env.VERCEL_ENV !== 'preview';
 
