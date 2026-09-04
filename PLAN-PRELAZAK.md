@@ -116,7 +116,7 @@ Za svaku stoji predlog. Kad je odluka doneta, upisati je u kolonu i
 | 0.8 | Spajanje i grana | Marko, 04.09.: rad ide na **novoj grani `feat/prelazak`** iz `feat/skola-c`, da `feat/skola-c` ostane netaknut izvor istine za poređenje. PR `feat/prelazak` → `main`, običan merge komit (ne squash). | **Da**; grana i tag napravljeni 04.09. |
 | 0.9 | `public/images/dodela-diploma-2.mp4` (47 MB, praktično ceo repo) koristi samo stara početna | **Obrisati iz stabla.** Klon se ne smanjuje bez prepisa istorije; to nije deo ovog plana. | **Da** (Marko, 04.09.) |
 | 0.10 | Do admin faze uređivači Početna, Škola i O nama u adminu menjaju podatke koje sajt više ne čita | Jedna rečenica upozorenja na vrhu ta tri uređivača, da Dragana ne uređuje u prazno. | **Ne sada**, admin se ne dira (Z10). Klijentu se kaže rečima u 10.6; u fazu 11. |
-| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | **Marko 04.09.: Google Analytics 4 (G-8V0PQW65GG) i Meta pixel (1411230116531391), odmah.** Urađeno u K6a `ffb23d0`. |
+| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | **Marko 04.09.: Google Analytics 4 (G-RJV846ZWZZ) i Meta pixel (1411230116531391), odmah.** Urađeno u K6a `ffb23d0`. |
 | 0.12 | Z1: dupli „\| Dragana Jović" u kartici pregledača na četiri strane | Tehnička greška, jedna linija po strani. Pod 1:1 ostaje. | |
 
 - [ ] Sve odluke upisane (otvoreno: 0.12 dupli sufiks; ne blokira)
