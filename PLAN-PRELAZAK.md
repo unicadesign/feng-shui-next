@@ -418,7 +418,7 @@ jednom u celini na kraju.
 
 ## 10. Spajanje i puštanje
 
-- [ ] 10.0 **Uslov za spajanje:** 1.4 postavljeno na Vercelu i 1.2 potvrđeno
+- [x] 10.0 **Uslov za spajanje:** 1.4 postavljeno na Vercelu i 1.2 potvrđeno (ispunjeno 04.09.: adresa na Production, SWIFT potvrđen)
       (ili klijent svesno pušta bez potvrde, upisano u 1.2). Ostalo iz faze 1
       ne čeka se: pod 1:1 tekst ide kakav je na preview-u.
 - [x] 10.1 PR `feat/prelazak` → `main`: opis šta se menja za posetioce, šta za (otvoren 04.09.: https://github.com/unicadesign/feng-shui-next/pull/11)
@@ -427,8 +427,8 @@ jednom u celini na kraju.
       `dpl_r6vNxQ8xBjK4AmxSaB9g7tpBmo6e` (komit `daa2eb6`, 18.06.). Povratak:
       Vercel → Deployments → taj deployment → „Promote to Production", traje
       sekunde, ne dira git.
-- [ ] 10.3 Merge (običan merge komit); pratiti produkcioni build do „Ready".
-- [ ] 10.4 Smoke test na `https://www.draganajovic.com`: 9.2 i 9.3 skraćeno,
+- [x] 10.3 Merge (običan merge komit); pratiti produkcioni build do „Ready". (Marko 04.09. „commit push and merge to main"; merge komit `1057d30`, produkcioni deployment `dpl_C1Pan8ee7qEMztuJZ8BhqypQD8pj`, Ready 12:57)
+- [x] 10.4 Smoke test na `https://www.draganajovic.com`: 9.2 i 9.3 skraćeno, (04.09. 13:00: 23 adrese, naslovi, noindex, sitemap sa www, gtag i pixel u HTML-u, bez runtime grešaka)
       zaglavlje na telefonu i desktopu, jedan modal otvoren bez slanja. Na
       produkciji se ništa ne šalje; 9.6 je to pokrio.
 - [ ] 10.5 Google Search Console: sitemap poslati ponovo, zatražiti
@@ -470,6 +470,15 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
 - Mrtva polja u adminu: `footer.tagline`, `home.newsletter.*`.
 - Vebinar traka, popup i modal u novom dizajnu.
 - `/login` i `/signup` nose natpis „ptPLAN"; `not-found` u starom dizajnu.
+- **Saglasnost za kolačiće.** Sajt od 04.09. meri posete (GA4 i Meta pixel)
+  bez banera za saglasnost; nezavisni pregled je to zabeležio. Tekst o
+  privatnosti na `/upitnik` govori o podacima iz obrasca (koji nikome trećem
+  ne idu), pa nije netačan, ali odluka o baneru je klijentova.
+- GA4: beleženje `/uplata` i `/hvala` (klijentska navigacija) oslanja se na
+  „Enhanced measurement: Page changes based on browser history events",
+  podrazumevano uključeno u GA nalogu; proveriti u Admin → Data streams.
+- Lokalni dev server šalje prave pogotke u GA i Metu (samo preview je
+  isključen); zanemarljivo, ali se zna.
 - 60 eslint grešaka u admin i vebinar fajlovima; engleski `aria-label`
   „Toggle menu" i „Close menu".
 
