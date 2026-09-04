@@ -116,10 +116,10 @@ Za svaku stoji predlog. Kad je odluka doneta, upisati je u kolonu i
 | 0.8 | Spajanje i grana | Marko, 04.09.: rad ide na **novoj grani `feat/prelazak`** iz `feat/skola-c`, da `feat/skola-c` ostane netaknut izvor istine za poređenje. PR `feat/prelazak` → `main`, običan merge komit (ne squash). | **Da**; grana i tag napravljeni 04.09. |
 | 0.9 | `public/images/dodela-diploma-2.mp4` (47 MB, praktično ceo repo) koristi samo stara početna | **Obrisati iz stabla.** Klon se ne smanjuje bez prepisa istorije; to nije deo ovog plana. | **Da** (Marko, 04.09.) |
 | 0.10 | Do admin faze uređivači Početna, Škola i O nama u adminu menjaju podatke koje sajt više ne čita | Jedna rečenica upozorenja na vrhu ta tri uređivača, da Dragana ne uređuje u prazno. | **Ne sada**, admin se ne dira (Z10). Klijentu se kaže rečima u 10.6; u fazu 11. |
-| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | |
+| 0.11 | Analitika: nema je. `/uplata` i `/hvala` su pravljeni kao stalni linkovi baš za nju. | Van obima prelaska. Pitanje: Vercel Analytics odmah uz prelazak ili posle? | **Marko 04.09.: Google Analytics 4 (G-8V0PQW65GG) i Meta pixel (1411230116531391), odmah.** Urađeno u K6a `ffb23d0`. |
 | 0.12 | Z1: dupli „\| Dragana Jović" u kartici pregledača na četiri strane | Tehnička greška, jedna linija po strani. Pod 1:1 ostaje. | |
 
-- [ ] Sve odluke upisane (otvoreno: 0.11 analitika, 0.12 dupli sufiks; ni jedno ne blokira)
+- [ ] Sve odluke upisane (otvoreno: 0.12 dupli sufiks; ne blokira)
 
 ## 1. Podaci od klijenta
 
@@ -129,7 +129,7 @@ radile. Ostalo se prosleđuje klijentu kao napomena, bez čekanja.
 
 **Blokira puštanje**
 
-- [ ] 1.4 **Adresa za obaveštenja Dragani** (`SKOLA_OBAVESTENJA_EMAIL`). Bez
+- [x] 1.4 **Adresa za obaveštenja Dragani** (`SKOLA_OBAVESTENJA_EMAIL`). Bez (Marko 04.09.: ptplan.rs@gmail.com)
       nje se svaka prijava upiše u bazu, a niko ne sazna (2.1).
 - [x] 1.2 **SWIFT** `AAAARSBG` u [lib/uplata.ts](lib/uplata.ts): Marko je
       04.09. potvrdio da je to kod koji je dobio od klijenta. Komentar
@@ -161,7 +161,7 @@ Provereno 04.09.: lokalni Vercel CLI je prijavljen i projekat je povezan
 (`.vercel/`, u `.gitignore`), pa env promenljive čitam i dodajem sam. Resend
 odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
 
-- [ ] 2.1 `vercel env add SKOLA_OBAVESTENJA_EMAIL` za **Production i Preview**,
+- [x] 2.1 `vercel env add SKOLA_OBAVESTENJA_EMAIL` za **Production i Preview**, (urađeno 04.09.: Production i Preview (feat/prelazak))
       čim Marko dostavi adresu. Bez nje se obaveštenja Dragani tiho preskaču
       ([send.ts:70-74, 98-102](lib/email/send.ts#L70-L102)), prijava se upiše
       u bazu, a niko ne sazna. Radim ja.
@@ -179,7 +179,7 @@ odgovara na API ključ iz projekta. Admin panel ostaje jedino do čega ne mogu.
       (Production i Preview). Sitemap danas ispisuje goli domen koji
       preusmerava na `www`; zatečeno, ali jeftino za ispraviti. Radim ja, uz
       2.1.
-- [ ] 2.6 Lokalno `.env.local`: `SKOLA_OBAVESTENJA_EMAIL` sa Markovom adresom
+- [x] 2.6 Lokalno `.env.local`: `SKOLA_OBAVESTENJA_EMAIL` sa Markovom adresom (urađeno 04.09., ista adresa)
       za probu iz 9.6.
 
 ## 3. Rute i meta podaci
@@ -487,6 +487,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K4 | brisanje starog koda i mrtvih fajlova | 7.1 do 7.9 |
 | K5 | čišćenje repoa | 8.1 do 8.4 |
 | pregled | `5735752` | 04.09. | faza 9 | nezavisni pregled cele grane naspram `main` (4 čitača + provera): 0 stvarnih nalaza od 5 kandidata |
+| K6a | `ffb23d0` | 04.09. | 1.4, 2.1, 2.6, 0.11 (analitika) | tsc i eslint čisti; GA i pixel provereni sa presretnutim zahtevima: po jedan PageView na učitavanje, klik kroz meni i posle prijave; piksel poređenje sa zamrznutim preview-om nepromenjeno; nezavisni pregled izmene |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
 K1 je jedini koji ne sme da se deli: rute i Header idu zajedno. Od K6 pre
