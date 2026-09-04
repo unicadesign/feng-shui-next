@@ -479,6 +479,10 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
   podrazumevano uključeno u GA nalogu; proveriti u Admin → Data streams.
 - Lokalni dev server šalje prave pogotke u GA i Metu (samo preview je
   isključen); zanemarljivo, ali se zna.
+- Pixel i GA po ruti se oslanjaju na automatske history hook-ove obe
+  skripte (provereno sa pravim skriptama 04.09.); Metin hook čita
+  `document.title` u trenutku `pushState`, pa naslov uz PageView može da
+  bude od prethodne strane. Kozmetika.
 - 60 eslint grešaka u admin i vebinar fajlovima; engleski `aria-label`
   „Toggle menu" i „Close menu".
 
@@ -499,6 +503,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K6a | `ffb23d0` | 04.09. | 1.4, 2.1, 2.6, 0.11 (analitika) | tsc i eslint čisti; GA i pixel provereni sa presretnutim zahtevima: po jedan PageView na učitavanje, klik kroz meni i posle prijave; piksel poređenje sa zamrznutim preview-om nepromenjeno; nezavisni pregled izmene |
 | K6b | `aa031bb` | 04.09. | ispravka analitike posle pregleda (pixel u klijentskoj komponenti, preview bez merenja) | test sa presretnutim zahtevima: 4 od 4 slučaja po jedan PageView; tsc i eslint čisti |
 | K7 | `ee33ad0` | 04.09. | favicon: zlatni znak na krem krugu (`app/icon.png`, `app/favicon.ico`; providna verzija probana pa odbačena, Marko 04.09.), `app/apple-icon.png` krem kvadrat; stara ikona (crni krug, ptPLAN) uklonjena; spojeno na main | dev emituje tri `<link rel=icon>`; provera na preview-u grane |
+| K6c | `b187a91` | 04.09. | ispravka analitike posle pregleda sa pravim skriptama: linkovi ka /login, /dashboard, /admin su puna učitavanja (merenje ne curi), pixel bez mrtvog ručnog PageView-a | test sa pravim gtag.js i fbevents.js: po jedan page_view i PageView za /, /school, /uplata; /login bez skripti; tsc čist |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
 K1 je jedini koji ne sme da se deli: rute i Header idu zajedno. Od K6 pre
