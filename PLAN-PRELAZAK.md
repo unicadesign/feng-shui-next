@@ -488,6 +488,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K5 | čišćenje repoa | 8.1 do 8.4 |
 | pregled | `5735752` | 04.09. | faza 9 | nezavisni pregled cele grane naspram `main` (4 čitača + provera): 0 stvarnih nalaza od 5 kandidata |
 | K6a | `ffb23d0` | 04.09. | 1.4, 2.1, 2.6, 0.11 (analitika) | tsc i eslint čisti; GA i pixel provereni sa presretnutim zahtevima: po jedan PageView na učitavanje, klik kroz meni i posle prijave; piksel poređenje sa zamrznutim preview-om nepromenjeno; nezavisni pregled izmene |
+| K6b | `aa031bb` | 04.09. | ispravka analitike posle pregleda (pixel u klijentskoj komponenti, preview bez merenja) | test sa presretnutim zahtevima: 4 od 4 slučaja po jedan PageView; tsc i eslint čisti |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
 K1 je jedini koji ne sme da se deli: rute i Header idu zajedno. Od K6 pre
