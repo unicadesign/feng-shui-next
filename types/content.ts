@@ -393,42 +393,6 @@ export interface VazaContent {
   cta: CTAContent;
 }
 
-// --- GALLERY PAGE ---
-export interface GalleryItem {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  category: string;
-  imageUrl: string;
-  span?: 'wide' | 'tall';
-}
-
-export interface TransformationStoryContent {
-  beforeImage: string;
-  afterImage: string;
-  clientName: string;
-  location: string;
-  service: string;
-  quote: string;
-}
-
-export interface GalleryContent {
-  hero: {
-    eyebrow: string;
-    title: string;
-    subtitle: string;
-  };
-  categories: string[];
-  items: GalleryItem[];
-  transformations: TransformationStoryContent[];
-  cta: {
-    title: string;
-    subtitle: string;
-    primaryButton: ButtonContent;
-  };
-}
-
 // --- GLOBAL SETTINGS ---
 export interface GlobalContent {
   siteConfig: {
@@ -459,57 +423,6 @@ export interface GlobalContent {
   };
 }
 
-// --- GUIDE PAGE ---
-export interface GuideQuizQuestion {
-  id: number;
-  text: string;
-}
-
-export interface GuideQuizResult {
-  range: [number, number];
-  title: string;
-  type: string;
-  description: string;
-}
-
-export interface GuideChapterContent {
-  id: string;
-  number: number;
-  title: string;
-  content: string[];
-  bullets?: string[];
-  reflectionQuestions?: string[];
-  steps?: Array<{ title: string; description: string }>;
-  blockages?: Array<{ title: string; bullets: string[]; quickStep: string }>;
-  programSections?: Array<{ title: string; description: string }>;
-  programBenefits?: string[];
-  joinIfItems?: string[];
-}
-
-export interface GuideContent {
-  hero: {
-    eyebrow: string;
-    title: string;
-    subtitle: string;
-  };
-  chapters: GuideChapterContent[];
-  quiz: {
-    questions: GuideQuizQuestion[];
-    results: GuideQuizResult[];
-    footerText: string;
-  };
-  emailGate: {
-    title: string;
-    subtitle: string;
-    buttonText: string;
-  };
-  cta: {
-    title: string;
-    buttonText: string;
-    buttonLink: string;
-  };
-}
-
 // --- MASTER TYPE ---
 export interface SiteContent {
   home: HomeContent;
@@ -517,7 +430,5 @@ export interface SiteContent {
   services: ServicesContent;
   school: SchoolContent;
   vaza: VazaContent;
-  gallery: GalleryContent;
   global: GlobalContent;
-  guide: GuideContent;
 }

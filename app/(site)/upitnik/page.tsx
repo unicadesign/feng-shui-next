@@ -1,12 +1,17 @@
 import type { Metadata } from 'next';
-import UpitnikContent from '@/components/upitnik/UpitnikContent';
+import KontaktContent from '@/components/sajt/KontaktContent';
 
+/**
+ * Kontakt upitnik. Adresa `/upitnik` je zadržana pri prelasku na novi
+ * dizajn (09.2026.) zbog postojećih linkova i Google istorije; strana JESTE
+ * za pretragu, za razliku od `/uplata` i `/hvala`.
+ */
 export const metadata: Metadata = {
-  title: 'Upitnik',
+  title: 'Kontakt | Dragana Jović',
   description:
-    'Popunite upitnik za personalizovanu Feng Shui konsultaciju — 4 kratka koraka i Dragana će vam se javiti sa preporukama prilagođenim vašem prostoru.',
+    'Popunite upitnik i Dragana Jović će vam se javiti sa predlogom za vaš prostor. Feng Shui konsultacije, procena nekretnina i škola.',
 };
 
-export default function UpitnikPage() {
-  return <UpitnikContent />;
+export default function KontaktPage() {
+  return <KontaktContent />;
 }

@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { getContent } from '@/lib/content';
-import HomeContent from '@/components/home/HomeContent';
+import PocetnaContent from '@/components/sajt/PocetnaContent';
 
 export const metadata: Metadata = {
-  title: 'Dragana Jović - Feng Shui Konsalting & Škola',
+  title: 'Feng Shui: put ka miru i radosti | Dragana Jović',
   description:
-    'Dragana Jović nudi premium Feng Shui konsalting usluge i 4-mesečnu online Feng Shui školu za transformaciju vašeg prostora i unapređenje života.',
+    'Feng Shui konsultacije, škola i harmonizacija prostora sa Draganom Jović. Zakažite besplatnu konsultaciju i uskladite svoj dom sa sobom.',
 };
 
-export default async function HomePage() {
-  const home = await getContent('home');
-  return <HomeContent content={home} />;
+export default function PocetnaPage() {
+  return <PocetnaContent />;
 }

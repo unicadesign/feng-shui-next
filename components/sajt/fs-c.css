@@ -1,0 +1,1675 @@
+/* ============================================================
+   Feng Shui, deljena dizajn-osnova javnog sajta (nastala kao „verzija C"
+   redizajna, 08.-09.2026.). Koristi je svih šest javnih strana. Sve je
+   skopirano pod `.fs-c` da NE curi na login, dashboard i admin, koji
+   ostaju na staroj paleti iz globals.css. Ime klase je ostalo iz vremena
+   redizajna: menjati ga kroz 1.600 linija nema svrhe.
+   Boje/tekst od klijenta se menjaju u :root delu ispod — na
+   JEDNOM mestu za sve tri stranice.
+   ============================================================ */
+
+.fs-c {
+  /* ============ PALETA (nova, 24.08.2026.) ============
+     Klijent je zadao dve boje: zelena #12403C i bež #EDD8BE, uz to da
+     crna nestane i pređe u braon. Plava je cela otišla u zelenu.
+
+     IMENA TOKENA SU OSTALA STARA namerno. `navy-*` više nije plava nego
+     zelena, `cream-*` je bež, `charcoal-*` je braon. Preimenovanje bi
+     značilo diranje oko 750 mesta u ovom fajlu i klasa `.c-navy` u tri
+     komponente, bez ijedne koristi danas. Kada dođe red, to je mehanički
+     prolaz. Do tada: ime je istorijsko, vrednost je brend.
+
+     Svaki odnos ispod je izmeren, ne procenjen.
+     ==================================================== */
+
+  /* BEŽ — svetle površine. #EDD8BE je brend, ostalo je izvedeno. */
+  --cream-50:  #FAF4ED;   /* pozadina strane; braon na njoj 12,37:1 */
+  --cream-100: #F5EBDD;
+  --cream-200: #EDD8BE;   /* BREND; naizmenične sekcije, braon 9,76:1 */
+  --cream-300: #DCC5A6;   /* ivice */
+
+  /* BRAON — zamena za crnu. Lestvica prati stare odnose kontrasta
+     (17,40 / 10,86 / 7,46 / 4,48 na belom), mešanjem ka bež da ton
+     ostane topao. */
+  --charcoal:     #3E2A1E;  /* 13,51:1 na belom */
+  --charcoal-600: #4C382B;  /* 11,01:1 */
+  --charcoal-500: #665243;  /*  7,36:1 */
+  /* Poslednji je namerno tamniji od pukog preslikavanja: stari #777777
+     daje 4,48:1, taman ispod praga, a na novoj bež sekciji bi bilo još
+     gore. Ovako .micro prolazi i na najtamnijoj svetloj podlozi
+     (#EDD8BE) sa 4,63:1. */
+  --charcoal-400: #6F5B4B;
+
+  /* ZELENA — zamena za tamnoplavu. #12403C je brend. */
+  --navy-50:  #E8EFE9;   /* svetla podloga za oznake; zelena na njoj 9,4:1 */
+  --navy-100: #CFE0D6;
+  /* Tekst na zelenim sekcijama je BEŽ, ne svetlija zelena: zelena
+     razblažena belom brzo gubi boju i ode u sivo. Bež na #0F3532 daje
+     9,63:1 i drži paletu na dve boje. */
+  --navy-300: #EDD8BE;
+  --navy-400: #849C9A;   /* fokus-obrub i ukrasi, ne tekst */
+  --navy-500: #597976;
+  --navy-600: #335B57;
+  --navy-700: #12403C;   /* BREND */
+  --navy-800: #0F3532;   /* tamne sekcije; belo 13,33:1, bež 9,63:1 */
+  --navy-900: #0B2B28;   /* najtamnije; belo 15,10:1 */
+
+  --gold-50:  #fdf8eb;
+  --gold-200: #f2d98a;
+  --gold-400: #c8a84e;
+  --gold-500: #b8952f;
+  --gold-600: #9a7a24;
+  /* Novi, tamniji ton. Na svetlim sekcijama zlato je i pre bilo tesno
+     (gold-500 na starom kremu 2,51), a na bež #EDD8BE pada na 2,06.
+     gold-700 daje 5,16 na bež i 6,55 na bež-50, pa sitan verzal
+     eyebrow prvi put prolazi prag od 4,5. */
+  --gold-700: #6B5518;
+
+  /* Akcenat za "sekciju u jakoj boji". Bila je terakota; 30.08. je
+     izbačena sa celog sajta na zahtev („da ne bude cigla boja nigde"),
+     pa akcenat sada nosi brend zelenu. Ime tokena je ostalo isto kao
+     kod `navy-*` i `charcoal-*`: menja se vrednost, ne ~15 poziva. */
+  --accent:      #12403C;   /* BREND */
+  --accent-dark: #0F3532;
+  --accent-soft: #E8EFE9;
+
+  /* --- SEMANTIČKI TOKENI --- */
+  --bg:            var(--cream-50);
+  --bg-alt:        var(--cream-200);
+  --text:          var(--charcoal);
+  --text-muted:    var(--charcoal-500);
+
+  /* --- TIPOGRAFIJA — koristi već učitan Outfit (next/font) --- */
+  --font: var(--font-outfit), system-ui, -apple-system, sans-serif;
+
+  /* --- RITAM --- */
+  --maxw-narrow: 680px;
+  --radius:    18px;
+  --radius-sm: 12px;
+  --pill:      999px;
+  /* Senke su bile plavkaste; sada nose ton braon boje teksta. */
+  --shadow:    0 10px 30px rgba(62, 42, 30, .10);
+  --shadow-lg: 0 22px 50px rgba(62, 42, 30, .16);
+  /* Visina lepljive trake. Izmerena na renderu: 66px na 320–899px,
+     ovde 68 zbog 2px vazduha. Rezerva se NE stavlja na `.fs-c` — vidi
+     komentar uz `body:has(.fs-c .sticky) footer` na dnu fajla. */
+  --sticky-h:  68px;
+
+  /* Wrapper = "body" prototipa */
+  font-family: var(--font);
+  background: var(--cream-50);
+  color: var(--text);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+.fs-c *, .fs-c *::before, .fs-c *::after { box-sizing: border-box; }
+.fs-c p { margin: 0; }
+.fs-c h1, .fs-c h2, .fs-c h3 {
+  margin: 0; line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; text-wrap: balance;
+}
+/* Naslov strane ima JEDNU veličinu na svim stranama. Ranije je
+   ovo pravilo služilo samo „O meni" (2,35–4,5rem), dok su hero naslovi
+   Početne i Škole imali svoje (2,5–4,2rem), pa je „O meni" na mobilnom
+   bio 2,4px manji a na desktopu 4,8px veći od ostalih. Sada je mera
+   ovde, a `.hero h1` ispod nosi samo boju. */
+.fs-c h1 { font-size: clamp(2.5rem, 9vw, 4.2rem); line-height: 1.05; font-weight: 800; color: inherit; }
+.fs-c h2 { font-size: clamp(1.9rem, 7vw, 3.25rem); }
+.fs-c h3 { font-size: clamp(1.15rem, 4vw, 1.4rem); font-weight: 600; }
+.fs-c .lead { font-size: clamp(1.05rem, 3.4vw, 1.3rem); line-height: 1.55; color: var(--charcoal-500); }
+.fs-c .eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-700); }
+
+/* --- layout helpers --- */
+.fs-c .card { padding: clamp(2.75rem, 9vw, 5.5rem) 0; scroll-margin-top: 64px; }
+.fs-c .wrap { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 1.35rem; }
+.fs-c .stack { display: flex; flex-direction: column; }
+.fs-c .g8 { gap: .5rem; } .fs-c .g12 { gap: .75rem; } .fs-c .g16 { gap: 1rem; }
+.fs-c .g24 { gap: 1.5rem; } .fs-c .g32 { gap: 2rem; }
+
+/* --- naizmenične pozadine --- */
+.fs-c .c-cream { background: var(--cream-50); }
+.fs-c .c-sand  { background: var(--cream-200); }
+.fs-c .c-navy  { background: var(--navy-800); color: #fff; }
+.fs-c .c-navy h2, .fs-c .c-navy h3 { color: #fff; }
+.fs-c .c-navy .lead { color: var(--navy-300); }
+.fs-c .c-navy .eyebrow { color: var(--gold-200); }
+.fs-c .c-accent { background: var(--accent); color: #fff; }
+.fs-c .c-accent h2, .fs-c .c-accent h3 { color: #fff; }
+.fs-c .c-accent .lead { color: rgba(255,255,255,.85); }
+.fs-c .c-accent .eyebrow { color: rgba(255,255,255,.8); }
+
+/* --- dugmad --- */
+.fs-c .btn {
+  display: flex; width: 100%; align-items: center; justify-content: center; text-align: center;
+  font-family: var(--font); font-size: 1.05rem; font-weight: 700; line-height: 1.3;
+  padding: 1.15rem 1.5rem; border-radius: var(--pill); text-decoration: none; cursor: pointer; border: 0;
+  min-height: 58px; transition: transform .12s, background .2s;
+}
+.fs-c .btn:active { transform: scale(.98); }
+/* `width: auto` nije dovoljno: dugme skoro uvek stoji u `.stack`
+   koji je flex-kolona, a tamo ga podrazumevani `align-items: stretch`
+   razvuče preko cele širine sekcije. Zato i `align-self`. */
+@media (min-width: 640px) {
+  /* Donja granica sirine: bez nje kratki natpisi ("Prijavi se") daju
+     sicusne pilule pored dugackih. */
+  .fs-c .btn { display: inline-flex; width: auto; align-self: flex-start; min-width: 150px; }
+  /* U centriranim sekcijama dugme prati kompoziciju, ne levu ivicu. */
+  .fs-c .emap-cta, .fs-c .close-cta .btn { align-self: center; }
+  /* Sitan red ispod dugmeta ide uz njega. Dok je dugme bilo preko cele
+     širine, centriran natpis je stajao tačno ispod; sada bi visio sam
+     na sredini sekcije. */
+  .fs-c .btn + .micro { text-align: left; }
+  /* Lepljiva traka sama poravnava po sredini i dugmetu daje `flex: 1`,
+     pa je izuzeta iz gornjeg pravila. */
+  .fs-c .sticky .btn { align-self: center; }
+}
+.fs-c .btn-accent { background: var(--accent); color: #fff; box-shadow: 0 10px 26px rgba(18,64,60,.3); }
+.fs-c .btn-accent:hover { background: var(--accent-dark); }
+.fs-c .btn-white { background: #fff; color: var(--charcoal); }
+/* Tiha varijanta za tamnu podlogu: dve pune pilule jedna uz drugu se
+   otimaju, pa sekundarna radnja ostaje samo kontura.
+   Ivica na --navy-800 daje 3,78:1, iznad praga 3:1 za elemente. */
+.fs-c .btn-line { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
+.fs-c .btn-line:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.6); }
+/* Za hero na BELOJ podlozi. Slova su BELA, na zahtev.
+   PAŽNJA: belo na --gold-500 daje 2,85:1, ispod praga od 4,5. Braon je na
+   istoj podlozi davao 4,74. Ako zatreba čitljivost bez menjanja natpisa,
+   rešenje je tamnija podloga (--gold-700 sa belim daje 7,15), ne druga
+   boja slova. Obrub je tu jer zlato naspram bele daje 2,85, ispod praga
+   od 3:1 za elemente, pa bi dugme bez njega curilo u pozadinu. */
+.fs-c .btn-zlatno { background: var(--gold-500); color: #fff; border: 1px solid rgba(62,42,30,.30); }
+.fs-c .btn-zlatno:hover { background: var(--gold-600); }
+/* Sekundarno: braon kontura i braon slova. Kontura na beloj 13,51. */
+.fs-c .btn-braon-linija { background: transparent; color: var(--charcoal); border: 1.5px solid var(--charcoal); }
+.fs-c .btn-braon-linija:hover { background: rgba(62,42,30,.06); }
+.fs-c .btn-navy { background: var(--navy-700); color: #fff; }
+.fs-c .btn-gold { background: var(--gold-400); color: var(--charcoal); }
+.fs-c .micro { font-size: .8rem; color: var(--charcoal-400); text-align: center; }
+.fs-c .c-navy .micro, .fs-c .c-accent .micro { color: rgba(255,255,255,.7); }
+
+/* --- skok-navigacija u krugovima (sidra ka sekcijama) --- */
+.fs-c .jump { display: flex; gap: .85rem; overflow-x: auto; padding: .25rem .1rem 1rem; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.fs-c .jump::-webkit-scrollbar { display: none; }
+.fs-c .jump a { flex: none; width: 88px; text-decoration: none; text-align: center; color: var(--charcoal-600); font-size: .78rem; font-weight: 600; }
+.fs-c .jump .dot {
+  width: 88px; height: 88px; border-radius: 50%; background: var(--cream-200);
+  border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center;
+  margin-bottom: .45rem; font-size: 1.5rem; color: var(--gold-700);
+}
+.fs-c .jump a:hover .dot { background: var(--gold-50); border-color: var(--gold-200); }
+@media (min-width: 700px) { .fs-c .jump { justify-content: center; overflow: visible; } }
+
+/* ============================ HERO ============================
+   Pozadinska slika preko celog bloka; tekst stoji na praznini koja
+   je već u slici. Header je `fixed` bez kompenzacije u layoutu, pa
+   hero sam mora da obezbedi razmak odozgo (--fsc-nav-clear), inače
+   plutajući navbar prekrije eyebrow i vrh naslova.
+   -------------------------------------------------------------- */
+.fs-c .hero {
+  padding: 0;
+  background: var(--navy-900);
+  color: #fff;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* razmak za plutajući navbar: pt-5 (20px) + visina pilule */
+.fs-c .hero { --fsc-nav-clear: 92px; }
+@media (min-width: 768px) { .fs-c .hero { --fsc-nav-clear: 104px; } }
+
+.fs-c .hero-bg { position: absolute; inset: 0; z-index: -2; display: block; }
+.fs-c .hero-bg img {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+  /* mobilna slika ima Draganu pri dnu — dno je ono što se ne sme iseći */
+  object-position: center bottom;
+}
+/* Preliv postoji zbog tirkiznog sjaja u sredini slike: on je najsvetlija
+   tačka i baš ispod njega padaju dva sitna natpisa. Bez preliva eyebrow
+   (gold-200) daje 4,30 a `.micro` 4,34, oboje taman ispod praga od 4,5.
+
+   Nema `z-index`. Raniji `z-index: -1` unutar `.hero-bg` (koji je na -2)
+   gurao je preliv u negativni sloj, ISPOD <img>, pa se nikada nije video.
+   Bez z-index-a ::after dolazi posle slike u stablu i pokriva je. */
+.fs-c .hero-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(11,43,40,.62) 0%, rgba(11,43,40,.60) 34%, rgba(11,43,40,.56) 48%,
+    rgba(11,43,40,.46) 57%, rgba(11,43,40,.30) 65%, rgba(11,43,40,.14) 73%,
+    rgba(11,43,40,.04) 80%, rgba(11,43,40,0) 88%);
+}
+
+.fs-c .hero-in { position: relative; }
+.fs-c .hero-body {
+  padding: calc(var(--fsc-nav-clear) + .5rem) 1.35rem clamp(3rem, 9vw, 4.5rem);
+  position: relative;
+}
+/* Visina hero-a na mobilnom se RAČUNA, ne pogađa.
+   Slika je `cover` i usidrena na dno, pa je rastojanje od dna do
+   Draganine glave uvek isti udeo širine:
+     Nova mobilna slika (27.08.) ima teme na 31,7% visine originala, gde
+     je stara imala 52,8%. Sa originalom 768x1376 tekst bi morao da stane
+     u gornjih 31,7% heroja, sto bi na 390px trazilo hero od 1443px.
+     Zato je platno produzeno na 768x2100: dodato je 724 reda zelene na
+     vrh, uzetih iz prvog reda same slike, pa se sav ne vidi (izmereno:
+     20,61,53 naspram 20,61,55).
+
+     Time slika postaje uza od okvira, pa `cover` skalira po SIRINI i
+     `bottom` sidri dno. Rastojanje od dna do temena je onda stalno:
+       od dna do temena = 2100 - (436 + 724) = 940 nativnih piksela
+       skala = 100vw / 768
+       od dna do temena = 940 * 100vw / 768 = 1.224 * 100vw
+     Dakle teme pada tacno na --fsc-text-space od vrha heroja.
+   Sve iznad toga je čist tamnoplavi deo slike i tu sme tekst.
+   --fsc-text-space je koliko taj tekstualni blok traži (navbar +
+   eyebrow + naslov + dva dugmeta + mikro red) plus vazduh.
+
+   Račun važi samo za hero koji NOSI sliku. Početna svoju nema (grupna
+   fotografija je izbačena), pa bi joj ova visina napravila praznu
+   zelenu rupu od pola ekrana ispod dugmadi — tamo hero prati sadržaj. */
+.fs-c .hero:has(.hero-bg) {
+  /* Izmereno na renderu: tekstualni blok se zavrsava na 433px (390px
+     sirine), pa 470 ostavlja 37px vazduha do temena. */
+  --fsc-text-space: 470px;
+  /* Odnos „od dna do temena naspram širine platna". Bio je zakucan na
+     1.224 dok je postojala samo slika Škole; sad je promenljiva, jer
+     fotografija Početne ima drugu geometriju (1.303). */
+  --fsc-slika-odnos: 1.224;
+  min-height: calc(var(--fsc-slika-odnos) * 100vw + var(--fsc-text-space));
+}
+/* Početna deli istu računicu, ali joj je tekst duži: blok se na 320px
+   završava na 544px (Škola: 433px), pa traži više prostora iznad temena.
+   Zato je i njeno mobilno platno više — 768x2600 umesto 768x2100: na
+   nižem platnu bi `cover` na ovako visokom herou prešao na skaliranje
+   po VISINI i konstanta 1.224 više ne bi važila.
+   Ista težina selektora kao pravilo iznad, pa pobeđuje redosledom. */
+.fs-c .hero.hero-pocetna { --fsc-text-space: 610px; --fsc-slika-odnos: 1.303; }
+
+/* Na tamnoj podlozi bez .c-navy klase osnovni .micro je prigušen
+   do neupotrebljivog — hero ga eksplicitno vraća. */
+/* Puna bela, ne 78%: sitan red pada tačno na tirkizni sjaj u slici i na
+   78% gubi prag od 4,5. */
+.fs-c .hero .micro { color: #fff; }
+
+/* Podnaslov ispod naslova heroja. Naslov je 24.08. skraćen na „Feng
+   shui program", pa ono što je pre stajalo u njemu (šta polaznica
+   dobija) sada nosi ovaj red. */
+/* Dva poziva na akciju u herou stoje u redu, ne jedan pod drugim. Dok je
+   prvo dugme nosilo dugu rečenicu, slaganje je imalo smisla; sa kratkim
+   „Prijavi se" ispod dužeg drugog dugmeta stub je ispadao razuđen. */
+@media (min-width: 640px) {
+  .fs-c .hero-cta { flex-direction: row; align-items: center; gap: .75rem; }
+  /* U redu dugmad moraju da budu iste visine i kad se duži natpis
+     prelomi u dva reda; `align-self: flex-start` iz opšteg pravila bi
+     kraće dugme prilepilo uz vrh. */
+  .fs-c .hero-cta .btn { align-self: stretch; }
+}
+
+.fs-c .hero-sub {
+  /* Zlatan od 27.08. na zahtev; naslov ostaje beo. */
+  color: var(--gold-200);
+  font-size: clamp(1.05rem, 3.8vw, 1.45rem);
+  font-weight: 500;
+  line-height: 1.4;
+  /* 28ch, ne 34ch: na desktopu je duži red stizao do belog logo-znaka u
+     slici, gde je kontrast padao na 2,20. Ovako se prelomi pre njega. */
+  max-width: 28ch;
+}
+/* Od 1200px ima mesta za jedan red, pa se prelom ukida. */
+@media (min-width: 1200px) {
+  .fs-c .hero-sub { max-width: none; white-space: nowrap; }
+}
+/* Na vrlo širokim ekranima kolona od 1180px ostavlja levo preko 400px
+   praznine, pa red gurne desno u svetliji deo slike. Šira kolona vraća
+   tekst ulevo, u tamniji deo, i usput smanjuje prazan hod. */
+@media (min-width: 1700px) {
+  .fs-c .hero-in { max-width: 1400px; }
+}
+
+/* Veličina stoji u osnovnom `.fs-c h1` gore i deli se sa „O meni".
+   Ovde ostaje samo boja: hero je taman, ostale strane nisu. */
+.fs-c .hero h1 { color: #fff; }
+
+/* Oba poziva na akciju idu u JEDAN red. Na mobilnom to znači da
+   veličina slova mora da prati širinu ekrana — duži natpis
+   („Pokaži mi kako moj prostor utiče na moj život") inače prelama.
+   Vrednosti nisu procenjene: natpis je izmeren u Outfit 700 i staje
+   bez prelamanja od 320px naviše (na 320px ostaje ~5px rezerve). */
+.fs-c .hero .btn {
+  max-width: 100%;
+  white-space: nowrap;
+  font-size: clamp(.75rem, 3.8vw, 1.05rem);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  /* Na desktopu raspored nosi širinu, ne visinu — računica sa
+     mobilnog (slika usidrena na dno) više ne važi. */
+  .fs-c .hero { display: flex; align-items: center; }
+  /* Visinu drži slika; hero bez slike staje uz svoj sadržaj. */
+  .fs-c .hero:has(.hero-bg) { min-height: clamp(560px, 82vh, 780px); }
+  /* Figura Početne se uklapa po visini i sedi desno, van tekstualne
+     kolone (`.hero-body` je ograničen na 62%). `92%` je od SLOBODNOG
+     prostora, ne od širine heroja.
+     Vrh je uvučen za visinu plutajućeg navbara: bez toga je `contain`
+     razvlači preko cele visine heroja, pa joj na 768–1024px navbar
+     sedne preko lica, a kosa dodiruje gornju ivicu (izmereno: figura
+     počinje u 3. redu ekrana). */
+  .fs-c .hero-pocetna .hero-figura {
+    top: var(--fsc-nav-clear);
+  }
+  .fs-c .hero-pocetna .hero-figura img { object-position: 92% bottom; }
+  /* desktop slika je prazna sleva — držimo je pomerenu tako da
+     Draganina glava ostane u kadru i na niskim prozorima */
+  .fs-c .hero-bg img { object-position: center 22%; }
+  /* Na desktopu tekst stoji levo, pa preliv ide vodoravno i gasi se pre
+     Dragane da je ne zamuti. */
+  /* Na desktopu tekst stoji levo, pa preliv ide vodoravno i gasi se pre
+     Dragane da je ne zamuti. Zastor mora da drži gustinu kroz celu
+     tekstualnu kolonu, ne samo uz levu ivicu: kadar se na užim
+     desktopima seče po visini, pa beli logo-znak iz slike sklizne ulevo
+     tačno pod naslov. Na 1024px je tamo kontrast bio 2,83. */
+  .fs-c .hero-bg::after {
+    background: linear-gradient(90deg,
+      rgba(11,43,40,.78) 0%, rgba(11,43,40,.77) 28%, rgba(11,43,40,.76) 46%,
+      rgba(11,43,40,.66) 57%, rgba(11,43,40,.32) 69%, rgba(11,43,40,0) 80%);
+  }
+
+  /* Uski desktop je najgori slučaj. Kadar se tu najjače seče po visini,
+     pa logo-znak sklizne najdalje ulevo: na 768px pokriva 291–607, a
+     tekst stoji na 40–516. Zato ovaj pojas dobija gušći i širi zastor.
+     Granica je 27.08. podignuta sa 999 na 1099px: podnaslov je prešao sa
+     bele na zlatnu, a zlatna je tamnija od bele, pa je na 1024px padala
+     na 3,32 tamo gde je bela imala 11,2. Ni čisto belo tu ne bi prošlo
+     komotno (4,63), dakle podloga je stvarno presvetla, ne boja slova. */
+  @media (max-width: 1149px) {
+    .fs-c .hero-bg::after {
+      background: linear-gradient(90deg,
+        rgba(11,43,40,.88) 0%, rgba(11,43,40,.86) 40%, rgba(11,43,40,.74) 62%,
+        rgba(11,43,40,.38) 76%, rgba(11,43,40,0) 90%);
+    }
+  }
+  .fs-c .hero-in { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 2.5rem; }
+  .fs-c .hero-body {
+    margin-top: 0;
+    padding: var(--fsc-nav-clear) 0 3rem;
+    /* Šira kolona: naslov diše u dva reda umesto tri, a duži CTA
+       staje u jedan red. Gornja granica je da tekst ne uđe u
+       Draganin deo slike. */
+    max-width: 62%;
+    min-width: 22rem;
+  }
+  /* Dugmad na desktopu prijanjaju uz svoj natpis umesto da se
+     razvlače po celoj koloni. */
+  .fs-c .hero .btn { align-self: flex-start; width: auto; }
+  /* Mikro red je bio centriran po celoj koloni, pa je vizuelno
+     „bežao" udesno u odnosu na levo poravnat naslov i dugmad. */
+  .fs-c .hero .micro { text-align: left; }
+}
+
+/* --- koraci / brojevi --- */
+.fs-c .steps { display: grid; gap: .85rem; grid-template-columns: 1fr; }
+@media (min-width: 640px) { .fs-c .steps { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .fs-c .steps-4 { grid-template-columns: repeat(4, 1fr); } }
+.fs-c .step { background: rgba(255,255,255,.07); border: 1px solid rgba(237,216,190,.2); border-radius: 20px; padding: 1.4rem; }
+.fs-c .step .n { font-size: 2.4rem; font-weight: 800; color: var(--gold-400); line-height: 1; letter-spacing: normal; display: block; margin-bottom: .5rem; }
+.fs-c .step h3 { color: inherit; }
+.fs-c .step p { color: var(--navy-300); font-size: .95rem; margin-top: .35rem; }
+.fs-c .c-sand .step, .fs-c .c-cream .step { background: #fff; border-color: var(--cream-300); }
+.fs-c .c-sand .step p, .fs-c .c-cream .step p { color: var(--charcoal-500); }
+.fs-c .c-sand .step h3, .fs-c .c-cream .step h3 { color: var(--charcoal); }
+
+/* --- lista krupnih stavki --- */
+.fs-c .big-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .7rem; }
+.fs-c .big-list li {
+  background: #fff; border: 1px solid var(--cream-300); border-radius: 16px;
+  padding: 1.1rem 1.2rem; font-size: 1.02rem; line-height: 1.45; font-weight: 500;
+  display: flex; gap: .8rem; align-items: flex-start;
+}
+.fs-c .big-list li::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-400); margin-top: .55rem; }
+.fs-c .c-navy .big-list li { background: rgba(255,255,255,.07); border-color: rgba(237,216,190,.2); color: #fff; }
+
+/* --- utisci --- */
+/* --- REZULTATI: „metrika prvo" kartice ---------------------------
+   Ishod je naslov kartice, citat je potvrda ispod njega. Radi bez
+   fotografije i bez videa, što je bilo pitanje klijenta.
+   Boje nisu preuzete iz predloška naslepo: zlatna --gold-400/500 na
+   beloj daje 2,3 odnosno 2,9 kontrasta i pada čak i prag za krupan
+   tekst (3:1). Metrika zato ide na --gold-600 (4,05), a sitne
+   oznake usluge na --gold-700 / --navy-700 (5,5 i 10,4). */
+/* Jedan utisak nosi merljiv ishod i stoji preko cele širine; ostala
+   dva su preporuke bez brojke i idu u dve kolone ispod njega. */
+.fs-c .quotes { display: grid; gap: 1rem; grid-template-columns: 1fr; align-items: stretch; }
+@media (min-width: 900px) { .fs-c .quotes { grid-template-columns: 1fr 1fr; gap: 1.25rem; } }
+
+.fs-c .tst {
+  background: #fff;
+  border: 1px solid var(--cream-300);
+  border-radius: 20px;
+  padding: 1.6rem 1.5rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  /* tanka zlatna nit gore — isti gest kao orbite oko krugova */
+  box-shadow: inset 0 3px 0 0 var(--gold-200);
+  transition: box-shadow .2s ease, transform .2s ease;
+}
+@media (hover: hover) {
+  .fs-c .tst:hover { transform: translateY(-2px); box-shadow: inset 0 3px 0 0 var(--gold-400), 0 14px 34px rgba(62,42,30,.10); }
+}
+
+.fs-c .tst .res {
+  font-size: clamp(1.9rem, 5.6vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--gold-600);
+  line-height: 1.05;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .tst .res-note {
+  font-size: 1rem; font-weight: 600; color: var(--charcoal); line-height: 1.35;
+}
+.fs-c .tst q {
+  display: block; color: var(--charcoal-500); font-size: .95rem; line-height: 1.6;
+  /* srpski par navodnika; ranije je zatvarao ravnim " */
+  quotes: "„" "”";
+  margin-top: .2rem;
+}
+/* Imena polaznica su podebljana i potamnjena 27.08. na zahtev: na .82rem
+   je razlika između 600 i 700 jedva vidljiva, pa nosi i boja. */
+.fs-c .tst .who {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  font-size: .82rem; color: var(--charcoal); font-weight: 700;
+  margin-top: auto; padding-top: 1rem;
+  border-top: 1px solid var(--cream-200);
+}
+.fs-c .tst .tag {
+  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: .22rem .6rem; border-radius: var(--pill); white-space: nowrap;
+}
+.fs-c .tst .tag-skola { background: var(--gold-50); color: #7a6220; }
+.fs-c .tst .tag-konsultacija { background: var(--navy-50); color: var(--navy-700); }
+
+/* Vodeći utisak: ista kartica, samo diše šire jer stoji sam u redu. */
+@media (min-width: 900px) {
+  .fs-c .tst-lead { padding: 2.1rem 2.1rem 1.8rem; }
+  .fs-c .tst-lead .res { font-size: clamp(2.4rem, 6vw, 3.1rem); }
+  .fs-c .tst-lead .res-note { font-size: 1.1rem; }
+  .fs-c .tst-lead q { font-size: 1.05rem; max-width: 68ch; }
+}
+
+/* --- brojke --- */
+.fs-c .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; text-align: center; }
+.fs-c .stats div { background: rgba(255,255,255,.08); border-radius: 16px; padding: 1.1rem .5rem; }
+.fs-c .stats b { display: block; font-size: clamp(1.5rem, 6vw, 2.3rem); font-weight: 800; letter-spacing: normal; color: var(--gold-200); }
+.fs-c .stats span { font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--navy-300); }
+/* Statistika na svetloj podlozi (npr. Kvalifikacije na navy je već pokrivena; na sand/cream): */
+.fs-c .c-sand .stats div, .fs-c .c-cream .stats div { background: #fff; border: 1px solid var(--cream-300); }
+.fs-c .c-sand .stats b, .fs-c .c-cream .stats b { color: var(--gold-600); }
+.fs-c .c-sand .stats span, .fs-c .c-cream .stats span { color: var(--charcoal-400); }
+
+/* ================= KPI TRAKA (Početna) =========================
+   Puna zelena traka odmah ispod heroa, po uzoru na tamnu traku sa
+   stare početne. Zlato --gold-200 na brend zelenoj daje 8,26:1, pa
+   prolazi i krupna brojka i sitan natpis ispod nje.
+   Tri stavke stoje u redu i na najužem telefonu: natpisi su kratki,
+   a razmak se skuplja preko `clamp`, pa nema preloma u dva reda. */
+/* Traka je sada dvoslojna: zlatna podloga je blago zarotirana i viri
+   iznad i ispod zelene, koja stoji prava. Oba sloja crtaju pseudoelementi,
+   pa u HTML-u nema praznog `div`-a samo zbog ukrasa.
+     ::before  zlatna, zarotirana, prostire se preko cele visine sekcije
+     ::after   zelena, prava, uvučena gore i dole da zlatna proviri
+   `isolation: isolate` drži oba sloja iza sadržaja a unutar sekcije.
+   `overflow-x: clip` seče 40px kojima se zlatna traka proteže levo i desno
+   (bez njih bi rotacija ostavila bele klinove u uglovima), a `overflow-y`
+   ostaje `visible` — par `clip`/`visible` je jedini dozvoljen, pa se
+   uspravno ništa ne seče. */
+.fs-c .kpi {
+  position: relative; isolation: isolate;
+  overflow-x: clip; overflow-y: visible;
+  background: transparent;
+  padding: clamp(1.9rem, 5.6vw, 2.6rem) 0;
+}
+.fs-c .kpi::before {
+  content: ""; position: absolute; z-index: -2;
+  left: -40px; right: -40px; top: 0; bottom: 0;
+  background: var(--gold-500);
+  transform: rotate(-1.1deg);
+}
+.fs-c .kpi::after {
+  content: ""; position: absolute; z-index: -1;
+  left: 0; right: 0; top: 11px; bottom: 11px;
+  background: var(--navy-700);
+}
+/* Forme su tanke linije, bez ispune, u istom zlatu kao brojke.
+   Zlato --gold-200 na zelenoj daje 8,26:1, znatno iznad praga od 3:1
+   za grafičke elemente. */
+.fs-c .kpi-ikona {
+  display: block; margin: 0 auto .55rem;
+  width: clamp(22px, 6.4vw, 30px); height: clamp(22px, 6.4vw, 30px);
+  fill: none; stroke: var(--gold-200); stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+.fs-c .kpi-in { display: flex; justify-content: center; gap: clamp(1.6rem, 9vw, 5rem); text-align: center; }
+.fs-c .kpi b {
+  display: block; font-size: clamp(1.55rem, 6.5vw, 2.4rem); font-weight: 800;
+  letter-spacing: -0.02em; line-height: 1.1; color: var(--gold-200);
+}
+.fs-c .kpi span {
+  display: block; margin-top: .3rem; font-size: clamp(.72rem, 2.6vw, .88rem);
+  line-height: 1.3; color: var(--gold-200);
+}
+
+/* --- o-meni foto --- */
+.fs-c .portrait { aspect-ratio: 4/5; max-width: 420px; margin-inline: auto; border-radius: 20px; overflow: hidden; background: var(--navy-700); width: 100%; }
+.fs-c .portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ================= O MENI kao pozadinska slika =================
+   Dragana stoji u levoj trećini kadra (izmereno: bela odeća zauzima
+   15,4%–32,8% širine slike, teme na 7% visine), pa tekst ide desno.
+   Osnova slike je #020B1E — sve prelivke idu ka toj boji, ne ka
+   --navy-900, da se ne vidi šav tamo gde slika prestaje.
+   Na mobilnom pored nje nema mesta za tekst: slika postaje traka na
+   vrhu koja se gasi u boju sekcije, a tekst stoji ispod.
+   --------------------------------------------------------------- */
+.fs-c .about {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #020B1E;
+  padding-top: 0;
+}
+.fs-c .about-bg {
+  position: absolute; top: 0; left: 0; right: 0; z-index: -2;
+  /* traka: dovoljno visoka da se vidi cela figura, a ne samo glava */
+  height: clamp(300px, 100vw, 460px);
+}
+.fs-c .about-bg img {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+  /* 26% drži Draganu u levoj trećini i kad se kadar seče po širini;
+     `top` čuva teme, jer se figura seče odozdo, nikad odozgo */
+  object-position: 26% top;
+}
+/* Bez z-index-a: ::after je posle <img> u stablu pa ga pokriva. */
+.fs-c .about-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(2,11,30,0) 42%, rgba(2,11,30,.55) 72%, rgba(2,11,30,.92) 92%, #020B1E 100%);
+}
+.fs-c .about-in { padding-top: clamp(300px, 100vw, 460px); }
+
+@media (min-width: 900px) {
+  /* Slika drži celu sekciju; tekst stoji u desnoj koloni, van figure. */
+  .fs-c .about { padding-top: clamp(2.75rem, 9vw, 5.5rem); min-height: 34rem; display: flex; align-items: center; }
+  .fs-c .about-bg { bottom: 0; height: auto; }
+  /* Vodoravna vrednost radi samo dok je kadar širi od prozora (do
+     ~1370px) — iznad toga se slika seče po visini. A baš tu i treba:
+     na 900px sa 22% figuri ostaje 62px do tekstualne kolone, sa 34%
+     razmak je 106px. */
+  .fs-c .about-bg img { object-position: 34% top; }
+  /* Zastor samo nad tekstom: najsvetlije linije geometrije daju
+     belom tekstu 3,85:1, a ispod 55% zastora 6,8:1. Levo ostaje
+     čisto da se figura ne zamuti. */
+  .fs-c .about-bg::after {
+    background: linear-gradient(90deg,
+      rgba(2,11,30,0) 32%, rgba(2,11,30,.35) 46%, rgba(2,11,30,.62) 60%, rgba(2,11,30,.72) 100%);
+  }
+  .fs-c .about-in { padding-top: 0; display: flex; justify-content: flex-end; }
+  .fs-c .about-col { width: min(100%, 30rem); }
+}
+
+/* --- FAQ --- */
+.fs-c .faq details { background: #fff; border: 1px solid var(--cream-300); border-radius: 16px; margin-bottom: .7rem; overflow: hidden; }
+.fs-c .faq summary { cursor: pointer; list-style: none; padding: 1.15rem 3rem 1.15rem 1.2rem; position: relative; font-weight: 600; font-size: 1.02rem; line-height: 1.4; }
+.fs-c .faq summary::-webkit-details-marker { display: none; }
+.fs-c .faq summary::after { content: "+"; position: absolute; right: 1.1rem; top: .95rem; font-size: 1.5rem; font-weight: 400; color: var(--gold-500); }
+.fs-c .faq details[open] summary::after { content: "−"; }
+.fs-c .faq p { padding: 0 1.2rem 1.2rem; color: var(--charcoal-500); font-size: .97rem; }
+
+/* --- lepljiva traka (mobilno) --- */
+.fs-c .sticky {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: rgba(255,255,255,.97);
+  backdrop-filter: blur(12px); border-top: 1px solid var(--cream-300);
+  padding: .55rem 1.35rem; display: flex; gap: .75rem; align-items: center;
+}
+.fs-c .sticky .meta { flex: none; line-height: 1.15; }
+.fs-c .sticky .meta b { display: block; font-size: .95rem; font-weight: 700; }
+.fs-c .sticky .meta span { font-size: .7rem; color: var(--charcoal-400); }
+.fs-c .sticky .btn { flex: 1; padding: .85rem 1rem; font-size: .95rem; min-height: 46px; }
+@media (min-width: 900px) { .fs-c .sticky { display: none; } }
+
+/* ================= KRUGOVI USLUGA (Početna) ==================================
+   Mobilno prvo: vodoravni snap-carousel, krupni krugovi u boji, jak kontrast.
+   Na desktopu se razvija u red. Bez foto placeholder-a: disk je pun ton +
+   label; kad stignu prave slike usluga, dodaje se <img> ispod .tint. */
+.fs-c .circles { display: flex; gap: 1.25rem; overflow-x: auto; padding: .5rem .25rem 1.25rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.fs-c .circles::-webkit-scrollbar { display: none; }
+.fs-c .circ { flex: none; scroll-snap-align: center; width: 250px; display: flex; flex-direction: column; align-items: center; gap: 1rem; text-decoration: none; color: inherit; }
+.fs-c .circ .disc { position: relative; width: 250px; height: 250px; border-radius: 50%; overflow: hidden; box-shadow: 0 16px 40px rgba(62,42,30,.24); background: var(--gold-500); }
+.fs-c .circ .disc img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.fs-c .circ .tint { position: absolute; inset: 0; }
+.fs-c .circ .lbl { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; padding: 1.9rem 1.4rem; text-align: center; }
+.fs-c .circ .lbl i { font-style: italic; font-size: .9rem; color: #fff; }
+.fs-c .circ .lbl b { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: #fff; line-height: 1.2; }
+/* Beli taster na svetlom zlatu daje 2,85:1, ispod praga od 3:1 za
+   elemente, pa mu ivicu crta obrub a ne sama razlika u svetlini.
+   `margin-top` razdvaja naziv usluge od dugmeta: `gap` na `.lbl` vazi
+   podjednako za sva tri reda, a ovde treba vazduha samo pod naslovom. */
+.fs-c .circ .lbl .pill { background: #fff; color: var(--charcoal); border: 1px solid rgba(62,42,30,.28); border-radius: var(--pill); margin-top: .5rem; padding: .55rem 1.2rem; font-size: .8rem; font-weight: 700; text-decoration: none; cursor: pointer; font-family: var(--font); }
+.fs-c .circ p { font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); text-align: center; max-width: 250px; }
+@media (min-width: 1100px) {
+  .fs-c .circles { overflow: visible; justify-content: center; gap: 1.5rem; }
+  .fs-c .circ, .fs-c .circ .disc { width: 245px; }
+  .fs-c .circ .disc { height: 245px; }
+}
+/* Sva četiri diska su 30.08. postala zlatna, po prvom krugu. Klase
+   t-1..t-4 su ostale u HTML-u da se redosled i dalje čita, ali više ne
+   nose različite boje.
+
+   PAŽNJA, ovo je svesna odluka a ne previd: ton je vraćen na --gold-500
+   sa belim tekstom, na zahtev, jer je tamna varijanta odbijena.
+   Izmereno: belo na --gold-500 daje 2,85:1, ispod praga od 4,5. Braon je
+   davao 4,74, a --gold-700 sa belim 7,15 — obe su čitljivije od ove.
+   Ako se bude tražila čitljivost bez menjanja tona, rešenje je tamni
+   zastor iza samog natpisa, ne druga boja slova. */
+.fs-c .t-1, .fs-c .t-2, .fs-c .t-3, .fs-c .t-4 { background: var(--gold-500); }
+
+/* ================= "ŠTA IZDVAJA MOJ PRISTUP" (O meni) — grid 2 kolone =========
+   Mala fotografija/ikonica levo, naslov + pasus desno (forma po referenci). */
+.fs-c .six { display: grid; gap: 28px 40px; grid-template-columns: 1fr; }
+@media (min-width: 820px) { .fs-c .six { grid-template-columns: 1fr 1fr; } }
+.fs-c .six .it6 { display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start; }
+.fs-c .six .it6 .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--gold-50); border: 1px solid var(--cream-300); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--gold-500); }
+.fs-c .six .it6 h3 { margin: 0 0 6px; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.25; }
+.fs-c .six .it6 p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--charcoal-500); }
+.fs-c .c-navy .six .it6 .ico { background: rgba(255,255,255,.08); border-color: rgba(237,216,190,.2); color: var(--gold-200); }
+.fs-c .c-navy .six .it6 p { color: var(--navy-300); }
+
+/* ============================================================
+   MODAL (kontakt / prijava) — "Markov upitnik", otvara se bez
+   napuštanja stranice. Živa forma → Supabase `inquiries`.
+   Deljen za sve tri stranice; klase su nezavisne od .fs-c
+   wrappera (modal se renderuje preko celog viewporta).
+   ============================================================ */
+.fs-c-modal-overlay {
+  position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(11,43,40,.55); backdrop-filter: blur(4px); padding: 0; animation: fsc-fade .2s ease;
+}
+@media (min-width: 640px) { .fs-c-modal-overlay { align-items: center; padding: 1.5rem; } }
+.fs-c-modal {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  background: #FAF4ED; color: #3E2A1E; width: 100%; max-width: 460px;
+  max-height: 92vh; overflow-y: auto; border-radius: 22px 22px 0 0; padding: 1.6rem 1.35rem 2rem;
+  box-shadow: 0 -10px 50px rgba(11,43,40,.3); animation: fsc-slide .25s cubic-bezier(.32,.72,0,1);
+}
+@media (min-width: 640px) { .fs-c-modal { border-radius: 22px; animation: fsc-pop .25s cubic-bezier(.32,.72,0,1); } }
+.fs-c-modal .modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.2rem; }
+.fs-c-modal .modal-head h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; margin: 0; }
+.fs-c-modal .modal-head p { font-size: .9rem; color: #665243; margin-top: .35rem; }
+.fs-c-modal .modal-close { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #EDD8BE; color: #4C382B; font-size: 1.3rem; line-height: 1; cursor: pointer; }
+.fs-c-modal .modal-close:hover { background: #DCC5A6; }
+.fs-c-modal .field { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+.fs-c-modal .field label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #6F5B4B; }
+.fs-c-modal .field input, .fs-c-modal .field select {
+  font-family: inherit; font-size: 1.05rem; padding: .9rem 1rem; min-height: 52px;
+  border: 1.5px solid #DCC5A6; border-radius: 14px; background: #fff; color: #3E2A1E; width: 100%;
+}
+/* Modal stoji izvan `.fs-c` pa ne vidi tokene — boje su doslovne.
+   Terakota je 30.08. zamenjena brend zelenom (#12403C / #0F3532 /
+   #E8EFE9). Jedini izuzetak je poruka o grešci ispod: greška mora da
+   se čita kao greška, pa ostaje crvena, ali čista crvena, ne cigla. */
+.fs-c-modal .field input:focus, .fs-c-modal .field select:focus { outline: 0; border-color: #12403C; }
+.fs-c-modal .modal-btn {
+  width: 100%; border: 0; cursor: pointer; background: #12403C; color: #fff; font-family: inherit;
+  font-size: 1.05rem; font-weight: 700; padding: 1.05rem 1.5rem; border-radius: 999px; min-height: 56px;
+  box-shadow: 0 10px 26px rgba(18,64,60,.3); transition: background .2s;
+}
+.fs-c-modal .modal-btn:hover { background: #0F3532; }
+.fs-c-modal .modal-btn:disabled { opacity: .6; cursor: default; }
+.fs-c-modal .modal-privacy { font-size: .78rem; color: #6F5B4B; text-align: center; margin-top: .8rem; }
+.fs-c-modal .modal-error { color: #B3261E; font-size: .85rem; margin-top: .6rem; text-align: center; }
+.fs-c-modal .modal-success { text-align: center; padding: 1.5rem .5rem; }
+.fs-c-modal .modal-success .check { width: 64px; height: 64px; border-radius: 50%; background: #E8EFE9; color: #12403C; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1rem; }
+.fs-c-modal .modal-success h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: .5rem; }
+.fs-c-modal .modal-success p { color: #665243; font-size: .95rem; }
+
+@keyframes fsc-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fsc-slide { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes fsc-pop { from { transform: scale(.96); opacity: .6; } to { transform: scale(1); opacity: 1; } }
+
+/* --- ISHOD: numerisana lista + kartica sa cenom --------------------
+   Lista je 24.08. prestala da bude interaktivna: nema više panela koji
+   se menja, pa nema ni šta da se bira. Ostao je isti izgled (broj,
+   naslov, opis, iste linije), samo bez radnje i bez strelice koja je
+   nagoveštavala klik. Desno je sada cena.
+   Kontrast na zelenoj kartici #0F3532: gold-200 9,56 · bež 9,63 ·
+   belo 13,33. -------------------------------------------------------- */
+.fs-c .learn { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 1000px) { .fs-c .learn { grid-template-columns: 1.05fr .95fr; gap: 3.5rem; } }
+
+/* Leva kolona drži i listu i poziv na akciju, da dugme stoji pod
+   brojevima a ne preko cele širine ispod oba stupca. */
+.fs-c .learn-col { display: flex; flex-direction: column; gap: 1.75rem; }
+.fs-c .learn-list { border-top: 1px solid var(--cream-300); }
+.fs-c .learn-item {
+  display: grid; grid-template-columns: auto 1fr; gap: .3rem 1.15rem;
+  align-items: start; width: 100%; text-align: left;
+  border-bottom: 1px solid var(--cream-300);
+  padding: 1.25rem .25rem;
+}
+.fs-c .learn-item .ln {
+  /* obe ćelije su postavljene eksplicitno: sa auto-placementom i
+     span-om preko dva reda opis upadne u kolonu broja */
+  grid-column: 1; grid-row: 1 / span 2; align-self: start;
+  font-size: 2.1rem; font-weight: 300; line-height: 1; letter-spacing: -0.02em;
+  /* gold-400 na bež daje 1,65 i broj se gubi; gold-700 daje 5,16 */
+  color: var(--gold-700);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .learn-item .lt {
+  grid-column: 2; grid-row: 1;
+  font-size: 1.22rem; font-weight: 600; line-height: 1.25; letter-spacing: -0.02em;
+  color: var(--charcoal);
+}
+.fs-c .learn-item .ld { grid-column: 2; grid-row: 2; font-size: .93rem; line-height: 1.5; color: var(--charcoal-500); }
+
+/* Kartica sa cenom. Za razliku od starog panela, vidi se na SVIM
+   širinama: stari panel je ponavljao ono što u listi već piše pa je
+   ispod 1000px bio suvišan, a cena nigde drugde na strani ne stoji. */
+.fs-c .learn-price {
+  display: flex; flex-direction: column; align-items: center; gap: .5rem;
+  position: relative; overflow: hidden; text-align: center;
+  padding: 2.4rem 1.75rem; border-radius: 24px;
+  background: var(--navy-800); color: #fff;
+  box-shadow: 0 22px 50px rgba(62,42,30,.18);
+}
+.fs-c .learn-price > * { position: relative; }
+.fs-c .lp-label {
+  font-size: .78rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--gold-200);
+}
+.fs-c .lp-value {
+  font-size: clamp(2.8rem, 11vw, 4rem); font-weight: 800;
+  line-height: 1; letter-spacing: normal;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.fs-c .lp-note {
+  margin-top: 1rem; max-width: 22rem;
+  font-size: .97rem; line-height: 1.55; color: var(--navy-300);
+}
+@media (min-width: 1000px) {
+  .fs-c .learn-price { min-height: 460px; justify-content: center; padding: 2.5rem; }
+  /* isti prsten-motiv kao „Enso" zatvaranje, da kartica ne bude prazna ploča */
+  .fs-c .learn-price::before,
+  .fs-c .learn-price::after {
+    content: ""; position: absolute; border-radius: 50%; pointer-events: none;
+    left: 50%; top: 50%; transform: translate(-50%,-50%);
+  }
+  .fs-c .learn-price::before { width: 250px; height: 250px; border: 1px solid rgba(200,168,78,.5); }
+  .fs-c .learn-price::after  { width: 330px; height: 330px; border: 1px dashed rgba(200,168,78,.28); }
+}
+
+/* --- ZA KOGA JE: podeljena kartica (navy levo, lista desno) --------
+   Naslov i zaključna napomena drže tamnu stranu, uslovi svetlu.
+   Kvačica je tamna na zlatnom krugu: bela na --gold-400 daje 2,29
+   kontrasta i pada prag za ikonice (3:1), tamna daje 7,60. */
+.fs-c .whofor {
+  display: grid; grid-template-columns: 1fr;
+  border-radius: 24px; overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--cream-300);
+}
+@media (min-width: 900px) { .fs-c .whofor { grid-template-columns: 37fr 63fr; } }
+
+.fs-c .whofor-aside {
+  background: var(--navy-800); color: #fff;
+  padding: 2.25rem 1.75rem;
+  display: flex; flex-direction: column; gap: 2rem;
+}
+@media (min-width: 900px) { .fs-c .whofor-aside { padding: 3rem 2.5rem; justify-content: space-between; } }
+.fs-c .whofor-aside .eyebrow { color: var(--gold-200); }
+.fs-c .whofor-aside h2 { color: #fff; margin-top: .75rem; }
+.fs-c .whofor-note {
+  font-size: 1rem; line-height: 1.6; color: var(--navy-300);
+  padding-top: 1.5rem; border-top: 1px solid rgba(237,216,190,.25);
+}
+
+.fs-c .whofor-list {
+  background: #fff; margin: 0; padding: .5rem 1.75rem; list-style: none;
+}
+@media (min-width: 900px) { .fs-c .whofor-list { padding: 1rem 2.5rem; } }
+.fs-c .whofor-list li {
+  display: grid; grid-template-columns: auto 1fr; gap: 1.1rem;
+  align-items: start;
+  padding: 1.15rem 0; border-bottom: 1px solid var(--cream-200);
+  font-size: 1.02rem; line-height: 1.5; color: var(--charcoal);
+}
+.fs-c .whofor-list li:last-child { border-bottom: 0; }
+.fs-c .whofor-list li::before {
+  content: "✓";
+  width: 1.75rem; height: 1.75rem; flex: none;
+  border-radius: 50%; background: var(--gold-400); color: var(--charcoal);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; font-weight: 700; line-height: 1;
+  margin-top: .05rem;
+}
+
+/* --- KAKO IZGLEDA KURS: traka nedelja + kolone sa razdelnicima ----
+   Traka nosi ritam osam nedelja; četiri tačke stoje tačno iznad
+   četiri kolone jer dele isti grid. Natpis na kraju je --gold-600:
+   --gold-400 na cream podlozi daje 2,22 i ne bi se pročitao. */
+.fs-c .course-rail { display: none; }
+@media (min-width: 900px) {
+  .fs-c .course-rail {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    align-items: center; position: relative;
+    height: 1.6rem; margin-bottom: .5rem; padding-right: 6.5rem;
+  }
+  .fs-c .course-rail::before {
+    content: ""; position: absolute; left: 0; right: 5.75rem; top: 50%;
+    height: 1px; background: var(--gold-400); opacity: .6;
+  }
+  .fs-c .rail-dot {
+    position: relative; justify-self: start;
+    width: .72rem; height: .72rem; border-radius: 50%;
+    border: 1.5px solid var(--gold-400); background: var(--cream-50);
+  }
+  .fs-c .rail-dot.is-on { width: .95rem; height: .95rem; background: var(--gold-400); }
+  .fs-c .rail-end {
+    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    font-size: .82rem; font-weight: 700; color: var(--gold-600); white-space: nowrap;
+  }
+}
+
+.fs-c .course-cols { display: grid; grid-template-columns: 1fr; gap: 1.75rem; }
+@media (min-width: 640px) { .fs-c .course-cols { grid-template-columns: 1fr 1fr; gap: 2rem 0; } }
+@media (min-width: 900px) { .fs-c .course-cols { grid-template-columns: repeat(4, 1fr); gap: 0; } }
+
+.fs-c .course-col { padding-top: 1.5rem; border-top: 1px solid var(--cream-300); }
+@media (min-width: 900px) {
+  .fs-c .course-col {
+    padding: 1.75rem 1.75rem 0; border-top: 0;
+    border-left: 1px solid var(--cream-300);
+  }
+  .fs-c .course-col:first-child { padding-left: 0; border-left: 0; }
+  .fs-c .course-col:last-child { padding-right: 0; }
+}
+.fs-c .course-col h3 { font-size: 1.15rem; font-weight: 700; color: var(--charcoal); margin-bottom: .6rem; }
+.fs-c .course-col p { font-size: 1rem; line-height: 1.6; color: var(--charcoal-500); }
+
+.fs-c .course-note {
+  font-style: italic; font-weight: 500;
+  font-size: clamp(1.02rem, 2.6vw, 1.22rem); line-height: 1.5;
+  color: var(--charcoal); margin-top: .75rem;
+}
+
+/* --- ENERGETSKA MAPA -----------------------------------------------
+   Sekcija je 24.08. prešla sa dve kartice („teče" naspram „zastane")
+   na niz od pet simptoma, po klijentovom tekstu. Kontrast na zelenoj
+   podlozi --navy-800 (#0F3532): belo 13,33 · bež 9,63 · gold-200 9,56.
+   -------------------------------------------------------------------- */
+.fs-c .emap-head { text-align: center; max-width: 46rem; margin-inline: auto; }
+.fs-c .emap-head .lead { color: var(--navy-300); }
+
+/* Uvodni i zaključni pasus dele istu širinu sa naslovom, da sekcija
+   ostane jedan centriran stub. */
+.fs-c .emap-p {
+  max-width: 46rem; margin-inline: auto; text-align: center;
+  color: #fff; font-size: 1.05rem; line-height: 1.65;
+}
+.fs-c .emap-p.is-muted { color: var(--navy-300); }
+.fs-c .emap-cue {
+  text-align: center; font-weight: 700; color: var(--gold-200);
+  font-size: 1.05rem;
+}
+
+.fs-c .emap-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: .75rem;
+}
+@media (min-width: 640px) { .fs-c .emap-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
+@media (min-width: 900px) { .fs-c .emap-grid { grid-template-columns: repeat(3, 1fr); } }
+.fs-c .emap-grid li {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(237,216,190,.22);
+  border-radius: 18px; padding: 1.15rem 1.3rem;
+  color: #fff; font-size: 1rem; line-height: 1.45;
+}
+
+/* --- UPIS: tri osnovna podatka u redu -------------------------------
+   Sekcije „Upis" (terakota) i zatvaranje pred footerom spojene su 27.08.
+   u jednu zelenu. Ostali su samo čipovi i nov red sa podacima; terakota
+   varijanta i njena vertikalna crta su obrisane kao mrtav kod.
+   Kontrast na --navy-800 (#0F3532): belo 13,33 · bež 9,63 · gold-200 9,56.
+   -------------------------------------------------------------------- */
+.fs-c .upis-fakti {
+  display: grid; grid-template-columns: 1fr; gap: 1.5rem;
+  margin-top: 2.25rem; padding: 1.75rem 0;
+  border-top: 1px solid rgba(255,255,255,.22);
+  border-bottom: 1px solid rgba(255,255,255,.22);
+}
+@media (min-width: 640px) {
+  .fs-c .upis-fakti { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  /* tanke pregrade između podataka, bez okvira oko svakog */
+  .fs-c .upis-fakti > div + div { border-left: 1px solid rgba(255,255,255,.22); }
+}
+.fs-c .upis-fakti .lbl {
+  display: block; font-size: .72rem; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--gold-200); margin-bottom: .45rem;
+}
+.fs-c .upis-fakti .val {
+  display: block; font-size: clamp(1.25rem, 4vw, 1.6rem); font-weight: 700;
+  letter-spacing: -0.02em; color: #fff; line-height: 1.15;
+}
+.fs-c .upis-fakti .sub {
+  display: block; margin-top: .35rem; font-size: .9rem; line-height: 1.4;
+  color: var(--navy-300);
+}
+
+.fs-c .enroll-chips {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: .7rem;
+  margin-top: 2rem; list-style: none; padding: 0;
+}
+.fs-c .enroll-chips li {
+  background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.28);
+  border-radius: var(--pill); padding: .8rem 1.35rem;
+  font-size: .97rem; line-height: 1.35; color: #fff;
+}
+
+/* ============ BLOK 13 — ZATVARANJE PRE FOOTERA ============
+   Poslednji poziv je centriran: naslov, jedna rečenica, dve radnje u
+   redu i tanka linija ispod koje stoje tri broja. Brojevi se ovde ne
+   ponavljaju u karticama kao u „O meni" nego kao tihi red, da ne
+   preuzmu pažnju od dugmadi.
+   --------------------------------------------------------- */
+.fs-c .close { text-align: center; max-width: 52rem; margin-inline: auto; }
+.fs-c .close .lead { max-width: 34rem; margin-inline: auto; margin-top: 1rem; }
+.fs-c .close-cta { display: flex; flex-direction: column; gap: .75rem; margin-top: 2.25rem; }
+@media (min-width: 640px) {
+  .fs-c .close-cta { flex-direction: row; justify-content: center; gap: 1rem; }
+  /* Bez donje granice „Prijavi se" ispadne upola uža pilula od
+     „Zakaži konsultaciju" — dve radnje istog reda treba da nose
+     istu težinu. */
+  .fs-c .close-cta .btn { min-width: 13rem; }
+}
+/* Linija i brojevi dele istu širinu, pa linija čita kao granica tog
+   reda, a ne kao slobodna crta preko sekcije. */
+.fs-c .close-proof {
+  max-width: 30rem; margin: 3rem auto 0; padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,.22);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-items: start;
+}
+.fs-c .close-proof b {
+  display: block; font-size: clamp(1.5rem, 5.5vw, 2.1rem);
+  font-weight: 800; letter-spacing: normal; color: #fff; line-height: 1.1;
+}
+/* Natpis ide malim slovima, ne verzalom kao u .stats: verzal na .72rem
+   uz beli broj pravi drugi naglasak tamo gde treba samo fusnota. */
+.fs-c .close-proof span {
+  display: block; margin-top: .35rem; font-size: .85rem; line-height: 1.35;
+  color: var(--navy-300);
+}
+
+/* ====== HEADER I FOOTER NA JAVNIM STRANAMA ========================
+   Zaglavlje i podnožje dolaze iz zajedničkog layouta i nose staru
+   paletu, pa bi na zelenoj strani ostala plava pilula „Prijava" i
+   plave ikonice u footeru.
+
+   `body:has(.fs-c)` pogađa svih šest javnih strana, jer samo one renderuju
+   `.fs-c` omotač; login, dashboard i admin ostaju na staroj paleti iz
+   globals.css. Redefinišu se Tailwind-ove promenljive
+   (`--color-*`), a njegove klase (`.bg-navy-500` i slične) su
+   definisane kao `var(--color-navy-500)` pa se povlače za njima.
+   Te strane ne osećaju ništa: promenljive se nigde drugde ne menjaju.
+
+   Blok se briše tek kad i login, dashboard i admin pređu na novu paletu
+   (admin faza, PLAN-PRELAZAK.md).
+   ================================================================== */
+body:has(.fs-c) {
+  /* svetle površine zaglavlja */
+  --color-cream-50:  #FAF4ED;
+  --color-cream-100: #F5EBDD;
+  --color-cream-200: #EDD8BE;
+  --color-cream-300: #DCC5A6;
+  --color-sand-100:  #F5EBDD;
+  --color-sand-200:  #DCC5A6;
+  /* tekst i ikonice na braon podnožju: bež 9,76 i 8,60 na #3E2A1E */
+  --color-sand-300:  #EDD8BE;
+  --color-sand-400:  #E1CBB0;
+
+  /* plava -> zelena */
+  --color-navy-50:  #E8EFE9;
+  --color-navy-100: #CFE0D6;
+  --color-navy-200: #CFE0D6;
+  /* navy-400 nosi ikonice i linkove na braon podnožju; zlato daje
+     5,90 gde je stara plava davala 5,44 */
+  --color-navy-300: #F2D98A;
+  --color-navy-400: #C8A84E;
+  --color-navy-500: #12403C;  /* pilula „Prijava"; belo na njoj 11,51 */
+  --color-navy-600: #0F3532;  /* tekst u čipu na navy-50: 11,40 */
+  --color-navy-700: #0F3532;
+  --color-navy-800: #0B2B28;
+  --color-navy-900: #0B2B28;
+
+  /* crna -> braon */
+  --color-charcoal:     #3E2A1E;
+  --color-charcoal-700: #4C382B;
+  --color-charcoal-600: #4C382B;
+  --color-charcoal-500: #665243;
+  --color-charcoal-400: #6F5B4B;
+}
+
+/* ================= HERO POČETNE: fotografija na beloj ====================
+   Hero je svetao: bela sa leve strane nosi tekst, pa se gasi u studijsku
+   pozadinu fotografije. Prelaz se jedva primećuje jer je i sama pozadina
+   snimka svetla — belo u belo, za razliku od ranije zelene koja je morala
+   da pokrije mnogo veću razliku u tonu.
+   Preliv je u CSS-u, ne pečen u sliku, da se prilagodi širini ekrana.
+   ------------------------------------------------------------------------ */
+.fs-c .hero-pocetna { background: #fff; color: var(--charcoal); }
+
+/* Naslov je zlatan, ali NE zlato sa krugova: --gold-500 na beloj daje
+   2,85 i pada čak i za krupan tekst. --gold-600 daje 4,05 i prolazi. */
+.fs-c .hero-pocetna h1 { color: var(--gold-600); }
+.fs-c .hero-pocetna .lead { color: var(--charcoal-500); }
+/* Vazduh izmedju pasusa i dugmadi. `gap` na `.hero-body` vazi podjednako
+   za sve razmake u koloni, a ovde treba samo ispod pasusa. */
+.fs-c .hero-pocetna .hero-cta { margin-top: 1.1rem; }
+
+/* Preliv je PEČEN u sliku: levo je ravna bela, pa se gasi tik pre nje.
+   CSS zastora preko fotografije NEMA, jer je on ranije padao i preko
+   Dragane i prao je. Ovde ga izuzetno vraća samo uski desktop, gde `cover`
+   odseca toliko sleva da bela iz slike ne stigne do kraja teksta. */
+.fs-c .hero-pocetna .hero-foto::after { content: none; }
+
+@media (min-width: 768px) {
+  /* Fotografija je usidrena desno-gore: pri zumu joj noge izlaze ispod
+     kadra, a teme mora da ostane u njemu. */
+  .fs-c .hero-pocetna .hero-foto img { object-position: right top; }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+  .fs-c .hero-pocetna .hero-foto::after {
+    content: "";
+    background: linear-gradient(90deg,
+      rgba(255,255,255,.97) 0%, rgba(255,255,255,.94) 34%,
+      rgba(255,255,255,.60) 46%, rgba(255,255,255,0) 55%);
+  }
+  /* Uža kolona: na 768px Dragana počinje na 57% širine, a tekst je na
+     62% ulazio pravo u nju. */
+  .fs-c .hero-pocetna .hero-body { max-width: 52%; }
+  /* U užoj koloni dva dugmeta ne staju uvek jedno pored drugog i
+     preklapala su se. `wrap` ih pušta u red dok staju, pa ih prelomi. */
+  .fs-c .hero-pocetna .hero-cta { flex-wrap: wrap; gap: .6rem .75rem; }
+  .fs-c .hero-pocetna .hero-cta .btn { align-self: flex-start; }
+}
+
+@media (max-width: 767px) {
+  /* Na telefonu je bela već upečena u gornji deo mobilnog platna i gasi se
+     tačno iznad njenog temena, pa vodoravni zastor ovde smeta. */
+  .fs-c .hero-pocetna .hero-foto::after {
+    background: linear-gradient(180deg,
+      rgba(255,255,255,.5) 0%, rgba(255,255,255,.3) 34%, rgba(255,255,255,0) 52%);
+  }
+  .fs-c .hero-pocetna .hero-foto img { object-position: center bottom; }
+}
+
+/* ================= O MENI: naizmenične trake =============================
+   Strana je 31.08. napisana ispočetka; ovo su jedina pravila koja joj trebaju
+   preko postojećih `card` / `wrap` / `lead`.
+   ------------------------------------------------------------------------ */
+
+/* Prva traka sama pravi mesto za plutajući navbar. On je `fixed` i ne
+   zauzima prostor u rasporedu, a `.card` na telefonu daje samo 44px
+   odozgo (clamp od 9vw), pa je nadnaslov padao pod pilulu — ona je
+   visoka 76px, računajući i 20px razmaka od vrha. */
+.fs-c .omeni-vrh,
+.fs-c .uplata-vrh { padding-top: 108px; }
+@media (min-width: 768px) {
+  .fs-c .omeni-vrh,
+  .fs-c .uplata-vrh { padding-top: 128px; }
+}
+
+/* Naslov sme šire od tekstualne mere: krupan je i prelama se sam. */
+.fs-c .omeni-naslov { max-width: 17ch; }
+@media (max-width: 767px) { .fs-c .omeni-naslov { max-width: none; } }
+
+/* Mera reda za čitanje. `.lead` po pravilu nema gornju granicu, a puna
+   širina `.wrap` na desktopu daje red od oko 85 znakova, predugačak za
+   udoban tekst. 760px je oko 65 znakova pri 20,8px. */
+.fs-c .omeni-pasus { max-width: 760px; }
+/* Na bež podlozi tekst ide tamniji: --charcoal-500 na #EDD8BE daje 4,63
+   a --charcoal-600 daje 6,92, pa duži pasus stoji komotnije. */
+.fs-c .omeni-pasus-bez { color: var(--charcoal-600); }
+
+/* Nadnaslov sa geometrijskom formom. `.eyebrow` je `inline`, pa mu treba
+   `inline-flex` da se forma i slova poravnaju po sredini. */
+.fs-c .omeni-nad { display: inline-flex; align-items: center; gap: .55rem; }
+.fs-c .omeni-oznaka { flex: none; }
+
+/* Fotografija preko cele širine. Visina je fiksna a slika `cover`, ali su
+   oba kadra isečena u TAČNOM odnosu svog okvira (desktop 2,571, telefon
+   1,3), pa `cover` u praksi nema šta da doseca. */
+.fs-c .omeni-traka { height: 300px; overflow: hidden; background: var(--cream-200); }
+.fs-c .omeni-traka picture,
+.fs-c .omeni-traka img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (min-width: 768px) {
+  .fs-c .omeni-traka { height: clamp(380px, 39vw, 560px); }
+}
+
+/* Dugme ispod FAQ-a. `.card` sadržaj je u `.wrap.stack`, dakle flex-kolona
+   sa `align-items: stretch`, pa bi se dugme razvuklo preko cele širine —
+   isti razlog zbog kog i ostala dugmad traže `align-self`. */
+.fs-c .faq-cta { margin-top: 2rem; }
+@media (min-width: 640px) { .fs-c .faq-cta { align-self: flex-start; } }
+
+/* ================= UPLATA I ZAHVALNICA ==================================
+   Strane `/uplata` i `/hvala`. Obe su javne ali neindeksirane, i obe
+   se otvaraju posle prijave — vidi `app/(site)/uplata/page.tsx`.
+   ------------------------------------------------------------------------ */
+
+
+/* `.micro` je po pravilu centriran (stoji ispod dugmeta). Ovde nosi
+   objašnjenje uz levo poravnat tekst, pa prati njega. */
+.fs-c .uplata-napomena { text-align: left; max-width: 640px; }
+
+/* Tabla sa podacima. Bela je namerno: podaci za uplatu se prepisuju, pa
+   se odvajaju od tona sekcije i čitaju kao dokument, ne kao tekst. */
+.fs-c .uplata-tabla {
+  background: #fff;
+  border: 1px solid var(--cream-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: .35rem 1.15rem;
+  max-width: 640px;
+}
+@media (min-width: 640px) { .fs-c .uplata-tabla { padding: .5rem 1.75rem; } }
+
+.fs-c .uplata-podnaslov {
+  font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-700); padding: 1.15rem 0 .1rem;
+}
+
+/* Na uskom ekranu naziv ide IZNAD vrednosti. IBAN je 22 znaka, broj
+   računa 20; rame uz rame sa nazivom bi se lomili na dva reda usred
+   broja, što je poslednje što treba na strani sa koje se prepisuje. */
+.fs-c .uplata-red {
+  display: flex; flex-direction: column; gap: .3rem;
+  padding: .95rem 0; border-bottom: 1px solid var(--cream-100);
+}
+.fs-c .uplata-red:last-child { border-bottom: 0; }
+@media (min-width: 560px) {
+  .fs-c .uplata-red {
+    flex-direction: row; align-items: baseline;
+    justify-content: space-between; gap: 1.5rem;
+  }
+}
+
+.fs-c .uplata-naziv { font-size: .85rem; color: var(--charcoal-500); flex: none; }
+.fs-c .uplata-desno { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem .7rem; }
+@media (min-width: 560px) { .fs-c .uplata-desno { justify-content: flex-end; } }
+
+/* `tabular-nums` drži cifre u koloni, pa se duga polja lakše prate okom. */
+.fs-c .uplata-vrednost {
+  font-size: 1.05rem; font-weight: 600; color: var(--charcoal);
+  font-variant-numeric: tabular-nums; word-break: break-word;
+}
+.fs-c .uplata-red-istaknut .uplata-vrednost { font-size: 1.4rem; font-weight: 800; }
+
+/* Dugme „kopiraj". 40px visine je iznad AA praga za veličinu cilja (24px)
+   i blizu udobnih 44; nije veće jer je pomoćno, a vrednost pored njega
+   ostaje čitljiva i kada ostava ne radi (bez HTTPS-a je nema).
+   Braon-zlatna #6B5518 na #fdf8eb daje 6,84:1. */
+.fs-c .uplata-kopiraj {
+  display: inline-flex; align-items: center; gap: .35rem; flex: none;
+  min-height: 40px; padding: .35rem .8rem;
+  font-family: var(--font); font-size: .78rem; font-weight: 600;
+  color: var(--gold-700); background: var(--gold-50);
+  border: 1px solid var(--cream-300); border-radius: var(--pill);
+  cursor: pointer; transition: background .18s, border-color .18s;
+}
+.fs-c .uplata-kopiraj:hover { background: var(--gold-200); border-color: var(--gold-400); }
+.fs-c .uplata-kopiraj svg { flex: none; }
+
+/* Dugmad i telefon na dnu zelene sekcije. `.btn` je na telefonu preko
+   cele širine, pa se sami slažu jedno ispod drugog. */
+.fs-c .uplata-dno { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; }
+.fs-c .uplata-telefon { text-decoration: none; }
+.fs-c .uplata-telefon:hover { text-decoration: underline; }
+/* Na `/uplata` telefon stoji uz dugme pa ga hvata pravilo `.btn + .micro`,
+   a na `/hvala` je ispod reda sa dugmadima i ostajao bi centriran nasred
+   sekcije. Isti red mora da izgleda isto na obe strane. */
+@media (min-width: 640px) {
+  .fs-c .uplata-telefon { text-align: left; align-self: flex-start; }
+}
+
+/* Vidljivo samo čitaču ekrana. Koristi ga potvrda „Kopirano" na
+   `/uplata`: natpis dugmeta je `aria-hidden`, pa promena mora da
+   stigne kroz zasebno polje sa `role="status"`. */
+.fs-c .samo-citac {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ================= KONTAKT UPITNIK (/upitnik) =========================
+   Naslednik starog upitnika na istoj adresi: ista četiri koraka, isti podaci, novo
+   ruho. Sve je novo osim rasporeda, koji je namerno ostao isti da se
+   ponašanje ne menja zajedno sa izgledom.
+   ------------------------------------------------------------------------ */
+
+/* --- traka koraka --- */
+/* Ista mera kao tabla ispod: traka koja je šira od obrasca izgleda
+   kao da meri nešto drugo. */
+.fs-c .upit-koraci { display: flex; gap: .5rem; max-width: 760px; }
+.fs-c .upit-korak { flex: 1; min-width: 0; }
+.fs-c .upit-crta {
+  display: block; height: 4px; border-radius: 999px;
+  background: var(--cream-300); transition: background .25s;
+}
+.fs-c .upit-korak-dostignut .upit-crta { background: var(--navy-700); }
+/* Na telefonu četiri naziva ne stanu u red a da se ne slome u kašu.
+   Značenje nosi „Korak N od 4" iznad obrasca i naslov samog koraka. */
+.fs-c .upit-ime { display: none; }
+@media (min-width: 640px) {
+  .fs-c .upit-ime {
+    display: block; margin-top: .55rem;
+    font-size: .78rem; color: var(--charcoal-500);
+  }
+  .fs-c .upit-korak-dostignut .upit-ime { color: var(--charcoal); font-weight: 600; }
+}
+
+/* --- bela tabla obrasca --- */
+.fs-c .upit-tabla {
+  background: #fff;
+  border: 1px solid var(--cream-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(1.35rem, 5vw, 2.5rem);
+  max-width: 760px;
+}
+.fs-c .upit-brojac {
+  font-size: .7rem; font-weight: 700; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--gold-700); margin-bottom: .55rem;
+}
+.fs-c .upit-naslov {
+  font-size: clamp(1.35rem, 4.5vw, 1.75rem); font-weight: 700;
+  color: var(--charcoal); margin-bottom: 1.75rem;
+}
+/* Fokus se posle promene koraka postavlja iz koda, da čitač ekrana kaže
+   gde smo. Bez ovoga bi mišem izazvana promena crtala okvir bez potrebe. */
+.fs-c .upit-naslov:focus { outline: none; }
+.fs-c .upit-naslov:focus-visible { outline: 2px solid var(--navy-700); outline-offset: 4px; }
+
+/* --- polja --- */
+.fs-c .upit-polje { display: flex; flex-direction: column; gap: .5rem; }
+.fs-c .upit-skup { border: 0; padding: 0; margin: 0; min-width: 0; }
+.fs-c .upit-oznaka {
+  display: block; padding: 0;
+  font-size: .95rem; font-weight: 600; color: var(--charcoal);
+}
+/* Zvezdica uz obavezno polje. --gold-700 na belom daje 7,15; crvena bi
+   uvela boju koje u paleti nema. */
+.fs-c .upit-obavezno { color: var(--gold-700); }
+
+.fs-c .upit-unos {
+  width: 100%;
+  font-family: var(--font); font-size: 1rem; color: var(--charcoal);
+  background: #fff; border: 1px solid var(--cream-300);
+  border-radius: var(--radius-sm); padding: .8rem 1rem;
+  transition: border-color .18s, box-shadow .18s;
+}
+.fs-c textarea.upit-unos { resize: vertical; min-height: 7rem; line-height: 1.5; }
+.fs-c .upit-unos::placeholder { color: var(--charcoal-400); }
+.fs-c .upit-unos:focus {
+  outline: none; border-color: var(--navy-700);
+  box-shadow: 0 0 0 3px rgba(18, 64, 60, .14);
+}
+.fs-c .upit-unos-greska { border-color: #9B2C1F; }
+/* Jedina boja van palete na celom sajtu. Greška mora da se razlikuje
+   od svega ostalog, a braon i zlatna se ovde ne razlikuju dovoljno.
+   #9B2C1F na belom daje 7,08:1. */
+.fs-c .upit-greska { font-size: .85rem; color: #9B2C1F; }
+.fs-c .upit-greska-slanja { margin-top: 1.25rem; }
+
+/* Native `select` na macOS-u ignoriše obrub, pa mu se izgled resetuje i
+   strelica crta pozadinom. SVG je ugrađen jer strana ne sme da traži
+   dodatni fajl za jedan trougao. */
+.fs-c select.upit-unos {
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%233E2A1E' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* --- pilule za „email ili telefon" --- */
+.fs-c .upit-red-izbora { display: flex; flex-wrap: wrap; gap: .6rem; }
+.fs-c .upit-pilula {
+  display: inline-flex; align-items: center; gap: .5rem;
+  min-height: 48px; padding: .6rem 1.1rem;
+  border: 1px solid var(--cream-300); border-radius: var(--pill);
+  background: #fff; color: var(--charcoal); cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.fs-c .upit-pilula:hover { border-color: var(--navy-400); }
+.fs-c .upit-pilula-aktivna { border-color: var(--navy-700); background: var(--navy-50); }
+
+/* --- kartice usluga --- */
+.fs-c .upit-izbor {
+  display: flex; align-items: flex-start; gap: .8rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--cream-300); border-radius: var(--radius-sm);
+  background: #fff; cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.fs-c .upit-izbor:hover { border-color: var(--navy-400); }
+.fs-c .upit-izbor-aktivan { border-color: var(--navy-700); background: var(--navy-50); }
+.fs-c .upit-izbor-tekst { display: flex; flex-direction: column; gap: .2rem; }
+.fs-c .upit-izbor-naslov { font-weight: 600; color: var(--charcoal); }
+.fs-c .upit-izbor-opis { font-size: .88rem; line-height: 1.45; color: var(--charcoal-500); }
+
+/* --- mreža ciljeva --- */
+.fs-c .upit-mreza { display: grid; grid-template-columns: 1fr; gap: .6rem; }
+@media (min-width: 640px) { .fs-c .upit-mreza { grid-template-columns: 1fr 1fr; } }
+.fs-c .upit-cilj {
+  display: flex; align-items: center; gap: .7rem;
+  min-height: 48px; padding: .7rem .9rem;
+  border: 1px solid var(--cream-300); border-radius: var(--radius-sm);
+  background: #fff; color: var(--charcoal); cursor: pointer;
+  transition: border-color .18s, background .18s;
+}
+.fs-c .upit-cilj:hover { border-color: var(--navy-400); }
+.fs-c .upit-cilj-aktivan { border-color: var(--navy-700); background: var(--navy-50); }
+
+/* Kućice i tačke prate brend zelenu umesto podrazumevane plave. */
+.fs-c .upit-tabla input[type="radio"],
+.fs-c .upit-tabla input[type="checkbox"] {
+  accent-color: var(--navy-700); flex: none;
+  width: 18px; height: 18px; margin: 0; cursor: pointer;
+}
+.fs-c .upit-izbor input[type="radio"] { margin-top: .15rem; }
+
+/* --- saglasnost --- */
+.fs-c .upit-saglasnost {
+  display: flex; align-items: flex-start; gap: .7rem;
+  font-size: .92rem; line-height: 1.5; color: var(--charcoal-500); cursor: pointer;
+}
+.fs-c .upit-saglasnost input { margin-top: .15rem; }
+
+/* --- dno obrasca --- */
+/* Na telefonu je `column-reverse`, pa glavna radnja stoji IZNAD povratka:
+   `.btn` je tamo preko cele širine, a palac stiže do donjeg dugmeta, koje
+   ne sme da bude „Prethodni korak". */
+.fs-c .upit-dno {
+  display: flex; flex-direction: column-reverse; gap: .7rem; margin-top: 2rem;
+}
+.fs-c .upit-praznina { display: none; }
+@media (min-width: 640px) {
+  .fs-c .upit-dno { flex-direction: row; justify-content: space-between; align-items: center; }
+  .fs-c .upit-praznina { display: block; }
+}
+.fs-c .upit-dugme { gap: .5rem; }
+
+.fs-c .upit-veza { color: #fff; text-underline-offset: .2em; }
+
+/* ================= ŠKOLA: hero sa upečenim zelenim prelivom ==============
+   Od 31.08. hero Škole radi po istom principu kao hero Početne: preliv je
+   UPEČEN U SLIKU umesto da bude CSS zastor. Razlog je isti u oba slučaja —
+   `cover` na svakoj širini seče kadar drugačije, pa su se CSS zastor i
+   Dragana pomerali jedno u odnosu na drugo. Upečen preliv drži isti odnos
+   prema njoj na svakoj širini.
+   ------------------------------------------------------------------------ */
+
+/* Zastora preko fotografije više nema. Osnovna `.hero-bg::after` pravila
+   gore NAMERNO ostaju: Početna na tabletu preko njih dobija `position` i
+   `inset`, pa bi ih brisanje pokvarilo. Ovo pravilo mora da stoji POSLE
+   njih — ista je težina, pa odlučuje redosled. */
+.fs-c .hero-zeleni::after { content: none; }
+
+/* Mobilno platno je novo, pa je i računica druga. Odnos „od dna platna do
+   njenog temena naspram širine platna" je izmeren na samom kompozitu:
+     platno 768x2100, zelena do 977, fotografija visoka 1123
+     teme je 269px u fotografiju, dakle na 1246 od vrha
+     od dna do temena = 2100 - 1246 = 854
+     854 / 768 = 1,112
+   Staro platno je davalo 1,224. Vidi duži izvod uz `--fsc-slika-odnos`. */
+.fs-c .hero:has(.hero-zeleni) { --fsc-slika-odnos: 1.112; }
+
+@media (min-width: 768px) {
+  /* Kompozit je usidren DESNO: leva strana mu je ravna zelena, ista kao
+     CSS pozadina heroja, pa sve što `cover` odseče sleva nestaje bez traga.
+     Po visini je 30% odozgo: kada je prozor širi od odnosa platna (1,9),
+     `cover` seče po visini, a njoj iznad glave ima manje mesta nego ispod
+     nogu, pa se seče pretežno odozdo. */
+  .fs-c .hero-zeleni img { object-position: right 30%; }
+}
+
+/* Vodeni žig na „O meni": znak popunjava prazninu desno od naslova.
+   Jačina je preuzeta sa Početne, gde je žig upečen u sliku i obara belu
+   podlogu za 11,4% (izmereno: 255 -> 226).
+
+   Ide kao CSS pozadina, ne kao <img>: čist je ukras, pa ne treba ni opis
+   ni mesto u stablu sadržaja.
+
+   Tek od 1024px. Ispod toga naslov zauzima skoro celu širinu (`17ch` na
+   4,2rem je oko 570px), pa praznine koju bi popunio nema, a žig bi seo
+   pravo pod tekst. */
+/* `isolation` pravi nov sloj, pa `z-index: -1` na zigu znaci „iza
+   teksta", a ne „iza pozadine sekcije". Bez toga bi apsolutno
+   pozicioniran zig crtao PREKO pasusa: pozicionirani elementi
+   podrazumevano idu iznad sadrzaja u toku. */
+.fs-c .omeni-vrh .wrap { position: relative; isolation: isolate; }
+.fs-c .omeni-znak { display: none; }
+@media (min-width: 1024px) {
+  .fs-c .omeni-znak {
+    display: block;
+    position: absolute;
+    right: 1.35rem;
+    top: -.5rem;
+    /* Znak ne popunjava ceo svoj kvadrat od 512px, pa je okvir veći
+       nego što izgleda. Gornja granica je 440px: praznina desno od
+       naslova je oko 470px na 1040px širokoj koloni. */
+    width: clamp(280px, 30vw, 440px);
+    aspect-ratio: 1;
+    z-index: -1;
+    background: url('/logo/logo-zlatni.png') center / contain no-repeat;
+    opacity: .114;
+    pointer-events: none;
+  }
+}
+
+/* Uski desktop i tablet (768–1199) su najtesniji slučaj: okvir je tu skoro
+   kvadratan (768x780), pa je i tablet platno skoro kvadratno i `cover` mu
+   jedva dira strane. Uz to se tekstualna kolona sužava sa 62% na 52%, isto
+   kao na Početnoj i iz istog razloga — na punoj širini je ulazila pravo u
+   Draganu. */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .fs-c .hero:has(.hero-zeleni) .hero-body { max-width: 52%; }
+  /* U uzoj koloni dva dugmeta vise ne staju jedno pored drugog i
+     preklapala su se. `wrap` ih drzi u redu dok staju, pa ih prelomi.
+     Ista zamka i isto resenje kao na Pocetnoj kad joj je kolona suzena. */
+  .fs-c .hero:has(.hero-zeleni) .hero-cta { flex-wrap: wrap; gap: .6rem .75rem; }
+  .fs-c .hero:has(.hero-zeleni) .hero-cta .btn { align-self: flex-start; }
+}
+
+/* Znak kao vodeni žig na zelenoj strani heroja Škole, isto kao na hero
+   Početne, da leva polovina banera ne bude prazna ploha.
+
+   Ide kao `::before` na samom herou, ne upečen u sliku kao na Početnoj:
+   ovde je leva strana ravna boja, pa žig ne mora da putuje sa kadrom, a
+   CSS-om se namešta po širinama bez ponovnog kodiranja šest fajlova.
+
+   `z-index: -1` ga stavlja IZNAD fotografije (`.hero-bg` je na -2) a ispod
+   teksta. Hero već ima `isolation: isolate` i `overflow: hidden`, pa
+   negativan sloj ne propada iza pozadine, a preliv preko leve ivice se seče.
+
+   Jačina je 12%: na Početnoj žig obara belu podlogu za 11,4% (izmereno,
+   255 -> 226). Ovde je podloga tamna pa žig ide naviše, ali istog reda
+   veličine — beli naslov na tako posvetljenoj zelenoj i dalje daje 11+. */
+.fs-c .hero:has(.hero-zeleni)::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/logo/logo-zlatni.png') center / contain no-repeat;
+  opacity: .12;
+  /* Telefon: zelena je samo gornji pojas, pa je i žig gore, iza teksta. */
+  left: -26%;
+  top: -6%;
+  width: min(128%, 560px);
+  aspect-ratio: 1;
+}
+@media (min-width: 768px) {
+  /* Desktop i tablet: žig stoji u levoj zelenoj koloni, po sredini visine,
+     i prelazi levu ivicu kao i na Početnoj. Širina je vezana za hero, ne
+     za `.hero-in`, jer treba da popuni ploču a ne kolonu teksta. */
+  .fs-c .hero:has(.hero-zeleni)::before {
+    left: -12%;
+    top: 50%;
+    width: min(66%, 860px);
+    transform: translateY(-50%);
+  }
+}
+
+/* Vazduh između podnaslova i dugmadi. `gap` na `.hero-body` važi
+   podjednako za sve razmake u koloni, a ovde treba samo ispod podnaslova —
+   isti razlog i ista mera kao na Početnoj. */
+.fs-c .hero:has(.hero-zeleni) .hero-cta { margin-top: 1.1rem; }
+
+/* Na telefonu drugo dugme heroja pada NIŽE od mesta gde se upečeni preliv
+   ugasi, dakle na čistu fotografiju. Tamo je iza njega prozor, najsvetlija
+   tačka kadra: belo na rgb(163,173,175) daje 2,29, duboko ispod praga.
+
+   Ovo NIJE unelo dodavanje razmaka iznad dugmadi — samo ga je pomerilo za
+   18px niže. Propust je bio i ranije, a promakao je jer je merenje uzimalo
+   NAJTAMNIJU tačku ispod slova. Za belo pismo najgora je najsvetlija.
+
+   Zato dugme na telefonu dobija providnu tamnu podlogu: ona ne zavisi od
+   toga šta je iza njega, pa prag drži i kad `cover` pomeri kadar. Na
+   desktopu i tabletu dugme stoji na ravnoj zelenoj (15,15) i ostaje čista
+   kontura. */
+@media (max-width: 767px) {
+  .fs-c .hero:has(.hero-zeleni) .btn-line {
+    background: rgba(11, 43, 40, .58);
+    border-color: rgba(255, 255, 255, .55);
+  }
+}
+
+/* ================= MESTO ZA LEPLJIVU TRAKU ==============================
+   Traka je `position: fixed` uz dno, pa pokriva poslednjih 66px prozora.
+   Rezerva za nju je do 01.09. stajala kao `padding-bottom` na `.fs-c`, ali
+   se `.fs-c` zavrsava PRE footera (bez traka i podnozje dolaze iz layouta),
+   pa se rezerva videla kao prazna kremasta rupa nasred strane, a dno
+   footera je i dalje ostajalo pod trakom.
+
+   Sada rezervu nosi sam footer: njegov beli fon se produzi nadole, pa nema
+   ni rupe ni pokrivenog sadrzaja. `:has(.fs-c .sticky)` pogadja samo strane
+   koje traku stvarno renderuju (Pocetna, Skola, O meni); Kontakt, Uplata i
+   Hvala je nemaju pa ne dobijaju ni rezervu.
+
+   Uslov po sirini prati `.sticky`, koja se gasi na 900px.
+   ------------------------------------------------------------------------ */
+@media (max-width: 899px) {
+  /* `.fs-c ~ footer`, ne golo `footer`: Skola ima tri `<footer class="who">`
+     unutar utisaka (potpis ispod citata), a oni bi od golog `footer` dobili
+     68px praznine svaki. Podnozje sajta je jedini `<footer>` koji je SESTRA
+     `.fs-c` omotaca — layout redja Header, sadrzaj i Footer jedno do drugog.
+     4rem je footerov `py-16` iz Tailwind-a; na njega se dodaje visina trake. */
+  body:has(.fs-c .sticky) .fs-c ~ footer { padding-bottom: calc(4rem + 68px); }
+}
+
+/* ================= RUNDA 01.09. =========================================
+   Tri sitna pravila uz klijentove izmene; sadržaj je u komponentama.
+   ------------------------------------------------------------------------ */
+
+/* Do sekcije se stiže sidrom iz kruga „Individualne konsultacije". Opšti
+   `.card` ostavlja 64px iznad sidra, a plutajući navbar na telefonu je
+   visok 76px sa razmakom od vrha, pa bi naslov seo pod njega. */
+.fs-c .tri-koraka { scroll-margin-top: 96px; }
+
+/* Imena polaznica krupnija, na zahtev 01.09. Bila su .82rem; tada je
+   podebljanje i tamnija boja nosila razliku jer je veličina bila sitna. */
+.fs-c .tst .who { font-size: 1.05rem; }
+
+
+/* ================= TRI KORAKA: „Nit" ====================================
+   Tri bela kruga sa zelenim obrubom na zelenoj niti. Mere su iz platna
+   (Markov izbor 01.09.), ali platno je imalo fiksne piksele, a sekcija
+   mora da radi od 320px naviše i pri uvećanom fontu u pregledaču.
+
+   SVE MERE SU U REM, NE U PX: krug, padding, ikonica i tekst rastu zajedno
+   kad korisnik poveća osnovni font, pa tekst ostaje unutra. Prva verzija je
+   bila u px i pri 16px je već imala NULA slobodnog prostora u drugom krugu
+   na desktopu, a pri Chrome-ovom „Large" (20px) tekst je izlazio preko
+   obruba na bež. Krug ima `min-height` a ne `height`: ako sadržaj ipak
+   preraste, krug se izduži u oval umesto da tekst ispadne. Prelomna tačka
+   je u `em` iz istog razloga — red od tri kruga se pali tek kad stane.
+
+   `flex: none` na ikonici je obavezno: u koloni fiksne visine flex prvo
+   stiska ono što sme, a ikonica je bila jedino takvo — u drugom krugu je
+   bila stisnuta na 0px i nije se videla.
+
+   - od 62,5em (1000px pri 16px) krugovi su 17,5rem (280px) u redu,
+     razmaknuti `space-between`, nit je vodoravna, rastegnuta na širinu
+     kolone (957–997px) i visinu 20rem;
+   - ispod toga krugovi su 17rem (272px) jedan ispod drugog, nit uspravna,
+     a ceo sklop je ograničen na 21,6875rem (347px) i centriran — inače bi
+     se na 768px uspravna nit rastegla preko cele širine i vijugala daleko
+     van krugova. Na 320px krug (272) staje u kolonu od 277px.
+
+   `preserveAspectRatio="none"` rasteže krivulju po širini; do 1040px je to
+   najviše 4%, nevidljivo. `vector-effect: non-scaling-stroke` drži liniju
+   na 2px i kad se rastegne. Tačkice nemaju taj efekat pa se i one blago
+   rastegnu, što na 5px nije uočljivo.
+
+   `width: 100%` na `.nit` je obavezno: `margin: 0 auto` na flex detetu
+   gasi `stretch` i svodi ga na širinu sadržaja, a na desktopu bi ta širina
+   bila nula — krugovi su se stiskali na 171px.
+   ------------------------------------------------------------------------ */
+.fs-c .nit { position: relative; width: 100%; max-width: 21.6875rem; margin: 0 auto; }
+.fs-c .nit-linija {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: var(--navy-700); stroke: var(--navy-700); stroke-width: 2; stroke-linecap: round;
+  pointer-events: none;
+}
+.fs-c .nit-linija path { fill: none; vector-effect: non-scaling-stroke; }
+.fs-c .nit-linija-siroka { display: none; }
+
+.fs-c .nit-krugovi {
+  position: relative; list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 3rem;
+}
+.fs-c .nit-krug {
+  flex: none; width: min(17rem, 100%); min-height: 17rem; box-sizing: border-box; border-radius: 50%;
+  background: #fff; border: 2px solid var(--navy-700); box-shadow: var(--shadow);
+  padding: 1.875rem 1.75rem;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; gap: .4rem;
+}
+.fs-c .nit-oznaka { flex: none; width: 1.125rem; height: 1.125rem; fill: none; stroke: var(--gold-700); stroke-width: 1.2; stroke-linejoin: round; }
+/* Opšti h3 je 22,4px; u krugu je to pretesno za tri reda. */
+.fs-c .nit-krug h3 { font-size: 1.125rem; line-height: 1.15; }
+.fs-c .nit-krug p { font-size: .85rem; line-height: 1.45; color: var(--charcoal-500); }
+
+@media (min-width: 62.5em) {
+  .fs-c .nit { max-width: none; min-height: 20rem; }
+  .fs-c .nit-linija-siroka { display: block; }
+  .fs-c .nit-linija-uska { display: none; }
+  /* Red je u toku (ne apsolutan), sa 1,25rem odozgo umesto `top: 20px`:
+     tako `.nit` sme da naraste ako se neki krug izduži, a nit iza njega
+     se rastegne sa njim. */
+  .fs-c .nit-krugovi {
+    flex-direction: row; justify-content: space-between; align-items: flex-start;
+    gap: 0; padding-top: 1.25rem;
+  }
+  /* `min(…, 30%)` je zaštita od uvećanog fonta: pri 20px osnovnog fonta krug
+     bi bio 350px, a tri takva ne staju u kolonu od 997px (kolona je u px i
+     ne raste). Pri 16px 30% je 299px pa pobeđuje 17,5rem — ništa se ne menja. */
+  .fs-c .nit-krug { width: min(17.5rem, 30%); min-height: 17.5rem; padding: 2.25rem 2rem; gap: .5rem; }
+  .fs-c .nit-krug h3 { font-size: 1.25rem; }
+  .fs-c .nit-krug p { font-size: .9rem; line-height: 1.45; }
+}

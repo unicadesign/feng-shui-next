@@ -2,11 +2,12 @@ import type { MetadataRoute } from 'next';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://draganajovic.com';
 
+// Javne, indeksabilne strane. `/uplata` i `/hvala` su namerno izvan: to su
+// strane posle prijave, neindeksirane meta oznakom (vidi njihove page.tsx).
 const publicRoutes = [
   '',
   'about',
   'school',
-  'vaza-izobilja',
   'upitnik',
 ];
 

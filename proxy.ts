@@ -32,7 +32,9 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // Statika, slike (i AVIF hero slike novog sajta), video, sitemap i robots
+  // ne treba da prolaze kroz osvežavanje Supabase sesije.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|mp4|ico|txt|xml)$).*)',
   ],
 };

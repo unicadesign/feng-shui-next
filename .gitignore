@@ -43,3 +43,14 @@ next-env.d.ts
 # Supabase CLI local artifacts
 supabase/.temp/
 supabase/.branches/
+
+# Izvorne fotografije i brend paket ne idu u repo (javan je). Čuvaju se van
+# repoa, u ../feng-shui-izvori. Ovo hvata originale ako ih neko opet spusti
+# u public/; sajt koristi samo isečene i optimizovane varijante.
+public/images/IMG_*.jpg
+public/images/*-hero.jpg
+public/logo/LOGO GAGA*
+public/logo/Logo bez linija*
+public/logo/Paleta*
+public/logo/prvenc*
+public/logo/simbol-*

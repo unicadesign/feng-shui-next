@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import WebinarNavbarBar from '@/components/WebinarNavbarBar';
+import { requestEnroll } from '@/components/sajt/enrollTrigger';
 import type { GlobalContent, HomeContent } from '@/types/content';
 
 interface HeaderProps {
@@ -16,14 +17,31 @@ interface HeaderProps {
 
 const HIDDEN_ROUTES = ['/services', '/vodic', '/galerija'];
 
+// Sidra koja su do 27.08. nosili bež krugovi ispod heroja. Krugovi su
+// izbačeni, pa se ista navigacija seli u padajući meni pod „Škola".
+// Meni se otvara na prelazak mišem, kao i ostali padajući meniji u
+// navigaciji, a strelica pored naziva ga otvara klikom — zbog tastature
+// i dodira, gde prelaska mišem nema. Klik na sam naziv vodi na /school.
+const SKOLA_SIDRA: { to: string; label: string }[] = [
+  { to: '/school#program', label: 'Program' },
+  { to: '/school#za-koga', label: 'Za koga je' },
+  { to: '/school#rezultati', label: 'Rezultati' },
+  /* „O meni" i „Upis" su izbačeni 31.08.: te dve sekcije su sakrivene na
+     strani, pa bi sidra vodila u prazno. Vraćaju se zajedno sa sekcijama. */
+  { to: '/school#faq', label: 'Pitanja' },
+];
+
 const Header = ({ content, webinar }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hoveredNav, setHoveredNav] = useState<string | null>(null);
   const [mobileExpandedNav, setMobileExpandedNav] = useState<string | null>(null);
+  const [skolaOpen, setSkolaOpen] = useState(false);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const skolaRef = useRef<HTMLDivElement>(null);
+  const skolaTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout, isAdmin } = useAuth();
@@ -41,6 +59,23 @@ const Header = ({ content, webinar }: HeaderProps) => {
   const navLinks = filteredNav.some((link) => link.to === '/school')
     ? filteredNav
     : [{ to: '/school', label: 'Škola', children: undefined }, ...filteredNav];
+  /**
+   * Modal za prijavu živi u komponenti strane, a Header ga doziva
+   * događajem (`enrollTrigger`). Nemaju ga sve strane: `/uplata` i `/hvala`
+   * se otvaraju POSLE prijave, a `/upitnik` ima sopstveni obrazac, pa bi na
+   * njima dugme „Sačuvaj svoje mesto" slalo događaj koji niko ne sluša.
+   * Tamo isto dugme vodi na stranicu škole.
+   */
+  const imaModalZaPrijavu = pathname === '/' || pathname === '/school' || pathname === '/about';
+  /**
+   * „Početna" u navigaciji. Dodaje se ovde a ne u admin panelu jer admin
+   * po dogovoru čeka svoju fazu (PLAN-PRELAZAK.md, faza 11). Potrebna je
+   * jer je naziv „Dragana Jović" pored znaka izbačen na zahtev klijenta,
+   * pa bi se bez nje na početnu moglo samo preko znaka.
+   */
+  const navLinksResolved = navLinks.some((link) => link.to === '/')
+    ? navLinks
+    : [{ to: '/', label: 'Početna', children: undefined }, ...navLinks];
   const siteName = content.siteConfig.siteName;
   const headerLabels = content.header;
 
@@ -69,6 +104,26 @@ const Header = ({ content, webinar }: HeaderProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Padajući meni „Škola" se otvara na klik, pa mora i da se zatvori:
+  // klikom izvan njega i tasterom Escape.
+  useEffect(() => {
+    if (!skolaOpen) return;
+    const naKlik = (e: MouseEvent) => {
+      if (skolaRef.current && !skolaRef.current.contains(e.target as Node)) {
+        setSkolaOpen(false);
+      }
+    };
+    const naTaster = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSkolaOpen(false);
+    };
+    document.addEventListener('mousedown', naKlik);
+    document.addEventListener('keydown', naTaster);
+    return () => {
+      document.removeEventListener('mousedown', naKlik);
+      document.removeEventListener('keydown', naTaster);
+    };
+  }, [skolaOpen]);
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleNavMouseEnter = (label: string) => {
@@ -85,6 +140,31 @@ const Header = ({ content, webinar }: HeaderProps) => {
     }, 150);
   };
 
+  const otkaziZatvaranjeSkole = () => {
+    if (skolaTimeoutRef.current) {
+      clearTimeout(skolaTimeoutRef.current);
+      skolaTimeoutRef.current = null;
+    }
+  };
+  const otvoriSkolu = () => {
+    otkaziZatvaranjeSkole();
+    setSkolaOpen(true);
+  };
+  /* Zatvaranje ide sa odlaganjem. Bez njega je meni bio praktično
+     neupotrebljiv: put od naziva „Škola" do stavke u panelu ide
+     dijagonalno i usput na tren izađe iz oba elementa, pa se meni
+     zatvarao pre nego što klik stigne. 260ms je taman da pokrije
+     taj prelaz, a da meni ne visi kad se miš stvarno skloni. */
+  const zatvoriSkoluSaOdlaganjem = () => {
+    otkaziZatvaranjeSkole();
+    skolaTimeoutRef.current = setTimeout(() => setSkolaOpen(false), 260);
+  };
+  const zatvoriSkoluOdmah = () => {
+    otkaziZatvaranjeSkole();
+    setSkolaOpen(false);
+  };
+  useEffect(() => otkaziZatvaranjeSkole, []);
+
   return (
     <header className="fixed top-0 left-0 right-0 z-40 flex justify-center pt-5">
       <div className="flex flex-col items-center w-full px-4 md:w-auto md:px-0">
@@ -96,14 +176,79 @@ const Header = ({ content, webinar }: HeaderProps) => {
         }`}
       >
         <Link href="/">
-          <span className="flex items-center gap-2 px-3">
-            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+          {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
+              ne pomeri raspored: negativna margina poništi dodati prostor.
+              Pošto je naziv pored znaka izbačen, znak je ostao jedina
+              prečica do početne i mora da se pogodi prstom. */}
+          <span className="flex items-center gap-2 px-3 py-2 -my-2">
+            {/* Zlatni znak ima providnu pozadinu; stari `logo-transparent.png`
+                (obrisan 09.2026.) je uprkos imenu bio bez alfa kanala, odatle beli kvadrat iza znaka. */}
+            <Image src="/logo/logo-zlatni.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            {/* Naziv pored znaka je izbačen na zahtev klijenta; ostaje samo znak.
+                Link i dalje vodi na početnu, a pristupačno ime mu daje
+                `alt` na slici, pa link ne ostaje bezimen. */}
           </span>
         </Link>
 
-        {navLinks.map((link) => (
-          link.children ? (
+        {navLinksResolved.map((link) => (
+          link.to === '/school' ? (
+            /* „Škola" nosi padajući meni sa sidrima koja su
+               ranije bili bež krugovi ispod heroja. Naziv je link i vodi na
+               stranu škole; padajući meni otvara strelica pored njega, kao i
+               prelazak mišem. Jedan element ne može oboje — klik bi ili
+               navigirao ili otvarao meni, ne oba. */
+            <div
+              key={link.to}
+              className="relative"
+              ref={skolaRef}
+              onMouseEnter={otvoriSkolu}
+              onMouseLeave={zatvoriSkoluSaOdlaganjem}
+            >
+              <span
+                className={`text-sm font-body font-medium pl-3 pr-2 py-1.5 rounded-full transition-all duration-300 ease-out-expo inline-flex items-center gap-0.5 ${
+                  pathname === link.to ? 'text-navy-500 bg-navy-50' : 'text-charcoal-500 hover:text-navy-500'
+                }`}
+              >
+                <Link href={link.to} onClick={zatvoriSkoluOdmah} className="cursor-pointer">
+                  {link.label}
+                </Link>
+                <button
+                  type="button"
+                  aria-expanded={skolaOpen}
+                  aria-haspopup="true"
+                  aria-label={`${link.label}: otvori podmeni`}
+                  onClick={() => (skolaOpen ? zatvoriSkoluOdmah() : otvoriSkolu())}
+                  className="cursor-pointer inline-flex items-center p-1 -m-1"
+                >
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${skolaOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </span>
+              {/* Razmak do panela je `pt-2` UNUTAR ovog omotača, a ne `mt-2`
+                  spolja. Spoljna margina nije ničiji element, pa je miš na
+                  putu nadole prelazio preko 8px praznine, izlazio iz oba
+                  elementa i rušio hover. Ovako je put neprekidan. */}
+              <div
+                className={`absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200 ${
+                  skolaOpen
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 -translate-y-2 pointer-events-none'
+                }`}
+              >
+                <div className="w-48 rounded-xl bg-cream-50 border border-sand-200 shadow-card py-2">
+                  {SKOLA_SIDRA.map((s) => (
+                    <Link
+                      key={s.to}
+                      href={s.to}
+                      onClick={zatvoriSkoluOdmah}
+                      className="block px-4 py-2.5 text-sm text-charcoal-500 hover:text-navy-500 hover:bg-navy-50 transition-colors duration-200"
+                    >
+                      {s.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : link.children ? (
             <div
               key={link.to}
               className="relative"
@@ -167,12 +312,30 @@ const Header = ({ content, webinar }: HeaderProps) => {
             )}
           </div>
         ) : (
-          <Link
-            href="/login"
-            className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
-          >
-            {headerLabels.loginButton}
-          </Link>
+          /* Gornji poziv na akciju vodi u prijavu za kurs, a ne na /login:
+             prijava se otvara kao modal, na licu mesta, pa posetilac ne
+             napušta prodajnu stranu. Samo desktop — na telefonu tu ulogu ima
+             lepljiva traka pri dnu. Natpis je u kodu; u admin ide u admin
+             fazi (PLAN-PRELAZAK.md, faza 11). Polaznice do /login stižu iz
+             mobilnog menija ili kucanjem adrese (odluka 0.3, pravilo 1:1). */
+          imaModalZaPrijavu ? (
+            <button
+              type="button"
+              onClick={requestEnroll}
+              className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
+            >
+              Sačuvaj svoje mesto
+            </button>
+          ) : (
+            /* Strane bez modala (`/upitnik`, `/uplata`, `/hvala`): isto dugme
+               vodi na školu umesto da ne radi ništa. */
+            <Link
+              href="/school"
+              className="rounded-full bg-navy-500 text-white px-5 py-2 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.98]"
+            >
+              Sačuvaj svoje mesto
+            </Link>
+          )
         )}
       </nav>
 
@@ -184,9 +347,15 @@ const Header = ({ content, webinar }: HeaderProps) => {
         }`}
       >
         <Link href="/">
-          <span className="flex items-center gap-2 px-3">
-            <Image src="/logo/logo-transparent.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
-            <span className="text-lg font-heading font-bold text-charcoal">Dragana Jović</span>
+          {/* `py-2 -my-2` uvecava povrsinu za dodir sa 32px na 48px a da
+              ne pomeri raspored: negativna margina poništi dodati prostor.
+              Pošto je naziv pored znaka izbačen, znak je ostao jedina
+              prečica do početne i mora da se pogodi prstom. */}
+          <span className="flex items-center gap-2 px-3 py-2 -my-2">
+            <Image src="/logo/logo-zlatni.png" alt={siteName} width={32} height={32} className="h-8 w-8 object-contain" priority />
+            {/* Naziv pored znaka je izbačen na zahtev klijenta; ostaje samo znak.
+                Link i dalje vodi na početnu, a pristupačno ime mu daje
+                `alt` na slici, pa link ne ostaje bezimen. */}
           </span>
         </Link>
 
@@ -219,7 +388,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
           </div>
 
           <nav className="flex flex-col items-center justify-center gap-6 mt-4">
-            {navLinks.map((link, index) => (
+            {navLinksResolved.map((link, index) => (
               link.children ? (
                 <div key={link.to} className="flex flex-col items-center">
                   <button
@@ -259,9 +428,9 @@ const Header = ({ content, webinar }: HeaderProps) => {
 
             {user ? (
               <>
-                <MobileNavLink to="/dashboard" index={navLinks.length}>{headerLabels.myCoursesLabel}</MobileNavLink>
+                <MobileNavLink to="/dashboard" index={navLinksResolved.length}>{headerLabels.myCoursesLabel}</MobileNavLink>
                 {isAdmin && (
-                  <MobileNavLink to="/admin" index={navLinks.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
+                  <MobileNavLink to="/admin" index={navLinksResolved.length + 1}>{headerLabels.adminPanelLabel}</MobileNavLink>
                 )}
                 <button
                   onClick={() => { setIsMenuOpen(false); handleLogout(); }}
@@ -269,7 +438,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                   style={{
                     opacity: 0,
                     transform: 'translateY(24px)',
-                    animation: `mobileNavFadeIn 0.4s ease-out ${(navLinks.length + (isAdmin ? 2 : 1)) * 0.07 + 0.1}s forwards`,
+                    animation: `mobileNavFadeIn 0.4s ease-out ${(navLinksResolved.length + (isAdmin ? 2 : 1)) * 0.07 + 0.1}s forwards`,
                   }}
                 >
                   {headerLabels.logoutLabel}
@@ -282,7 +451,7 @@ const Header = ({ content, webinar }: HeaderProps) => {
                 style={{
                   opacity: 0,
                   transform: 'translateY(24px)',
-                  animation: `mobileNavFadeIn 0.4s ease-out ${navLinks.length * 0.07 + 0.1}s forwards`,
+                  animation: `mobileNavFadeIn 0.4s ease-out ${navLinksResolved.length * 0.07 + 0.1}s forwards`,
                 }}
               >
                 {headerLabels.loginButton}

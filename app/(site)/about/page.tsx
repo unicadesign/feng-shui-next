@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-import { getContent } from '@/lib/content';
-import AboutContent from '@/components/about/AboutContent';
+import OMeniContent from '@/components/sajt/OMeniContent';
 
 export const metadata: Metadata = {
-  title: 'O nama',
+  title: 'O meni | Dragana Jović, Feng Shui',
   description:
-    'Upoznajte Draganu Jović — sertifikovanog Feng Shui konsultanta sa preko 25 godina iskustva i 1000+ realizovanih projekata u Srbiji i regionu.',
+    '25 godina iskustva, preko 1000 projekata. Dragana Jović spaja tradicionalni Feng Shui sa modernim, holističkim pristupom prostoru.',
 };
 
-export default async function AboutPage() {
-  const about = await getContent('about');
-  return <AboutContent content={about} />;
+export default function OMeniPage() {
+  return <OMeniContent />;
 }
