@@ -5,12 +5,14 @@ import WebinarPopup from '@/components/WebinarPopup';
 import Script from 'next/script';
 import Analitika from '@/components/Analitika';
 
-/* Merenje posete, dodato 04.09.2026. na Markov zahtev: Google Analytics 4 i
-   Meta pixel. Samo na javnim stranama (ovaj layout); login, dashboard i admin
-   ih nemaju. Oba se učitavaju posle hidratacije (`afterInteractive`), pa ne
-   usporavaju prvi prikaz. Promenu rute za pixel prati `Analitika`. */
+/* Merenje posete, dodato 04.09.2026. na Markov zahtev: Google Analytics 4
+   (ovde, `next/script` posle hidratacije) i Meta pixel (u `Analitika`, jer
+   mora da prati i klijentsku navigaciju). Samo na javnim stranama; login,
+   dashboard i admin ih nemaju. Preview deploymenti na Vercelu ne mere, da
+   probe ne zagade podatke; lokalni dev meri, radi provere. */
 const GA_ID = 'G-8V0PQW65GG';
 const META_PIXEL_ID = '1411230116531391';
+const MERENJE_UKLJUCENO = process.env.VERCEL_ENV !== 'preview';
 
 export default async function SiteLayout({
   children,
@@ -28,38 +30,30 @@ export default async function SiteLayout({
       {children}
       <Footer content={global} />
       <WebinarPopup content={home.webinarSection} />
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
-      <Script id="ga-init" strategy="afterInteractive">
-        {`window.dataLayer = window.dataLayer || [];
+      {MERENJE_UKLJUCENO && (
+        <>
+          <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GA_ID}');`}
-      </Script>
-      <Script id="meta-pixel" strategy="afterInteractive">
-        {`!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '${META_PIXEL_ID}');
-fbq('track', 'PageView');`}
-      </Script>
-      <noscript>
-        {/* Rezervni beacon za posetioce bez JavaScript-a, po Metinom uputstvu;
-            next/image ovde nema smisla (spoljni piksel 1×1, ne slika). */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: 'none' }}
-          alt=""
-          src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
-        />
-      </noscript>
-      <Analitika />
+          </Script>
+          <noscript>
+            {/* Rezervni beacon za posetioce bez JavaScript-a, po Metinom uputstvu;
+                next/image ovde nema smisla (spoljni piksel 1×1, ne slika). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              height="1"
+              width="1"
+              style={{ display: 'none' }}
+              alt=""
+              src={`https://www.facebook.com/tr?id=${META_PIXEL_ID}&ev=PageView&noscript=1`}
+            />
+          </noscript>
+          <Analitika />
+        </>
+      )}
     </>
   );
 }
