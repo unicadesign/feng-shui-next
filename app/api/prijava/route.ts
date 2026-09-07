@@ -5,6 +5,8 @@ import {
   sendSkolaPrijavaObavestenje,
   sendUpitPotvrda,
   sendUpitObavestenje,
+  sendRazgovorPotvrda,
+  sendRazgovorObavestenje,
 } from '@/lib/email/send';
 import type { InquiryInsert } from '@/types/inquiry';
 
@@ -23,7 +25,9 @@ import type { InquiryInsert } from '@/types/inquiry';
  * Tri namere, tri ponašanja:
  *   prijava      upis u školu   -> podaci za uplatu + obaveštenje Dragani
  *   upit         kontakt strana -> potvrda prijema + obaveštenje Dragani
- *   konsultacije kratki modal   -> bez pošte, Dragana zove
+ *   konsultacije kratki modal   -> potvrda posetiocu + obaveštenje Dragani
+ *                                  (od 07.09.2026.; do tada bez pošte, pa
+ *                                  Dragana nije znala da neko čeka poziv)
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -159,6 +163,14 @@ export async function POST(request: Request) {
     ]);
     if (!zaPosiljaoca.sent) {
       console.error('[prijava] potvrda upita nije poslata:', zaPosiljaoca.error);
+    }
+  } else {
+    const [zaPosetioca] = await Promise.all([
+      sendRazgovorPotvrda(email, { fullName, serviceType }),
+      sendRazgovorObavestenje({ fullName, email, phone, goal, serviceType, heardFrom }),
+    ]);
+    if (!zaPosetioca.sent) {
+      console.error('[prijava] potvrda razgovora nije poslata:', zaPosetioca.error);
     }
   }
 

@@ -284,6 +284,97 @@ export function skolaPrijavaObavestenje(
 }
 
 /* ══════════════════════════════════════════════════════════════════
+   RAZGOVOR — kratki modal (konsultacija, razgovor, nekretnina, radionice).
+
+   Do 07.09.2026. ova namera nije slala ništa: prijava je išla samo u
+   admin pregled („Dragana zove"). Klijent je javio da obaveštenje ne
+   stiže, a Marko je tražio i potvrdu posetiocu. Oba teksta su moja.
+   ══════════════════════════════════════════════════════════════════ */
+
+export interface RazgovorPotvrdaData {
+  fullName: string;
+  /** Slobodan naziv iz modala, npr. „Besplatna konsultacija" (nije šifra). */
+  serviceType?: string | null;
+}
+
+export function razgovorPotvrda(data: RazgovorPotvrdaData): { subject: string; html: string } {
+  const ime = esc(data.fullName);
+  const usluga = (data.serviceType || '').trim();
+
+  const zaUslugu = usluga
+    ? `<p style="margin:0 0 22px;line-height:1.6;">Zabeležili smo: <strong>${esc(usluga)}</strong>.</p>`
+    : '';
+
+  return {
+    subject: 'Vaša prijava za razgovor je primljena',
+    html: shell(
+      'Vaša prijava je stigla',
+      `<p style="margin:0 0 14px;line-height:1.6;">Zdravo ${ime},</p>
+       <p style="margin:0 0 14px;line-height:1.6;">hvala što ste se javili. Dragana je dobila vaše podatke i javiće vam se lično, u najkraćem roku, na telefon ili email koji ste ostavili.</p>
+       ${zaUslugu}
+       <p style="margin:0 0 22px;line-height:1.6;">Do tada ne treba da radite ništa. Ako se u međuvremenu setite nečega što bi bilo korisno da zna, samo odgovorite na ovaj mejl.</p>
+       <p style="margin:0 0 4px;line-height:1.6;">Svako dobro,<br><strong>${BRAND}</strong></p>
+       <p style="margin:0;line-height:1.7;font-size:13px;color:${SITAN_TEKST};">
+         Uređenje prostora-Feng Shui<br>
+         Tel: <a href="tel:${UPLATA.telefonZaLink}" style="color:${SITAN_TEKST};">${UPLATA.telefon}</a><br>
+         Web: <a href="https://draganajovic.com" style="color:${SITAN_TEKST};">draganajovic.com</a>
+       </p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
+
+export interface RazgovorObavestenjeData {
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  goal?: string | null;
+  serviceType?: string | null;
+  /** Sa koje stranice je prijava stigla (Početna, Škola, O meni). */
+  heardFrom?: string | null;
+}
+
+export function razgovorObavestenje(
+  data: RazgovorObavestenjeData,
+): { subject: string; html: string } {
+  const ime = esc(data.fullName);
+  const telefon = (data.phone || '').trim();
+  const cilj = (data.goal || '').trim();
+  const usluga = (data.serviceType || '').trim();
+  const odakle = (data.heardFrom || '').trim();
+
+  const redovi: (RedPodataka | null)[] = [
+    { naziv: 'Ime i prezime', vrednost: ime },
+    {
+      naziv: 'Email',
+      vrednost: `<a href="mailto:${esc(data.email)}" style="color:${TAMNI_TEKST};">${esc(data.email)}</a>`,
+    },
+    {
+      naziv: 'Telefon',
+      vrednost: telefon
+        ? `<a href="tel:${esc(telefon.replace(/[^\d+]/g, ''))}" style="color:${TAMNI_TEKST};">${esc(telefon)}</a>`
+        : '<span style="color:#a2988c;font-weight:400;">nije ostavljen</span>',
+    },
+    usluga ? { naziv: 'Zanima', vrednost: esc(usluga) } : null,
+    cilj ? { naziv: 'Najvažnije', vrednost: esc(cilj) } : null,
+    odakle ? { naziv: 'Stranica', vrednost: esc(odakle) } : null,
+  ];
+
+  return {
+    subject: usluga
+      ? `Nova prijava za razgovor: ${data.fullName} (${usluga})`
+      : `Nova prijava za razgovor: ${data.fullName}`,
+    html: shell(
+      'Nova prijava za razgovor',
+      `<p style="margin:0 0 22px;line-height:1.6;">Neko je ostavio podatke i čeka poziv. Posetilac je dobio potvrdu da ćete mu se javiti.</p>
+       ${tabelaPodataka(redovi)}
+       <p style="margin:0;line-height:1.6;font-size:13px;color:${SITAN_TEKST};">Prijava je upisana i u admin pregled, među ostale upite.</p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════
    KONTAKT UPITNIK — potvrda pošiljaocu i obaveštenje Dragani.
 
    Do sada nijedan od dva nije postojao: upitnik je upisivao red u bazu
