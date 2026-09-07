@@ -470,6 +470,13 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
 - Mrtva polja u adminu: `footer.tagline`, `home.newsletter.*`.
 - Vebinar traka, popup i modal u novom dizajnu.
 - `/login` i `/signup` nose natpis „ptPLAN"; `not-found` u starom dizajnu.
+- **RLS u bazi, HITNO (nađeno 07.09.).** Javni anon ključ je mogao da čita
+  sve prijave (`inquiries`, 31 red sa ličnim podacima) i profile; zatečeno,
+  starije od redizajna. Predlog politika je u
+  `supabase/migrations/0002_rls_inquiries_profiles.sql`, NIJE primenjen
+  (nema Supabase prijave iz ove sesije): pokrenuti u SQL editoru ili
+  `supabase login` pa `db push`. Uz to pregledati politike za `courses`,
+  `course_modules`, `lessons` (anon čita), `enrollments`, `payments`.
 - **Saglasnost za kolačiće.** Sajt od 04.09. meri posete (GA4 i Meta pixel)
   bez banera za saglasnost; nezavisni pregled je to zabeležio. Tekst o
   privatnosti na `/upitnik` govori o podacima iz obrasca (koji nikome trećem
