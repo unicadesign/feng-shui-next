@@ -6,11 +6,15 @@ import {
   skolaPrijavaObavestenje,
   upitPotvrda,
   upitObavestenje,
+  razgovorPotvrda,
+  razgovorObavestenje,
   type WebinarConfirmationData,
   type SkolaPrijavaData,
   type SkolaPrijavaObavestenjeData,
   type UpitPotvrdaData,
   type UpitObavestenjeData,
+  type RazgovorPotvrdaData,
+  type RazgovorObavestenjeData,
 } from './templates';
 
 type SendResult = { sent: boolean; error?: string };
@@ -101,5 +105,31 @@ export async function sendUpitObavestenje(
     return { sent: false, error: 'notify_address_not_configured' };
   }
   const { subject, html } = upitObavestenje(data);
+  return send(to, subject, html);
+}
+
+/** Posetiocu koji je zakazao razgovor: potvrda da će ga Dragana pozvati. */
+export async function sendRazgovorPotvrda(
+  to: string,
+  data: RazgovorPotvrdaData,
+): Promise<SendResult> {
+  const { subject, html } = razgovorPotvrda(data);
+  return send(to, subject, html);
+}
+
+/**
+ * Dragani: nova prijava za razgovor (konsultacija, nekretnina, radionice).
+ * Ista adresa i isto pravilo kao za školu i upitnik: bez
+ * `SKOLA_OBAVESTENJA_EMAIL` se preskače, red je već u bazi.
+ */
+export async function sendRazgovorObavestenje(
+  data: RazgovorObavestenjeData,
+): Promise<SendResult> {
+  const to = (process.env.SKOLA_OBAVESTENJA_EMAIL || '').trim();
+  if (!to) {
+    console.warn('[email] SKOLA_OBAVESTENJA_EMAIL nije postavljen — obaveštenje o razgovoru se preskače');
+    return { sent: false, error: 'notify_address_not_configured' };
+  }
+  const { subject, html } = razgovorObavestenje(data);
   return send(to, subject, html);
 }
