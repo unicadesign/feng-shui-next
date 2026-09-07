@@ -470,13 +470,20 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
 - Mrtva polja u adminu: `footer.tagline`, `home.newsletter.*`.
 - Vebinar traka, popup i modal u novom dizajnu.
 - `/login` i `/signup` nose natpis „ptPLAN"; `not-found` u starom dizajnu.
-- **RLS u bazi, HITNO (nađeno 07.09.).** Javni anon ključ je mogao da čita
-  sve prijave (`inquiries`, 31 red sa ličnim podacima) i profile; zatečeno,
-  starije od redizajna. Predlog politika je u
-  `supabase/migrations/0002_rls_inquiries_profiles.sql`, NIJE primenjen
-  (nema Supabase prijave iz ove sesije): pokrenuti u SQL editoru ili
-  `supabase login` pa `db push`. Uz to pregledati politike za `courses`,
-  `course_modules`, `lessons` (anon čita), `enrollments`, `payments`.
+- **RLS u bazi, zatvoreno 07.09.** Nađeno pri proveri kontakt upitnika:
+  javni anon ključ je čitao sve prijave (31 red sa ličnim podacima) i sve
+  profile, a mogao je i da bilo kom profilu upiše `role = 'admin'`
+  (politike `using (true)` iz vremena starog sajta); svaki prijavljen
+  polaznik je čitao pretplatnike i prijave za vebinar; anon je čitao
+  objavljene lekcije sa video linkovima. Primenjeno iz ove sesije preko
+  `supabase db query --linked -f supabase/migrations/0002_rls_zatvaranje.sql`
+  (CLI je prijavljen i povezan na projekat). Posle: anon samo upisuje
+  prijave, newsletter i vebinar; polaznik vidi svoj profil (samo kao
+  `user`), objavljene kurseve i svoje upise; admin sve. Provereno REST
+  probama (sve privatne tabele daju 0 redova za anon) i simulacijom uloga u
+  transakcijama sa rollback. Ostaje za admin fazu: `lessons.video_url`
+  (stari jedan video po lekciji) vidljiv svakom prijavljenom, ne samo
+  upisanom; novi videi u `lesson_videos` su ograničeni na upisane.
 - **Saglasnost za kolačiće.** Sajt od 04.09. meri posete (GA4 i Meta pixel)
   bez banera za saglasnost; nezavisni pregled je to zabeležio. Tekst o
   privatnosti na `/upitnik` govori o podacima iz obrasca (koji nikome trećem
