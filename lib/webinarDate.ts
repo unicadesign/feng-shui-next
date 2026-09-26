@@ -12,6 +12,15 @@ export function isWebinarLive(c: WebinarSection, now: number = Date.now()): bool
   return now < t;
 }
 
+/**
+ * Ključ u `localStorage` kojim pretraživač pamti da se ovaj posetilac već
+ * prijavio, pa mu traka, popup i sekcija na početnoj ne nude prijavu opet.
+ * Vezan je za termin, da prijava na prošli vebinar ne pokrije sledeći.
+ * Pamti SAMO ovaj pretraživač; server ne zna ništa o tome.
+ */
+export const prijavljenKljuc = (c: WebinarSection) =>
+  `webinar_registered:${c.startsAt || c.title}`;
+
 const pad = (n: number) => String(n).padStart(2, '0');
 
 // "2026-06-25T20:00" → "25.06.2026 u 20h" / "25.06.2026 u 20:30h"

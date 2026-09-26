@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import PrijavaModal from './PrijavaModal';
 import { useEnrollTrigger } from './enrollTrigger';
+import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
+import { formatWebinarDate, prijavljenKljuc } from '@/lib/webinarDate';
+import type { HomeContent } from '@/types/content';
 import './fs-c.css';
 
 type ModalIntent = 'konsultacije' | 'nekretnina' | 'radionice' | 'prijava';
@@ -64,13 +67,29 @@ const modalCopy: Record<
  * Uslovni video ("Zašto Feng Shui") i iskakanje ebooka su izostavljeni dok
  * ne stigne materijal/odluka klijenta (vidi tabla → Backlog).
  */
-const PocetnaContent = () => {
+/** `null` kad vebinar nije uključen ili je termin prošao; tada nema sekcije. */
+type Props = { vebinar?: HomeContent['webinarSection'] | null };
+
+const PocetnaContent = ({ vebinar = null }: Props) => {
   const [modal, setModal] = useState<ModalIntent | null>(null);
+  const [vebinarOtvoren, setVebinarOtvoren] = useState(false);
   const open = (intent: ModalIntent) => () => setModal(intent);
 
   useEnrollTrigger(() => setModal('prijava'));
 
+  /* Isti zapis koji ostavljaju traka i popup: ko se jednom prijavio, tome
+     popup više ne iskače u ovom pretraživaču. */
+  const zapamtiPrijavu = () => {
+    if (!vebinar) return;
+    try {
+      localStorage.setItem(prijavljenKljuc(vebinar), '1');
+    } catch {
+      /* privatni prozor, zabranjena memorija: nije bitno */
+    }
+  };
+
   return (
+    <>
     <div className="fs-c">
       {/* HERO */}
       <header className="hero hero-pocetna">
@@ -259,6 +278,33 @@ const PocetnaContent = () => {
         </div>
       </section>
 
+      {/* VEBINAR — ceo sadržaj (nadnaslov, naslov, podnaslov, termin, natpis
+          dugmeta) dolazi iz admina, strana „Početna", sekcija „Vebinar (CTA)".
+          Sekcije nema u HTML-u kad vebinar nije uključen ili je termin prošao.
+          Mesto: između usluga i „Tri koraka", da dve tamne trake (KPI iznad i
+          kontakt na dnu) ne stoje jedna do druge. */}
+      {vebinar && (
+        <section className="card c-navy" id="vebinar" aria-labelledby="vebinar-naslov">
+          <div className="wrap stack g24">
+            <span className="eyebrow">{vebinar.badge}</span>
+            <h2 id="vebinar-naslov">{vebinar.title}</h2>
+            <p className="lead">{vebinar.subtitle}</p>
+            {formatWebinarDate(vebinar.startsAt) && (
+              <p className="vebinar-termin">
+                <svg className="vebinar-oznaka" viewBox="0 0 16 16" fill="none" strokeWidth={1.4} aria-hidden="true">
+                  <rect x="2.2" y="3.4" width="11.6" height="10.4" rx="1.4" />
+                  <path d="M2.2 6.6h11.6M5.4 2.2v2.4M10.6 2.2v2.4" />
+                </svg>
+                {formatWebinarDate(vebinar.startsAt)}
+              </p>
+            )}
+            <button className="btn btn-white" onClick={() => setVebinarOtvoren(true)}>
+              {vebinar.buttonText}
+            </button>
+          </div>
+        </section>
+      )}
+
       {/* TRI KORAKA — prenet sa žive početne 01.09. na klijentov zahtev, a
           istog dana prerađen u pravac „B — Nit" koji je Marko izabrao od tri
           predloga: tri bela kruga sa zelenim obrubom na zelenoj niti koja
@@ -392,6 +438,17 @@ const PocetnaContent = () => {
         redirectTo={modal ? modalCopy[modal].redirectTo : undefined}
       />
     </div>
+    {/* Van `.fs-c`: modal je iz starog skupa komponenti i nosi svoje
+        Tailwind klase, pa ne treba da ga hvataju pravila te klase. */}
+    {vebinar && (
+      <WebinarRegistrationModal
+        content={vebinar}
+        open={vebinarOtvoren}
+        onClose={() => setVebinarOtvoren(false)}
+        onSuccess={zapamtiPrijavu}
+      />
+    )}
+    </>
   );
 };
 

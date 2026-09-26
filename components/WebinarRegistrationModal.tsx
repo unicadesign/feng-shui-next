@@ -144,7 +144,7 @@ const WebinarRegistrationModal: React.FC<Props> = ({ content, open, onClose, onS
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-charcoal text-cream-50 px-7 py-4 text-sm font-heading font-semibold hover:bg-charcoal/90 transition-all duration-300 ease-out-expo active:scale-[0.99] disabled:opacity-60"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-navy-500 text-cream-50 px-7 py-4 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.99] disabled:opacity-60"
               >
                 {status === 'loading' && <Loader2 size={16} className="animate-spin" />}
                 {content.buttonText}
