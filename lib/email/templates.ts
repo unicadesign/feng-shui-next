@@ -69,21 +69,22 @@ export interface WebinarConfirmationData {
   zoomLink?: string;
 }
 
+/**
+ * „2026-10-05T19:00" -> „05.10.2026 u 19h". Ovde, a ne iz
+ * `lib/webinarDate.ts`, da mejlovi ne povlače tipove sa granice
+ * klijent/server. Koriste ga potvrda prijavljenom i obaveštenje Dragani.
+ */
+function formatirajTermin(startsAt?: string | null): string {
+  if (!startsAt) return '';
+  const d = new Date(startsAt);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const time = d.getMinutes() === 0 ? `${d.getHours()}h` : `${pad(d.getHours())}:${pad(d.getMinutes())}h`;
+  return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()} u ${time}`;
+}
+
 export function webinarConfirmation(data: WebinarConfirmationData): { subject: string; html: string } {
-  // Inlined to avoid pulling client/server boundary types into the email template.
-  const formatted = (() => {
-    if (!data.startsAt) return '';
-    const d = new Date(data.startsAt);
-    if (Number.isNaN(d.getTime())) return '';
-    const pad = (n: number) => String(n).padStart(2, '0');
-    const day = pad(d.getDate());
-    const month = pad(d.getMonth() + 1);
-    const year = d.getFullYear();
-    const h = d.getHours();
-    const m = d.getMinutes();
-    const time = m === 0 ? `${h}h` : `${pad(h)}:${pad(m)}h`;
-    return `${day}.${month}.${year} u ${time}`;
-  })();
+  const formatted = formatirajTermin(data.startsAt);
   const when = formatted
     ? `<p style="margin:0 0 14px;line-height:1.6;"><strong>Termin:</strong> ${formatted}</p>`
     : '';
@@ -110,6 +111,61 @@ export function webinarConfirmation(data: WebinarConfirmationData): { subject: s
   };
 }
 
+/**
+ * Obaveštenje Dragani da se neko prijavio na vebinar. Dodato 26.09.2026.:
+ * do tada je potvrdu dobijao samo prijavljeni, a ona je morala da gleda
+ * admin pregled da bi znala koliko ih ima.
+ */
+export interface WebinarObavestenjeData {
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  note?: string | null;
+  /** Termin vebinara, isti koji ide prijavljenom. */
+  startsAt?: string | null;
+}
+
+export function webinarObavestenje(
+  data: WebinarObavestenjeData,
+): { subject: string; html: string } {
+  const ime = esc(data.fullName);
+  const telefon = (data.phone || '').trim();
+  const poruka = (data.note || '').trim();
+  const termin = formatirajTermin(data.startsAt);
+
+  const redovi: (RedPodataka | null)[] = [
+    { naziv: 'Ime i prezime', vrednost: ime },
+    {
+      naziv: 'Email',
+      vrednost: `<a href="mailto:${esc(data.email)}" style="color:${TAMNI_TEKST};">${esc(data.email)}</a>`,
+    },
+    {
+      naziv: 'Telefon',
+      vrednost: telefon
+        ? `<a href="tel:${esc(telefon.replace(/[^\d+]/g, ''))}" style="color:${TAMNI_TEKST};">${esc(telefon)}</a>`
+        : '<span style="color:#a2988c;font-weight:400;">nije ostavljen</span>',
+    },
+    termin ? { naziv: 'Termin', vrednost: esc(termin) } : null,
+  ];
+
+  const porukaBlok = poruka
+    ? `${podnaslov('Poruka')}
+       <p style="margin:0 0 22px;line-height:1.6;white-space:pre-wrap;">${esc(poruka)}</p>`
+    : '';
+
+  return {
+    subject: `Nova prijava na vebinar: ${data.fullName}`,
+    html: shell(
+      'Nova prijava na vebinar',
+      `<p style="margin:0 0 22px;line-height:1.6;">Prijavljeni je dobio potvrdu sa terminom i linkom.</p>
+       ${tabelaPodataka(redovi)}
+       ${porukaBlok}
+       <p style="margin:0;line-height:1.6;font-size:13px;color:${SITAN_TEKST};">Sve prijave su i u admin pregledu, na stranici „Vebinar".</p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
+
 /* ══════════════════════════════════════════════════════════════════
    PRIJAVA ZA ŠKOLU — mejl sa podacima za uplatu.
 
@@ -118,7 +174,8 @@ export function webinarConfirmation(data: WebinarConfirmationData): { subject: s
 
    1. BROJ RAČUNA je pun, `115-0038163380098-95`. U instrukcijama je
       bio bez kontrolne dvocifre, a IBAN dokazuje da ide sa njom.
-   2. IZNOS ZA INOSTRANSTVO je 289 €, ne 286 €, po Markovoj odluci da
+   2. IZNOS ZA INOSTRANSTVO se uzima iz `lib/uplata.ts` (od 26.09.2026.
+      340 €), po Markovoj odluci da
       se cene ostave onako kako ih klijent daje, bez preračunavanja.
    3. SVRHA UPLATE je dodata, sa imenom prijavljenog. Nije je bilo, a
       bez nje se uplata ne može spojiti sa osobom.

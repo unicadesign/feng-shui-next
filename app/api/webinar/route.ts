@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getContent } from '@/lib/content';
-import { sendWebinarConfirmation } from '@/lib/email/send';
+import { sendWebinarConfirmation, sendWebinarObavestenje } from '@/lib/email/send';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -43,8 +43,12 @@ export async function POST(request: Request) {
   const startsAt = home.webinarSection.startsAt || undefined;
   const zoomLink = home.webinarSection.zoomLink || undefined;
 
-  // Email failure must not fail the registration.
-  await sendWebinarConfirmation(email, { fullName, startsAt, zoomLink });
+  // Greška u pošti ne sme da obori prijavu: red je već u bazi.
+  // Prijavljenom ide potvrda sa terminom i linkom, Dragani obaveštenje.
+  await Promise.all([
+    sendWebinarConfirmation(email, { fullName, startsAt, zoomLink }),
+    sendWebinarObavestenje({ fullName, email, phone, note, startsAt }),
+  ]);
 
   return NextResponse.json({ success: true });
 }
