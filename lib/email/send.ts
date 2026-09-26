@@ -8,6 +8,7 @@ import {
   upitObavestenje,
   razgovorPotvrda,
   razgovorObavestenje,
+  webinarObavestenje,
   type WebinarConfirmationData,
   type SkolaPrijavaData,
   type SkolaPrijavaObavestenjeData,
@@ -15,6 +16,7 @@ import {
   type UpitObavestenjeData,
   type RazgovorPotvrdaData,
   type RazgovorObavestenjeData,
+  type WebinarObavestenjeData,
 } from './templates';
 
 type SendResult = { sent: boolean; error?: string };
@@ -131,5 +133,22 @@ export async function sendRazgovorObavestenje(
     return { sent: false, error: 'notify_address_not_configured' };
   }
   const { subject, html } = razgovorObavestenje(data);
+  return send(to, subject, html);
+}
+
+/**
+ * Dragani: neko se prijavio na vebinar. Ista adresa i isto pravilo kao za
+ * školu, razgovor i upitnik: bez `SKOLA_OBAVESTENJA_EMAIL` se preskače, a
+ * prijava je već u bazi i u admin pregledu.
+ */
+export async function sendWebinarObavestenje(
+  data: WebinarObavestenjeData,
+): Promise<SendResult> {
+  const to = (process.env.SKOLA_OBAVESTENJA_EMAIL || '').trim();
+  if (!to) {
+    console.warn('[email] SKOLA_OBAVESTENJA_EMAIL nije postavljen — obaveštenje o vebinaru se preskače');
+    return { sent: false, error: 'notify_address_not_configured' };
+  }
+  const { subject, html } = webinarObavestenje(data);
   return send(to, subject, html);
 }

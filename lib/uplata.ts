@@ -22,11 +22,18 @@
  * BANKE, kojih u instrukcijama nema. Kada stignu, idu u `bankaNaziv` i
  * `bankaAdresa` ispod i same se pojave na stranici i u mejlu.
  *
- * ─── ODLUKA O IZNOSU ────────────────────────────────────────────────
- * Instrukcije su za inostranstvo pominjale 286 €, a stranica škole 289 €.
- * Marko je 31.08. odlučio: bez preračunavanja, ostaju cene kako ih je
- * klijent dao — 33.550 RSD i 289 €. Zato ovde nema kursa; dva iznosa su
- * dva podatka, ne jedan izveden iz drugog.
+ * ─── IZNOS ──────────────────────────────────────────────────────────
+ * Klijent je 23.09.2026. javio novu cenu, koja važi od 26.09.2026.:
+ * 39.880 RSD ili 340 €. Do tada je bilo 33.550 RSD i 289 €.
+ *
+ * Dinari i evri su dva podatka koja klijent daje odvojeno, ne jedan
+ * izveden iz drugog: ovde nema kursa, i kad se cena menja, menjaju se
+ * oba reda.
+ *
+ * PRIJAVE OD PRE 26.09. IDU PO STAROJ CENI (Marko, 26.09.). Njihov mejl
+ * sa podacima za uplatu nosi iznos iz trenutka slanja i ostaje tačan;
+ * stranica `/uplata` uvek pokazuje tekuću cenu, pa ako neko od njih
+ * otvori stranicu, videće novu. Za te prijave važi ono što piše u mejlu.
  */
 
 export const UPLATA = {
@@ -35,9 +42,9 @@ export const UPLATA = {
   racun: '115-0038163380098-95',
 
   /** Za prikaz. */
-  iznosRsd: '33.550 RSD',
+  iznosRsd: '39.880 RSD',
   /** Za dugme „kopiraj" — e-bankarstvo neće tačku ni oznaku valute. */
-  iznosRsdSirov: '33550',
+  iznosRsdSirov: '39880',
 
   /**
    * Svrha uplate NIJE bila u instrukcijama, a bez nje Dragana ne može da
@@ -48,8 +55,8 @@ export const UPLATA = {
 
   iban: 'RS35115003816338009895',
   swift: 'AAAARSBG',
-  iznosEur: '289 €',
-  iznosEurSirov: '289',
+  iznosEur: '340 €',
+  iznosEurSirov: '340',
 
   /** Prazno dok klijent ne pošalje; prikaz ih preskače kada su prazni. */
   bankaNaziv: '',

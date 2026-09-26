@@ -2,6 +2,7 @@ import { getContent } from '@/lib/content';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import WebinarPopup from '@/components/WebinarPopup';
+import { isWebinarLive } from '@/lib/webinarDate';
 import Script from 'next/script';
 import Analitika from '@/components/Analitika';
 
@@ -27,12 +28,20 @@ export default async function SiteLayout({
     getContent('home'),
   ]);
 
+  /* Vebinar se pokazuje samo ako je uključen U ADMINU I ako termin nije
+     prošao. Odluka je ovde, na serveru, jer server već ima datum: ranije je
+     server gledao samo prekidač, pa je pri svakom učitavanju traka bljesnula
+     ispod navbara i odmah nestala kad pretraživač izračuna da je termin
+     prošao. Komponente i dalje same proveravaju vreme, da traka i popup
+     nestanu u trenutku kad vebinar počne dok je strana otvorena. */
+  const vebinarZiv = isWebinarLive(home.webinarSection);
+
   return (
     <>
-      <Header content={global} webinar={home.webinarSection} />
+      <Header content={global} webinar={vebinarZiv ? home.webinarSection : undefined} />
       {children}
       <Footer content={global} />
-      <WebinarPopup content={home.webinarSection} />
+      {vebinarZiv && <WebinarPopup content={home.webinarSection} />}
       {MERENJE_UKLJUCENO && (
         <>
           <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
