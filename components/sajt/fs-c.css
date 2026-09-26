@@ -1673,3 +1673,24 @@ body:has(.fs-c) {
   .fs-c .nit-krug h3 { font-size: 1.25rem; }
   .fs-c .nit-krug p { font-size: .9rem; line-height: 1.45; }
 }
+
+/* ================= VEBINAR (sekcija na početnoj) ========================
+   Traka se pojavljuje samo dok je vebinar uključen u adminu i dok termin
+   nije prošao; odluku donosi server (`app/(site)/page.tsx`). Zato ovde
+   nema nijednog pravila za „sakriveno stanje": kad vebinara nema, nema ni
+   sekcije u HTML-u.
+
+   Podloga je ista zelena kao ostale tamne trake (`.c-navy`), pa naslov,
+   nadnaslov i `lead` nasleđuju boje iz tog bloka.
+   ------------------------------------------------------------------------ */
+.fs-c .vebinar-termin {
+  display: inline-flex; align-items: center; gap: .55rem;
+  align-self: flex-start;
+  padding: .5rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, .34);
+  border-radius: var(--pill);
+  font-size: .95rem; font-weight: 600;
+  color: #fff;
+}
+/* Ista geometrija kao oznake drugde na sajtu: kvadrat iz brend simbola. */
+.fs-c .vebinar-oznaka { flex: none; width: 1rem; height: 1rem; stroke: var(--gold-200); }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { CalendarCheck, X } from 'lucide-react';
-import { formatWebinarDate, isWebinarLive } from '@/lib/webinarDate';
+import { formatWebinarDate, isWebinarLive, prijavljenKljuc } from '@/lib/webinarDate';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
 import type { HomeContent } from '@/types/content';
 
@@ -12,8 +12,6 @@ interface Props {
 
 const sessionKey = (c: HomeContent['webinarSection']) =>
   `webinar_popup_dismissed:${c.startsAt || c.title}`;
-const registeredKey = (c: HomeContent['webinarSection']) =>
-  `webinar_registered:${c.startsAt || c.title}`;
 
 const SHOW_DELAY_MS = 3000;
 
@@ -38,7 +36,7 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
     }
     try {
       if (sessionStorage.getItem(sessionKey(content)) === '1') return;
-      if (localStorage.getItem(registeredKey(content)) === '1') return;
+      if (localStorage.getItem(prijavljenKljuc(content)) === '1') return;
     } catch {
       /* ignore */
     }
@@ -86,7 +84,7 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
 
   const handleSuccess = () => {
     try {
-      localStorage.setItem(registeredKey(content), '1');
+      localStorage.setItem(prijavljenKljuc(content), '1');
     } catch {
       /* ignore */
     }
@@ -131,7 +129,7 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
 
             <button
               onClick={openRegistration}
-              className="mt-6 w-full inline-flex items-center justify-center rounded-full bg-charcoal text-cream-50 px-7 py-4 text-sm font-heading font-semibold hover:bg-charcoal/90 transition-all duration-300 ease-out-expo active:scale-[0.99]"
+              className="mt-6 w-full inline-flex items-center justify-center rounded-full bg-navy-500 text-cream-50 px-7 py-4 text-sm font-heading font-semibold hover:bg-navy-600 transition-all duration-300 ease-out-expo active:scale-[0.99]"
             >
               {content.buttonText}
             </button>

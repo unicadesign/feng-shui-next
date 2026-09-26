@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { CalendarCheck } from 'lucide-react';
-import { isWebinarLive, countdownString } from '@/lib/webinarDate';
+import { isWebinarLive, countdownString, prijavljenKljuc } from '@/lib/webinarDate';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
 import type { HomeContent } from '@/types/content';
 
@@ -10,8 +10,6 @@ interface Props {
   content: HomeContent['webinarSection'];
 }
 
-const registeredKey = (c: HomeContent['webinarSection']) =>
-  `webinar_registered:${c.startsAt || c.title}`;
 
 // Pill bar that sits attached to the bottom of the navbar — top edge tucked
 // behind the navbar (via negative margin + lower z-index), bottom edge peeks
@@ -38,7 +36,7 @@ const WebinarNavbarBar: React.FC<Props> = ({ content }) => {
 
   const handleSuccess = () => {
     try {
-      localStorage.setItem(registeredKey(content), '1');
+      localStorage.setItem(prijavljenKljuc(content), '1');
     } catch {
       /* ignore */
     }
