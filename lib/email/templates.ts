@@ -175,7 +175,7 @@ export function webinarObavestenje(
    1. BROJ RAČUNA je pun, `115-0038163380098-95`. U instrukcijama je
       bio bez kontrolne dvocifre, a IBAN dokazuje da ide sa njom.
    2. IZNOS ZA INOSTRANSTVO se uzima iz `lib/uplata.ts` (od 26.09.2026.
-      340 €), po Markovoj odluci da
+      350 €), po Markovoj odluci da
       se cene ostave onako kako ih klijent daje, bez preračunavanja.
    3. SVRHA UPLATE je dodata, sa imenom prijavljenog. Nije je bilo, a
       bez nje se uplata ne može spojiti sa osobom.
