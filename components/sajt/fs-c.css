@@ -1675,16 +1675,18 @@ body:has(.fs-c) {
 }
 
 /* ================= VEBINAR (sekcija na početnoj) ========================
-   Predlog „M" sa platna, Marko 28.09.2026.: datum kao slika, tanke linije,
-   bez kutije, a ispod belog vela fotografija stola sa tlocrtima.
+   Raspored iz predloga „M" sa platna (datum kao slika, tanke linije, bez
+   kutije), a pozadina po varijanti „C", Marko 28.09.2026.: tamnozelena
+   traka sa bledim nacrtanim tlocrtom. Prva verzija (fotografija stola pod
+   belim velom) je uživo između krem sekcija ispadala siva.
 
    Sekcija postoji samo dok je vebinar uključen u adminu i dok termin nije
    prošao; odluku donosi server (`app/(site)/page.tsx`). Zato ovde nema
    nijednog pravila za „sakriveno stanje".
 
-   Fotografija je samo tekstura: beli veo od 86% ostavlja tlocrte da se
-   naziru, a tekst ima podlogu kao na beloj strani. Slojevi idu kao u heroju
-   (`isolation` + negativni z-index), pa sadržaju ne treba ništa posebno.
+   Tlocrt je samo tekstura: linije su na 16% i maskom se gube iza teksta.
+   Slojevi idu kao u heroju (`isolation` + negativni z-index), pa sadržaju
+   ne treba ništa posebno.
 
    Tri rasporeda:
      telefon (do 767px)  sve u koloni, horizontalna crta između datuma i teksta
@@ -1692,20 +1694,33 @@ body:has(.fs-c) {
      desktop (1100+)     datum | crta | tekst | dugme, u jednom redu
    ------------------------------------------------------------------------ */
 .fs-c .vebinar {
-  /* Linije su toplija bež od `--cream-300`: na belom velu ona je bila
-     preslaba, a ova drži isti ton kao ostatak strane. */
-  --vebinar-linija: #D2B892;
+  /* Tanke linije sekcije su prigušeno zlato, ton nadnaslova. */
+  --vebinar-linija: rgba(242, 217, 138, .34);
   position: relative; isolation: isolate; overflow: hidden;
-  background: #fff;
+  background: var(--navy-800);
   padding: clamp(2.125rem, 6.5vw, 4.5rem) 0;
   scroll-margin-top: 96px;
 }
-.fs-c .vebinar-pozadina { position: absolute; inset: 0; z-index: -2; display: block; }
-.fs-c .vebinar-pozadina img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
-.fs-c .vebinar::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background: rgba(255, 255, 255, .86);
+.fs-c .vebinar-tlocrt {
+  position: absolute; inset: 0; z-index: -1; display: block; width: 100%; height: 100%;
+  color: rgba(237, 216, 190, .16);
+  /* Telefon: tekst je levo i preko cele širine, pa crtež ostaje samo desno. */
+  -webkit-mask-image: linear-gradient(90deg, transparent 30%, #000 100%);
+          mask-image: linear-gradient(90deg, transparent 30%, #000 100%);
 }
+@media (max-width: 767px) {
+  /* Uvećan i centriran, da spoljni zidovi odu van trake i ne poklope se
+     sa tankim linijama sekcije gore i dole. */
+  .fs-c .vebinar-tlocrt { top: -18%; bottom: -18%; left: -40%; right: -40%; width: auto; height: auto; }
+}
+@media (min-width: 768px) {
+  /* Crtež se utapa iza teksta, a vidi se prema ivicama. */
+  .fs-c .vebinar-tlocrt {
+    -webkit-mask-image: radial-gradient(ellipse 34% 85% at 54% 50%, transparent 45%, #000 100%);
+            mask-image: radial-gradient(ellipse 34% 85% at 54% 50%, transparent 45%, #000 100%);
+  }
+}
+.fs-c .vebinar .eyebrow { color: var(--gold-200); }
 
 .fs-c .vebinar-red {
   display: grid;
@@ -1719,17 +1734,17 @@ body:has(.fs-c) {
 .fs-c .vebinar-datum { grid-area: datum; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
 .fs-c .vebinar-broj {
   font-size: clamp(4.75rem, 9vw, 7.25rem); line-height: .86;
-  font-weight: 800; letter-spacing: -.055em; color: var(--navy-700);
+  font-weight: 800; letter-spacing: -.055em; color: var(--cream-50);
 }
-.fs-c .vebinar-dan { font-size: clamp(.95rem, 1.4vw, 1.06rem); font-weight: 600; color: var(--charcoal-600); }
+.fs-c .vebinar-dan { font-size: clamp(.95rem, 1.4vw, 1.06rem); font-weight: 600; color: var(--gold-200); }
 .fs-c .vebinar-crta { grid-area: crta; display: block; height: 1px; background: var(--vebinar-linija); }
 .fs-c .vebinar-tekst { grid-area: tekst; display: flex; flex-direction: column; align-items: flex-start; gap: .625rem; }
 /* Uža mera od opšteg `h2` (do 3,25rem): pored broja od 7rem naslov od
    52px bi se takmičio sa datumom za pažnju. */
-.fs-c .vebinar h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.1; }
+.fs-c .vebinar h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.1; color: #fff; }
 .fs-c .vebinar-podnaslov {
   font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5;
-  color: var(--charcoal-600); max-width: 30rem;
+  color: var(--cream-200); max-width: 30rem;
   /* Bez ovoga je na desktopu „domu" ostajalo samo u drugom redu. */
   text-wrap: pretty;
 }

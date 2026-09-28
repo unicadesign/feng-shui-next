@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PrijavaModal from './PrijavaModal';
 import { useEnrollTrigger } from './enrollTrigger';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
+import TlocrtPozadina from './TlocrtPozadina';
 import {
   prijavljenKljuc,
   webinarKratakDatum,
@@ -283,10 +284,12 @@ const PocetnaContent = ({ vebinar = null }: Props) => {
         </div>
       </section>
 
-      {/* VEBINAR — predlog „M" sa platna, Marko 28.09.: datum kao slika, tanke
-          linije, bez kutije, a ispod belog vela fotografija stola sa
-          tlocrtima (radionica 15.05.2026.), jer podnaslov govori o praktičnoj
-          primeni u domu.
+      {/* VEBINAR — raspored iz predloga „M" sa platna (datum kao slika, tanke
+          linije, bez kutije), a pozadina po varijanti „C" koju je Marko
+          izabrao 28.09. kad je M video uživo: tamnozelena traka sa bledim
+          nacrtanim tlocrtom (`TlocrtPozadina`), jer podnaslov govori o
+          praktičnoj primeni u domu. Fotografija stola pod belim velom je
+          među krem sekcijama ispadala siva i puna predmeta.
 
           Ceo tekst (nadnaslov, naslov, podnaslov, termin, natpis dugmeta)
           dolazi iz admina, strana „Početna", sekcija „Vebinar (CTA)"; ništa
@@ -297,12 +300,7 @@ const PocetnaContent = ({ vebinar = null }: Props) => {
           pun datum rečima iz `<time>`. */}
       {vebinar && (
         <section className="vebinar" id="vebinar" aria-labelledby="vebinar-naslov">
-          <picture className="vebinar-pozadina">
-            <source media="(max-width: 767px)" type="image/avif" srcSet="/images/vebinar-tlocrti-mobile.avif" />
-            <source media="(max-width: 767px)" srcSet="/images/vebinar-tlocrti-mobile.jpg" />
-            <source type="image/avif" srcSet="/images/vebinar-tlocrti.avif" />
-            <img src="/images/vebinar-tlocrti.jpg" alt="" loading="lazy" decoding="async" />
-          </picture>
+          <TlocrtPozadina />
           <div className="wrap">
             <div className="vebinar-red">
               {webinarKratakDatum(vebinar.startsAt) && (
@@ -322,7 +320,7 @@ const PocetnaContent = ({ vebinar = null }: Props) => {
                 <h2 id="vebinar-naslov">{vebinar.title}</h2>
                 <p className="vebinar-podnaslov">{vebinar.subtitle}</p>
               </div>
-              <button className="btn btn-accent vebinar-dugme" onClick={() => setVebinarOtvoren(true)}>
+              <button className="btn btn-white vebinar-dugme" onClick={() => setVebinarOtvoren(true)}>
                 {vebinar.buttonText}
               </button>
             </div>
