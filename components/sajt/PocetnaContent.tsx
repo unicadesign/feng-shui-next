@@ -5,7 +5,12 @@ import Link from 'next/link';
 import PrijavaModal from './PrijavaModal';
 import { useEnrollTrigger } from './enrollTrigger';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
-import { formatWebinarDate, prijavljenKljuc } from '@/lib/webinarDate';
+import {
+  prijavljenKljuc,
+  webinarKratakDatum,
+  webinarDanISat,
+  webinarPunDatum,
+} from '@/lib/webinarDate';
 import type { HomeContent } from '@/types/content';
 import './fs-c.css';
 
@@ -278,29 +283,49 @@ const PocetnaContent = ({ vebinar = null }: Props) => {
         </div>
       </section>
 
-      {/* VEBINAR — ceo sadržaj (nadnaslov, naslov, podnaslov, termin, natpis
-          dugmeta) dolazi iz admina, strana „Početna", sekcija „Vebinar (CTA)".
-          Sekcije nema u HTML-u kad vebinar nije uključen ili je termin prošao.
-          Mesto: između usluga i „Tri koraka", da dve tamne trake (KPI iznad i
-          kontakt na dnu) ne stoje jedna do druge. */}
+      {/* VEBINAR — predlog „M" sa platna, Marko 28.09.: datum kao slika, tanke
+          linije, bez kutije, a ispod belog vela fotografija stola sa
+          tlocrtima (radionica 15.05.2026.), jer podnaslov govori o praktičnoj
+          primeni u domu.
+
+          Ceo tekst (nadnaslov, naslov, podnaslov, termin, natpis dugmeta)
+          dolazi iz admina, strana „Početna", sekcija „Vebinar (CTA)"; ništa
+          od toga nije u kodu. Sekcije nema u HTML-u kad vebinar nije uključen
+          ili je termin prošao, o čemu odlučuje server (`app/(site)/page.tsx`).
+
+          Veliki broj je čisto vizuelan (`aria-hidden`); čitač ekrana dobija
+          pun datum rečima iz `<time>`. */}
       {vebinar && (
-        <section className="card c-navy" id="vebinar" aria-labelledby="vebinar-naslov">
-          <div className="wrap stack g24">
-            <span className="eyebrow">{vebinar.badge}</span>
-            <h2 id="vebinar-naslov">{vebinar.title}</h2>
-            <p className="lead">{vebinar.subtitle}</p>
-            {formatWebinarDate(vebinar.startsAt) && (
-              <p className="vebinar-termin">
-                <svg className="vebinar-oznaka" viewBox="0 0 16 16" fill="none" strokeWidth={1.4} aria-hidden="true">
-                  <rect x="2.2" y="3.4" width="11.6" height="10.4" rx="1.4" />
-                  <path d="M2.2 6.6h11.6M5.4 2.2v2.4M10.6 2.2v2.4" />
-                </svg>
-                {formatWebinarDate(vebinar.startsAt)}
-              </p>
-            )}
-            <button className="btn btn-white" onClick={() => setVebinarOtvoren(true)}>
-              {vebinar.buttonText}
-            </button>
+        <section className="vebinar" id="vebinar" aria-labelledby="vebinar-naslov">
+          <picture className="vebinar-pozadina">
+            <source media="(max-width: 767px)" type="image/avif" srcSet="/images/vebinar-tlocrti-mobile.avif" />
+            <source media="(max-width: 767px)" srcSet="/images/vebinar-tlocrti-mobile.jpg" />
+            <source type="image/avif" srcSet="/images/vebinar-tlocrti.avif" />
+            <img src="/images/vebinar-tlocrti.jpg" alt="" loading="lazy" decoding="async" />
+          </picture>
+          <div className="wrap">
+            <div className="vebinar-red">
+              {webinarKratakDatum(vebinar.startsAt) && (
+                <time className="vebinar-datum" dateTime={vebinar.startsAt}>
+                  <span className="vebinar-broj" aria-hidden="true">
+                    {webinarKratakDatum(vebinar.startsAt)}
+                  </span>
+                  <span className="vebinar-dan" aria-hidden="true">
+                    {webinarDanISat(vebinar.startsAt)}
+                  </span>
+                  <span className="samo-citac">{webinarPunDatum(vebinar.startsAt)}</span>
+                </time>
+              )}
+              <span className="vebinar-crta" aria-hidden="true" />
+              <div className="vebinar-tekst">
+                <span className="eyebrow">{vebinar.badge}</span>
+                <h2 id="vebinar-naslov">{vebinar.title}</h2>
+                <p className="vebinar-podnaslov">{vebinar.subtitle}</p>
+              </div>
+              <button className="btn btn-accent vebinar-dugme" onClick={() => setVebinarOtvoren(true)}>
+                {vebinar.buttonText}
+              </button>
+            </div>
           </div>
         </section>
       )}
