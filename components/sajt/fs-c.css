@@ -1675,22 +1675,86 @@ body:has(.fs-c) {
 }
 
 /* ================= VEBINAR (sekcija na početnoj) ========================
-   Traka se pojavljuje samo dok je vebinar uključen u adminu i dok termin
-   nije prošao; odluku donosi server (`app/(site)/page.tsx`). Zato ovde
-   nema nijednog pravila za „sakriveno stanje": kad vebinara nema, nema ni
-   sekcije u HTML-u.
+   Predlog „M" sa platna, Marko 28.09.2026.: datum kao slika, tanke linije,
+   bez kutije, a ispod belog vela fotografija stola sa tlocrtima.
 
-   Podloga je ista zelena kao ostale tamne trake (`.c-navy`), pa naslov,
-   nadnaslov i `lead` nasleđuju boje iz tog bloka.
+   Sekcija postoji samo dok je vebinar uključen u adminu i dok termin nije
+   prošao; odluku donosi server (`app/(site)/page.tsx`). Zato ovde nema
+   nijednog pravila za „sakriveno stanje".
+
+   Fotografija je samo tekstura: beli veo od 86% ostavlja tlocrte da se
+   naziru, a tekst ima podlogu kao na beloj strani. Slojevi idu kao u heroju
+   (`isolation` + negativni z-index), pa sadržaju ne treba ništa posebno.
+
+   Tri rasporeda:
+     telefon (do 767px)  sve u koloni, horizontalna crta između datuma i teksta
+     tablet (768-1099)   datum | crta | tekst, dugme ispod teksta
+     desktop (1100+)     datum | crta | tekst | dugme, u jednom redu
    ------------------------------------------------------------------------ */
-.fs-c .vebinar-termin {
-  display: inline-flex; align-items: center; gap: .55rem;
-  align-self: flex-start;
-  padding: .5rem 1.05rem;
-  border: 1px solid rgba(255, 255, 255, .34);
-  border-radius: var(--pill);
-  font-size: .95rem; font-weight: 600;
-  color: #fff;
+.fs-c .vebinar {
+  /* Linije su toplija bež od `--cream-300`: na belom velu ona je bila
+     preslaba, a ova drži isti ton kao ostatak strane. */
+  --vebinar-linija: #D2B892;
+  position: relative; isolation: isolate; overflow: hidden;
+  background: #fff;
+  padding: clamp(2.125rem, 6.5vw, 4.5rem) 0;
+  scroll-margin-top: 96px;
 }
-/* Ista geometrija kao oznake drugde na sajtu: kvadrat iz brend simbola. */
-.fs-c .vebinar-oznaka { flex: none; width: 1rem; height: 1rem; stroke: var(--gold-200); }
+.fs-c .vebinar-pozadina { position: absolute; inset: 0; z-index: -2; display: block; }
+.fs-c .vebinar-pozadina img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.fs-c .vebinar::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: rgba(255, 255, 255, .86);
+}
+
+.fs-c .vebinar-red {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "datum" "crta" "tekst" "dugme";
+  row-gap: .875rem;
+  padding: 1.625rem 0;
+  border-top: 1px solid var(--vebinar-linija);
+  border-bottom: 1px solid var(--vebinar-linija);
+}
+.fs-c .vebinar-datum { grid-area: datum; display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
+.fs-c .vebinar-broj {
+  font-size: clamp(4.75rem, 9vw, 7.25rem); line-height: .86;
+  font-weight: 800; letter-spacing: -.055em; color: var(--navy-700);
+}
+.fs-c .vebinar-dan { font-size: clamp(.95rem, 1.4vw, 1.06rem); font-weight: 600; color: var(--charcoal-600); }
+.fs-c .vebinar-crta { grid-area: crta; display: block; height: 1px; background: var(--vebinar-linija); }
+.fs-c .vebinar-tekst { grid-area: tekst; display: flex; flex-direction: column; align-items: flex-start; gap: .625rem; }
+/* Uža mera od opšteg `h2` (do 3,25rem): pored broja od 7rem naslov od
+   52px bi se takmičio sa datumom za pažnju. */
+.fs-c .vebinar h2 { font-size: clamp(1.8rem, 3vw, 2.4rem); line-height: 1.1; }
+.fs-c .vebinar-podnaslov {
+  font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.5;
+  color: var(--charcoal-600); max-width: 30rem;
+  /* Bez ovoga je na desktopu „domu" ostajalo samo u drugom redu. */
+  text-wrap: pretty;
+}
+.fs-c .vebinar-dugme { grid-area: dugme; margin-top: .125rem; }
+
+@media (min-width: 768px) {
+  .fs-c .vebinar-red {
+    grid-template-columns: auto 1px minmax(0, 1fr);
+    grid-template-areas: "datum crta tekst" "datum crta dugme";
+    column-gap: 2.5rem; row-gap: 1.25rem;
+    padding: 2.125rem 0;
+  }
+  .fs-c .vebinar-datum { align-self: center; }
+  .fs-c .vebinar-crta { width: 1px; height: auto; align-self: stretch; }
+  .fs-c .vebinar-tekst { align-self: end; }
+  .fs-c .vebinar-dugme { justify-self: start; align-self: start; margin-top: 0; }
+}
+
+@media (min-width: 1100px) {
+  .fs-c .vebinar-red {
+    grid-template-columns: auto 1px minmax(0, 1fr) auto;
+    grid-template-areas: "datum crta tekst dugme";
+    column-gap: 3rem;
+    padding: 2.25rem 0;
+  }
+  .fs-c .vebinar-tekst { align-self: center; }
+  .fs-c .vebinar-dugme { align-self: center; justify-self: end; }
+}

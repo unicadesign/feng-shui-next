@@ -37,6 +37,45 @@ export function formatWebinarDate(startsAt: string): string {
   return `${day}.${month}.${year} u ${time}`;
 }
 
+/* Prikaz termina u sekciji na početnoj (predlog M, 28.09.2026.).
+   Čita se zidni sat kako ga je admin upisao („2026-10-05T19:00"), isto kao
+   `formatWebinarDate`: na serveru i u pretraživaču dobija se isti dan i sat,
+   pa HTML sa servera i prvi prikaz u pretraživaču ne mogu da se razlikuju. */
+const DANI = ['nedelja', 'ponedeljak', 'utorak', 'sreda', 'četvrtak', 'petak', 'subota'];
+const MESECI = [
+  'januara', 'februara', 'marta', 'aprila', 'maja', 'juna',
+  'jula', 'avgusta', 'septembra', 'oktobra', 'novembra', 'decembra',
+];
+
+function termin(startsAt: string): Date | null {
+  if (!startsAt) return null;
+  const d = new Date(startsAt);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+const sat = (d: Date) =>
+  d.getMinutes() === 0 ? `${d.getHours()}h` : `${pad(d.getHours())}:${pad(d.getMinutes())}h`;
+
+// "2026-10-05T19:00" → "5.10."  (veliki broj u sekciji)
+export function webinarKratakDatum(startsAt: string): string {
+  const d = termin(startsAt);
+  return d ? `${d.getDate()}.${d.getMonth() + 1}.` : '';
+}
+
+// "2026-10-05T19:00" → "ponedeljak · 19h"
+export function webinarDanISat(startsAt: string): string {
+  const d = termin(startsAt);
+  return d ? `${DANI[d.getDay()]} · ${sat(d)}` : '';
+}
+
+// "2026-10-05T19:00" → "ponedeljak, 5. oktobra 2026. u 19h"  (za čitač ekrana)
+export function webinarPunDatum(startsAt: string): string {
+  const d = termin(startsAt);
+  return d
+    ? `${DANI[d.getDay()]}, ${d.getDate()}. ${MESECI[d.getMonth()]} ${d.getFullYear()}. u ${sat(d)}`
+    : '';
+}
+
 // Short countdown for the navbar bar. "3d 12h" / "12h 24m" / "24m" / "Uskoro".
 export function countdownString(now: number, startsAt: string): string {
   if (!startsAt) return '';
