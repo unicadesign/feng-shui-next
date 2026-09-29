@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { CalendarCheck, X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { formatWebinarDate, isWebinarLive, prijavljenKljuc } from '@/lib/webinarDate';
 import WebinarRegistrationModal from '@/components/WebinarRegistrationModal';
 import type { HomeContent } from '@/types/content';
@@ -15,12 +16,20 @@ const sessionKey = (c: HomeContent['webinarSection']) =>
 
 const SHOW_DELAY_MS = 3000;
 
+/**
+ * Prijavni formular škole (`/skola/<kljuc>`) popunjavaju polaznice koje su
+ * već uplatile; popup bi ih prekinuo usred dugih odgovora. Traka vebinara
+ * u zaglavlju tamo ostaje.
+ */
+const bezPopupa = (putanja: string | null) => !!putanja?.startsWith('/skola/');
+
 const WebinarPopup: React.FC<Props> = ({ content }) => {
   const [visible, setVisible] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
   // Re-evaluate "live" every 30s so we hide the popup the second the webinar
   // starts, even if the user is sitting on the page.
   const [now, setNow] = useState<number | null>(null);
+  const skriven = bezPopupa(usePathname());
 
   useEffect(() => {
     setNow(Date.now());
@@ -30,7 +39,7 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
 
   useEffect(() => {
     if (now === null) return;
-    if (!isWebinarLive(content, now)) {
+    if (skriven || !isWebinarLive(content, now)) {
       setVisible(false);
       return;
     }
@@ -44,7 +53,7 @@ const WebinarPopup: React.FC<Props> = ({ content }) => {
     return () => window.clearTimeout(t);
     // Only run once the live check passes after mount; the interval handles auto-hide.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [content, now !== null]);
+  }, [content, now !== null, skriven]);
 
   const dismiss = useCallback(() => {
     try {
