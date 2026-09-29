@@ -519,9 +519,10 @@ Dragani. Kopiju smo vam poslali na e-mail."
 - [x] 12.3 `/api/skola-formular`: ključ, provera polja, mejl Dragani pa
       kopija polaznici; bez mejla Dragani greška i ponovno slanje
 - [x] 12.4 nacrt u `sessionStorage`; vebinar popup se ne otvara na formularu
-- [ ] 12.5 Marko pregleda na preview-u; uvodne rečenice oba mejla su moje
-      i traže pregled (`lib/email/templates.ts`, prijavni formular)
-- [ ] 12.6 spajanje na main, pa link Dragani
+- [x] 12.5 Marko pregledao na preview-u 29.09.: „sve radi kako treba"
+- [x] 12.6 spojeno na main (PR #22); na produkciji pravi ključ 200,
+      pogrešan 404, API aktivan. Link Dragani šalje Marko (ključ je u
+      `.env.local`; na Vercelu je „sensitive" i ne može da se pročita)
 
 ## Redosled komitova na grani `feat/prelazak`
 
@@ -547,7 +548,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K11 | `6c84ed0` | 28.09. | sekcija vebinara po predlogu M sa platna: datum kao slika, tanke linije, tlocrti pod belim velom; tri rasporeda (telefon, tablet, desktop); datum izveden iz admina, pun datum za čitač ekrana | 390 do 1440 px bez prelivanja; prijava iz sekcije šalje tačan zahtev uz presretnuto slanje; tsc i eslint čisti |
 | K12 | `31505f7` | 28.09. | termin iz admina se poredi kao beogradsko vreme (server na Vercelu je UTC; bez ovoga bi 5.10. od 19 do 21h vebinar bio „živ" na serveru) | isti trenutak pod četiri vremenske zone i u noćima promene sata |
 | K13 | `90bee70` | 28.09. | sekcija vebinara na tamnozelenoj traci (varijanta C, Marko 28.09., izabrana od tri uporedjene u kontekstu strane jer je M uživo ispadao siv): nacrtan izmišljen tlocrt kao SVG umesto fotografije, datum krem, dugme belo; fotografija `vebinar-tlocrti.*` obrisana. Fotografisani tlocrt iz baze slika odbačen: tuđi dom sa imenom investitora, pečatima i potpisima | tsc i eslint čisti; 390, 768, 1024, 1280 i 1440 px bez prelivanja i bez 404; prijava iz sekcije na 390 i 1280 px šalje tačan zahtev uz presretnuto slanje, poruka o uspehu i ključ „već se prijavio" upisani; spojeno na main (PR #21), na produkciji potvrđeno istim testom, u bazi nijedan probni red |
-| K14 | `f495843` | 29.09. | 12.1 do 12.4: prijavni formular škole na tajnom linku, odgovori mejlom Dragani i kopija polaznici, bez baze | tsc čist, eslint čist za nove fajlove (dve zatečene greške u WebinarPopup ostaju); pravi i pogrešan ključ 200 i 404, API bez ključa 404, nepotpun formular 400; ceo tok na 390 i 1280 px uz presretnuto slanje (greške po koraku, nacrt posle osvežavanja, 13 oblasti, tačan zahtev, zahvalnica); popup na početnoj i školi da, na formularu ne (privremeno uključen samo lokalno); pravo slanje kroz rutu samo na Resend probnu adresu delivered@resend.dev: oba mejla isporučena, replyTo na Draganinom |
+| K14 | `f495843` | 29.09. | 12.1 do 12.4: prijavni formular škole na tajnom linku, odgovori mejlom Dragani i kopija polaznici, bez baze | tsc čist, eslint čist za nove fajlove (dve zatečene greške u WebinarPopup ostaju); pravi i pogrešan ključ 200 i 404, API bez ključa 404, nepotpun formular 400; ceo tok na 390 i 1280 px uz presretnuto slanje (greške po koraku, nacrt posle osvežavanja, 13 oblasti, tačan zahtev, zahvalnica); popup na početnoj i školi da, na formularu ne (privremeno uključen samo lokalno); pravo slanje kroz rutu samo na Resend probnu adresu delivered@resend.dev: oba mejla isporučena, replyTo na Draganinom; spojeno na main (PR #22), na produkciji proveren pravi i pogrešan ključ i API |
 | baza | (bez komita) | 26.09. | `site_content.home.webinarSection`: termin 05.10.2026 19:00, naslov „Feng Shui bez mistike", podnaslov „Kako da praktično primenite principe u svom domu"; stari junski Zoom link obrisan, prekidač ostavljen ISKLJUČEN dok Marko ne upiše nov link | rezervna kopija stare vrednosti u scratchpad-u; ostalih 13 ključeva strane `home` netaknuto |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
