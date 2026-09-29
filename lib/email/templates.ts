@@ -9,6 +9,14 @@ import {
   nazivIzvora,
   nazivVremena,
 } from '@/lib/upitnikOpcije';
+import {
+  SEKCIJE,
+  OZNAKE,
+  OBLASTI,
+  datumZaPrikaz,
+  opisOcene,
+  type SkolaFormular,
+} from '@/lib/skolaFormular';
 
 const BRAND = 'Dragana Jović';
 
@@ -560,6 +568,102 @@ export function upitObavestenje(
        ${tabelaPodataka(redovi)}
        ${slobodanTekst}
        <p style="margin:0;line-height:1.6;font-size:13px;color:${SITAN_TEKST};">Upit je upisan i u admin pregled, među ostale.</p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   PRIJAVNI FORMULAR ŠKOLE (29.09.2026.)
+
+   Formular popunjava polaznica koja je već uplatila, preko tajnog linka
+   koji joj Dragana pošalje. Odgovori se ne čuvaju u bazi, pa je mejl
+   Dragani JEDINI zapis; polaznica dobija kopiju.
+
+   Pitanja i nazivi oblasti dolaze iz `lib/skolaFormular.ts`, isti tekst
+   kao na formularu. Uvodne rečenice oba mejla su MOJE i traže pregled.
+   ══════════════════════════════════════════════════════════════════ */
+
+function pitanjeIOdgovor(pitanje: string, odgovorHtml: string): string {
+  return `<p style="margin:0 0 4px;font-size:13px;line-height:1.5;font-weight:600;color:${SITAN_TEKST};">${esc(pitanje)}</p>
+       <p style="margin:0 0 18px;line-height:1.6;">${odgovorHtml}</p>`;
+}
+
+/** Svi odgovori, po sekcijama formulara. Isto telo ide Dragani i polaznici. */
+function odgovoriFormulara(f: SkolaFormular): string {
+  const nijeUpisano = '<span style="color:#a2988c;font-weight:400;">nije upisano</span>';
+  const telefon = f.telefon.trim();
+
+  const licni: (RedPodataka | null)[] = [
+    { naziv: OZNAKE.imePrezime, vrednost: esc(f.imePrezime) },
+    { naziv: OZNAKE.datumRodjenja, vrednost: esc(datumZaPrikaz(f.datumRodjenja)) },
+    { naziv: OZNAKE.mesto, vrednost: esc(f.mesto) },
+    {
+      naziv: OZNAKE.email,
+      vrednost: `<a href="mailto:${esc(f.email)}" style="color:${TAMNI_TEKST};">${esc(f.email)}</a>`,
+    },
+    { naziv: 'Facebook profil', vrednost: f.facebook ? esc(f.facebook) : nijeUpisano },
+    {
+      naziv: OZNAKE.telefon,
+      vrednost: `<a href="tel:${esc(telefon.replace(/[^\d+]/g, ''))}" style="color:${TAMNI_TEKST};">${esc(telefon)}</a>`,
+    },
+  ];
+
+  const pohadjao =
+    f.pohadjao === 'da'
+      ? `Da${f.kojiKurs ? `<br>${esc(OZNAKE.kojiKurs)} ${pasus(f.kojiKurs)}` : ''}`
+      : 'Ne';
+
+  const zadovoljstvo: RedPodataka[] = OBLASTI.map((oblast, i) => ({
+    naziv: oblast,
+    vrednost: `${esc(f.zadovoljstvo[i])} · ${esc(opisOcene(f.zadovoljstvo[i]))}`,
+  }));
+
+  return `${podnaslov(SEKCIJE[0])}
+       ${tabelaPodataka(licni)}
+       ${podnaslov(SEKCIJE[1])}
+       ${pitanjeIOdgovor(OZNAKE.zasto, pasus(f.zasto))}
+       ${pitanjeIOdgovor(OZNAKE.pohadjao, pohadjao)}
+       ${pitanjeIOdgovor(OZNAKE.zaintrigiralo, pasus(f.zaintrigiralo))}
+       ${pitanjeIOdgovor(OZNAKE.vreme, pasus(f.vreme))}
+       <div style="height:4px;"></div>
+       ${podnaslov(SEKCIJE[2])}
+       ${tabelaPodataka(zadovoljstvo)}
+       ${podnaslov(SEKCIJE[3])}
+       ${pitanjeIOdgovor(OZNAKE.znanje, `<strong>${esc(f.znanje)}</strong> od 10`)}
+       ${pitanjeIOdgovor(OZNAKE.ocekivanja, pasus(f.ocekivanja))}`;
+}
+
+/** Dragani: popunjen prijavni formular, sa svim odgovorima. */
+export function skolaFormularObavestenje(f: SkolaFormular): { subject: string; html: string } {
+  return {
+    subject: `Prijavni formular: ${f.imePrezime}`,
+    html: shell(
+      'Stigao je prijavni formular',
+      `<p style="margin:0 0 22px;line-height:1.6;">Popunjen je preko linka za polaznice Feng Shui online škole. Odgovor na ovaj mejl ide direktno polaznici.</p>
+       ${odgovoriFormulara(f)}
+       <p style="margin:4px 0 0;line-height:1.6;font-size:13px;color:${SITAN_TEKST};">Odgovori se ne čuvaju na sajtu: ovaj mejl je jedini zapis. Kopija je poslata i na adresu iz formulara.</p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
+
+/** Polaznici: kopija njenih odgovora. */
+export function skolaFormularKopija(f: SkolaFormular): { subject: string; html: string } {
+  return {
+    subject: 'Vaši odgovori: prijavni formular Feng Shui online škole',
+    html: shell(
+      'Vaši odgovori su stigli',
+      `<p style="margin:0 0 14px;line-height:1.6;">Zdravo ${esc(f.imePrezime)},</p>
+       <p style="margin:0 0 22px;line-height:1.6;">hvala što ste popunili prijavni formular za Feng Shui online školu. Vaši odgovori su stigli Dragani, a ispod je kopija za vas.</p>
+       ${odgovoriFormulara(f)}
+       <p style="margin:4px 0 22px;line-height:1.6;">Ako želite nešto da dopunite ili ispravite, samo odgovorite na ovaj mejl.</p>
+       <p style="margin:0 0 4px;line-height:1.6;">Svako dobro,<br><strong>${BRAND}</strong></p>
+       <p style="margin:0;line-height:1.7;font-size:13px;color:${SITAN_TEKST};">
+         Uređenje prostora-Feng Shui<br>
+         Tel: <a href="tel:${UPLATA.telefonZaLink}" style="color:${SITAN_TEKST};">${UPLATA.telefon}</a><br>
+         Web: <a href="https://draganajovic.com" style="color:${SITAN_TEKST};">draganajovic.com</a>
+       </p>`,
       BREND_ZELENA,
     ),
   };

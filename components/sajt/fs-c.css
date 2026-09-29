@@ -1416,6 +1416,74 @@ body:has(.fs-c) {
 
 .fs-c .upit-veza { color: #fff; text-underline-offset: .2em; }
 
+/* ================= PRIJAVNI FORMULAR ŠKOLE (/skola/<kljuc>) ============
+   Isto ruho kao upitnik iznad (29.09.2026.); ovde su samo delovi koje
+   upitnik nema: ocene A-D po oblastima i skala od 1 do 10.
+   ------------------------------------------------------------------------ */
+
+/* Legenda ocena: slovo u krugu i opis, jedna ispod druge. */
+.fs-c .formular-legenda {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: .45rem;
+  font-size: .92rem; line-height: 1.4; color: var(--charcoal-600);
+}
+.fs-c .formular-legenda li { display: flex; align-items: center; gap: .6rem; }
+.fs-c .formular-znak {
+  flex: none; display: grid; place-items: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--cream-300); background: var(--cream-50);
+  font-size: .8rem; font-weight: 700; color: var(--charcoal);
+}
+@media (min-width: 640px) {
+  .fs-c .formular-legenda { grid-template-columns: 1fr 1fr; column-gap: 1.5rem; }
+}
+
+/* Oblasti: naziv levo, četiri slova desno, tanka linija između redova. */
+.fs-c .formular-zaglavlje {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding-bottom: .55rem; border-bottom: 1px solid var(--cream-300);
+  font-size: .7rem; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--gold-700);
+}
+.fs-c .formular-oblast {
+  display: flex; align-items: center; justify-content: space-between; gap: .75rem;
+  padding: .6rem 0; border-bottom: 1px solid var(--cream-200);
+}
+.fs-c .formular-oblast-ime { font-weight: 600; line-height: 1.3; color: var(--charcoal); }
+.fs-c .formular-oblast-greska .formular-oblast-ime { color: #9B2C1F; }
+.fs-c .formular-slova { flex: none; display: flex; gap: .4rem; }
+
+/* Slovo i broj su radio dugmad: pravi `input` je providan i leži preko
+   cele pilule, pa radi i dodir, i tastatura, i čitač ekrana. */
+.fs-c .formular-slovo {
+  position: relative; display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--cream-300); background: #fff;
+  font-weight: 700; color: var(--charcoal); cursor: pointer;
+  transition: border-color .18s, background .18s, color .18s;
+}
+.fs-c .formular-slovo:hover { border-color: var(--navy-400); }
+.fs-c .formular-slovo-aktivno,
+.fs-c .formular-slovo-aktivno:hover { background: var(--navy-700); border-color: var(--navy-700); color: #fff; }
+.fs-c .formular-slovo input[type="radio"] {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  margin: 0; opacity: 0; cursor: pointer;
+}
+.fs-c .formular-slovo:has(input:focus-visible) { outline: 2px solid var(--navy-700); outline-offset: 2px; }
+.fs-c .formular-oblast-greska .formular-slovo { border-color: #D9A79F; }
+
+/* Skala 1-10: na telefonu dva reda po pet, šire u jednom redu. */
+.fs-c .formular-napomena { font-size: .88rem; color: var(--charcoal-500); }
+.fs-c .formular-skala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+.fs-c .formular-broj { width: auto; border-radius: var(--pill); }
+@media (min-width: 640px) {
+  .fs-c .formular-skala { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+}
+
+.fs-c .formular-da-ne .upit-pilula { min-width: 96px; justify-content: center; }
+
+.fs-c .formular-hvala-tekst { font-size: 1.05rem; line-height: 1.6; color: var(--charcoal-600); }
+
 /* ================= ŠKOLA: hero sa upečenim zelenim prelivom ==============
    Od 31.08. hero Škole radi po istom principu kao hero Početne: preliv je
    UPEČEN U SLIKU umesto da bude CSS zastor. Razlog je isti u oba slučaja —

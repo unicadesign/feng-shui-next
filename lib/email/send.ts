@@ -9,6 +9,8 @@ import {
   razgovorPotvrda,
   razgovorObavestenje,
   webinarObavestenje,
+  skolaFormularObavestenje,
+  skolaFormularKopija,
   type WebinarConfirmationData,
   type SkolaPrijavaData,
   type SkolaPrijavaObavestenjeData,
@@ -18,17 +20,29 @@ import {
   type RazgovorObavestenjeData,
   type WebinarObavestenjeData,
 } from './templates';
+import type { SkolaFormular } from '@/lib/skolaFormular';
 
 type SendResult = { sent: boolean; error?: string };
 
-async function send(to: string, subject: string, html: string): Promise<SendResult> {
+async function send(
+  to: string,
+  subject: string,
+  html: string,
+  replyTo?: string,
+): Promise<SendResult> {
   const resend = getResend();
   if (!resend) {
     console.warn('[email] RESEND_API_KEY missing — skipping send to', to);
     return { sent: false, error: 'email_not_configured' };
   }
   try {
-    const { error } = await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
+    const { error } = await resend.emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject,
+      html,
+      ...(replyTo ? { replyTo } : {}),
+    });
     if (error) {
       console.error('[email] Resend error:', error);
       return { sent: false, error: error.message };
@@ -151,4 +165,28 @@ export async function sendWebinarObavestenje(
   }
   const { subject, html } = webinarObavestenje(data);
   return send(to, subject, html);
+}
+
+/**
+ * Dragani: popunjen prijavni formular škole. Odgovori se ne čuvaju u bazi,
+ * pa za razliku od ostalih obaveštenja ovo NIJE propratna radnja: ako
+ * `SKOLA_OBAVESTENJA_EMAIL` nije postavljen ili slanje padne, ruta javlja
+ * grešku i polaznica šalje ponovo, umesto da se odgovori izgube.
+ *
+ * Odgovor na mejl ide polaznici (`replyTo`), ne na adresu sajta.
+ */
+export async function sendSkolaFormularObavestenje(f: SkolaFormular): Promise<SendResult> {
+  const to = (process.env.SKOLA_OBAVESTENJA_EMAIL || '').trim();
+  if (!to) {
+    console.error('[email] SKOLA_OBAVESTENJA_EMAIL nije postavljen — prijavni formular ne može da se pošalje');
+    return { sent: false, error: 'notify_address_not_configured' };
+  }
+  const { subject, html } = skolaFormularObavestenje(f);
+  return send(to, subject, html, f.email);
+}
+
+/** Polaznici: kopija njenih odgovora iz prijavnog formulara. */
+export async function sendSkolaFormularKopija(f: SkolaFormular): Promise<SendResult> {
+  const { subject, html } = skolaFormularKopija(f);
+  return send(f.email, subject, html);
 }
