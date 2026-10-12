@@ -6,6 +6,7 @@ import type {
   Course, CourseModule, Lesson,
   CourseRow, CourseModuleRow, LessonRow, LessonVideoRow,
   CourseInsert, CourseModuleInsert, LessonInsert, LessonVideoInsert,
+  LessonItemKind,
 } from '@/types';
 import { toCourse, toCourseModule, toLesson } from '@/types';
 
@@ -14,7 +15,12 @@ export interface LessonVideoSaveData {
   title: string;
   video_path: string | null;
   video_url: string;
+  kind: LessonItemKind;
+  file_name: string | null;
 }
+
+/** PDF dokumenti lekcija žive u `course-videos` pod ovim prefiksom. */
+const PREFIKS_DOKUMENATA = 'dokumenti/';
 
 interface CourseContextType {
   courses: Course[];
@@ -177,6 +183,8 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 title: v.title ?? '',
                 video_path: v.video_path ?? null,
                 video_url: v.video_url ?? '',
+                kind: v.kind ?? 'video',
+                file_name: v.file_name ?? null,
               });
             });
           });
@@ -190,13 +198,34 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
       }
 
+      // PDF-ovi koji su postojali pre snimanja a sada ih nema ni u jednoj
+      // lekciji kursa brišu se iz bucket-a, da se ne gomilaju fajlovi koji se
+      // plaćaju. Samo pod `dokumenti/`: videi se odavde nikad ne brišu.
+      const ostaju = new Set(
+        lessonsData.flatMap((l) =>
+          (l.videos ?? [])
+            .filter((v) => v.kind === 'document' && v.video_path)
+            .map((v) => v.video_path as string)
+        )
+      );
+      const zaBrisanje = lessons
+        .filter((l) => l.courseId === courseId)
+        .flatMap((l) => l.videos)
+        .filter((v) => v.kind === 'document' && v.videoPath?.startsWith(PREFIKS_DOKUMENATA))
+        .map((v) => v.videoPath as string)
+        .filter((put) => !ostaju.has(put));
+      if (zaBrisanje.length > 0) {
+        const { error: brisErr } = await supabase.storage.from('course-videos').remove(zaBrisanje);
+        if (brisErr) console.warn('[kurs] uklonjeni PDF-ovi nisu obrisani iz bucket-a:', brisErr.message);
+      }
+
       await refreshCourses();
       return { success: true, courseId };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Nepoznata greška';
       return { success: false, error: message };
     }
-  }, [refreshCourses]);
+  }, [refreshCourses, lessons]);
 
   const deleteCourse = useCallback(async (id: string): Promise<{ success: boolean; error?: string }> => {
     const { error } = await supabase.from('courses').delete().eq('id', id);

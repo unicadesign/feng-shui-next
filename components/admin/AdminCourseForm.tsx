@@ -7,12 +7,13 @@ import {
   Save, Plus, Pencil, Trash2, Check, X,
   ChevronUp, ChevronDown, ChevronRight,
   Sparkles, MessageCircleQuestion, ClipboardCheck, GraduationCap,
-  Loader2,
+  Loader2, FileText, Upload,
 } from 'lucide-react';
 import Button from '@/components/Button';
 import { useCourses } from '@/hooks/useCourses';
-import type { CourseType } from '@/types';
+import type { CourseType, LessonItemKind } from '@/types';
 import { normalizeStoragePath } from '@/lib/storagePath';
+import { supabase } from '@/lib/supabase/client';
 
 // ─── Local state shapes ──────────────────────────────────────
 
@@ -25,12 +26,38 @@ interface ModuleForm {
   isVazaIzobilja: boolean;
 }
 
+/**
+ * Stavka sadržaja lekcije: video ili PDF (od 13.10.2026.). PDF se podiže sa
+ * računara u `course-videos/dokumenti/`, a putanja ide u `videoPath`, da bi
+ * ga štitilo isto pravilo pristupa kao video.
+ */
 interface VideoForm {
   _tempId: string;
+  kind: LessonItemKind;
   title: string;
   videoPath: string;
   videoUrl: string;
+  /** Originalno ime PDF fajla. */
+  fileName: string;
 }
+
+const MAX_PDF_MB = 50;
+
+/** „Radni list – Nedelja 1 (č).pdf" → „radni-list-nedelja-1-c". */
+const imeZaPutanju = (ime: string) =>
+  ime
+    .replace(/\.pdf$/i, '')
+    .replace(/đ/g, 'dj')
+    .replace(/Đ/g, 'Dj')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'dokument';
+
+/** Putanja novog PDF-a u `course-videos`; vreme sprečava da se dva fajla istog imena pregaze. */
+const novaPutanjaPdf = (ime: string) => `dokumenti/${Date.now()}-${imeZaPutanju(ime)}.pdf`;
 
 interface LessonForm {
   _tempId: string;
@@ -93,6 +120,9 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   const [moduleEditForm, setModuleEditForm] = useState({ title: '', description: '', isVazaIzobilja: false });
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
   const [lessonEditForm, setLessonEditForm] = useState<Partial<LessonForm>>({});
+  /** Stanje učitavanja PDF-a po stavci: 'u toku' ili poruka o grešci. */
+  const [otpremanje, setOtpremanje] = useState<Record<string, string>>({});
+  const [greskaSadrzaja, setGreskaSadrzaja] = useState<string | null>(null);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
 
   // ── Load existing data ──
@@ -141,16 +171,20 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
             const videos: VideoForm[] = l.videos && l.videos.length > 0
               ? l.videos.map((v) => ({
                   _tempId: v.id,
+                  kind: v.kind,
                   title: v.title,
                   videoPath: v.videoPath || '',
                   videoUrl: v.videoUrl || '',
+                  fileName: v.fileName || '',
                 }))
               : (l.videoUrl || l.videoPath)
                 ? [{
                     _tempId: genId(),
+                    kind: 'video' as const,
                     title: '',
                     videoPath: l.videoPath || '',
                     videoUrl: l.videoUrl || '',
+                    fileName: '',
                   }]
                 : [];
             return {
@@ -315,9 +349,51 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
       ...f,
       videos: [
         ...(f.videos ?? []),
-        { _tempId: genId(), title: '', videoPath: '', videoUrl: '' },
+        { _tempId: genId(), kind: 'video', title: '', videoPath: '', videoUrl: '', fileName: '' },
       ],
     }));
+  };
+
+  const addDocumentToEdit = () => {
+    setLessonEditForm((f) => ({
+      ...f,
+      videos: [
+        ...(f.videos ?? []),
+        { _tempId: genId(), kind: 'document', title: '', videoPath: '', videoUrl: '', fileName: '' },
+      ],
+    }));
+  };
+
+  /**
+   * PDF ide direktno iz pretraživača u Supabase; admin ima pravo upisa u
+   * `course-videos`. Ime u bucket-u je vreme + očišćeno ime, da se dva
+   * fajla istog imena ne pregaze; originalno ime se čuva za prikaz.
+   */
+  const otpremiPdf = async (tempId: string, fajl: File) => {
+    const jePdf = fajl.type === 'application/pdf' || /\.pdf$/i.test(fajl.name);
+    if (!jePdf) {
+      setOtpremanje((p) => ({ ...p, [tempId]: 'Izaberite PDF fajl.' }));
+      return;
+    }
+    if (fajl.size > MAX_PDF_MB * 1024 * 1024) {
+      setOtpremanje((p) => ({ ...p, [tempId]: `PDF je veći od ${MAX_PDF_MB} MB.` }));
+      return;
+    }
+    setOtpremanje((p) => ({ ...p, [tempId]: 'u toku' }));
+    const putanja = novaPutanjaPdf(fajl.name);
+    const { error: upErr } = await supabase.storage
+      .from('course-videos')
+      .upload(putanja, fajl, { contentType: 'application/pdf', upsert: false });
+    if (upErr) {
+      setOtpremanje((p) => ({ ...p, [tempId]: `Učitavanje nije uspelo: ${upErr.message}` }));
+      return;
+    }
+    updateVideoInEdit(tempId, { videoPath: putanja, fileName: fajl.name });
+    setOtpremanje((p) => {
+      const novo = { ...p };
+      delete novo[tempId];
+      return novo;
+    });
   };
 
   const updateVideoInEdit = (videoTempId: string, patch: Partial<VideoForm>) => {
@@ -350,6 +426,18 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   const cancelLessonEdit = () => setEditingLessonId(null);
 
   const saveLessonEdit = (tempId: string) => {
+    if (Object.values(otpremanje).includes('u toku')) {
+      setGreskaSadrzaja('Sačekajte da se PDF učita.');
+      return;
+    }
+    const bezFajla = (lessonEditForm.videos ?? []).findIndex(
+      (v) => v.kind === 'document' && !v.videoPath
+    );
+    if (bezFajla >= 0) {
+      setGreskaSadrzaja(`Stavka ${bezFajla + 1} je PDF bez fajla: izaberite fajl ili je uklonite.`);
+      return;
+    }
+    setGreskaSadrzaja(null);
     setFormLessons((prev) =>
       prev.map((l) =>
         l._tempId === tempId
@@ -367,6 +455,10 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   // ── Submit ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (Object.values(otpremanje).includes('u toku')) {
+      setError('Sačekajte da se PDF učita, pa sačuvajte kurs.');
+      return;
+    }
     setSaving(true);
     setError(null);
 
@@ -420,7 +512,9 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
           sort_order: i,
           title: v.title,
           video_path: cleanedPath || null,
-          video_url: v.videoUrl,
+          video_url: v.kind === 'document' ? '' : v.videoUrl,
+          kind: v.kind,
+          file_name: v.kind === 'document' ? v.fileName || null : null,
         };
       }),
     }));
@@ -713,42 +807,88 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
                                   <textarea value={lessonEditForm.description || ''} onChange={(e) => setLessonEditForm((f) => ({ ...f, description: e.target.value }))} rows={3} className={smallInputClasses} placeholder="Sadržaj lekcije, opis teme..." />
                                 </div>
                                 <div className="space-y-2 rounded-xl border border-sand-200 bg-sand-50/50 p-3">
-                                  <div className="flex items-center justify-between">
-                                    <label className="block text-xs font-body font-semibold text-charcoal">Video lekcije (možete dodati više)</label>
-                                    <button type="button" onClick={addVideoToEdit} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-navy-500 text-white text-[11px] font-body hover:bg-navy-600 transition-colors">
-                                      + Dodaj video
-                                    </button>
+                                  <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <label className="block text-xs font-body font-semibold text-charcoal">Sadržaj lekcije (video i PDF, redom kako se prikazuje)</label>
+                                    <div className="flex items-center gap-1.5">
+                                      <button type="button" onClick={addVideoToEdit} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-navy-500 text-white text-[11px] font-body hover:bg-navy-600 transition-colors">
+                                        + Dodaj video
+                                      </button>
+                                      <button type="button" onClick={addDocumentToEdit} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-navy-500 text-white text-[11px] font-body hover:bg-navy-600 transition-colors">
+                                        + Dodaj PDF
+                                      </button>
+                                    </div>
                                   </div>
                                   {(lessonEditForm.videos ?? []).length === 0 && (
-                                    <p className="text-[11px] text-charcoal-400 italic">Nema dodatih videa. Kliknite "Dodaj video" da biste dodali prvi.</p>
+                                    <p className="text-[11px] text-charcoal-400 italic">Lekcija još nema sadržaj. Dodajte video ili PDF.</p>
                                   )}
-                                  {(lessonEditForm.videos ?? []).map((v, vi) => (
+                                  {(lessonEditForm.videos ?? []).map((v, vi) => {
+                                    const status = otpremanje[v._tempId];
+                                    const ucitava = status === 'u toku';
+                                    return (
                                     <div key={v._tempId} className="rounded-lg bg-white border border-sand-200 p-3 space-y-2">
                                       <div className="flex items-center justify-between">
-                                        <span className="text-[11px] font-body font-semibold text-charcoal-500">Video {vi + 1}</span>
+                                        <span className="inline-flex items-center gap-1 text-[11px] font-body font-semibold text-charcoal-500">
+                                          {v.kind === 'document' ? <FileText className="w-3 h-3" /> : <span aria-hidden="true">🎬</span>}
+                                          {vi + 1}. {v.kind === 'document' ? 'PDF dokument' : 'Video'}
+                                        </span>
                                         <div className="flex items-center gap-1">
                                           <button type="button" disabled={vi === 0} onClick={() => moveVideoInEdit(v._tempId, -1)} className="p-1 rounded text-charcoal-500 hover:bg-sand-200 disabled:opacity-30" title="Pomeri gore">↑</button>
                                           <button type="button" disabled={vi === (lessonEditForm.videos ?? []).length - 1} onClick={() => moveVideoInEdit(v._tempId, 1)} className="p-1 rounded text-charcoal-500 hover:bg-sand-200 disabled:opacity-30" title="Pomeri dole">↓</button>
-                                          <button type="button" onClick={() => removeVideoFromEdit(v._tempId)} className="p-1 rounded text-red-500 hover:bg-red-50" title="Ukloni video">
+                                          <button type="button" disabled={ucitava} onClick={() => removeVideoFromEdit(v._tempId)} className="p-1 rounded text-red-500 hover:bg-red-50 disabled:opacity-30" title="Ukloni">
                                             <Trash2 className="w-3 h-3" />
                                           </button>
                                         </div>
                                       </div>
                                       <div>
                                         <label className="block text-[11px] font-body text-charcoal-500 mb-1">Naslov (opcionalno)</label>
-                                        <input type="text" value={v.title} onChange={(e) => updateVideoInEdit(v._tempId, { title: e.target.value })} className={smallInputClasses} placeholder="npr. Deo 1: Uvod" />
+                                        <input type="text" value={v.title} onChange={(e) => updateVideoInEdit(v._tempId, { title: e.target.value })} className={smallInputClasses} placeholder={v.kind === 'document' ? 'npr. Radni list za nedelju 1' : 'npr. Deo 1: Uvod'} />
                                       </div>
-                                      <div>
-                                        <label className="block text-[11px] font-body text-charcoal-500 mb-1">Putanja u Supabase (preporučeno)</label>
-                                        <input type="text" value={v.videoPath} onChange={(e) => updateVideoInEdit(v._tempId, { videoPath: e.target.value })} className={smallInputClasses} placeholder="npr. lekcija-1.mp4 ili course-1/lekcija-1.mp4" />
-                                        <p className="text-[10px] text-charcoal-400 mt-1">Naziv fajla u <span className="font-mono">course-videos</span> bucket-u. Ako nalepite ceo Supabase URL, automatski se skraćuje pri snimanju.</p>
-                                      </div>
-                                      <div>
-                                        <label className="block text-[11px] font-body text-charcoal-500 mb-1">Video URL (alternativa)</label>
-                                        <input type="text" value={v.videoUrl} onChange={(e) => updateVideoInEdit(v._tempId, { videoUrl: e.target.value })} className={smallInputClasses} placeholder="https://rumble.com/embed/..." />
-                                      </div>
+                                      {v.kind === 'document' ? (
+                                        <div className="space-y-1.5">
+                                          {v.videoPath && (
+                                            <p className="flex items-center gap-1.5 text-[11px] font-body text-charcoal break-all">
+                                              <FileText className="w-3.5 h-3.5 flex-shrink-0 text-navy-500" />
+                                              {v.fileName || v.videoPath}
+                                            </p>
+                                          )}
+                                          <label className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-sand-300 bg-sand-50 text-[11px] font-body text-charcoal transition-colors ${ucitava ? 'opacity-60 cursor-wait' : 'cursor-pointer hover:bg-sand-100'}`}>
+                                            {ucitava ? <Loader2 className="w-3 h-3 animate-spin" /> : <Upload className="w-3 h-3" />}
+                                            {ucitava ? 'Učitavam PDF…' : v.videoPath ? 'Zameni PDF' : 'Izaberi PDF sa računara'}
+                                            <input
+                                              type="file"
+                                              accept="application/pdf,.pdf"
+                                              className="sr-only"
+                                              disabled={ucitava}
+                                              onChange={(e) => {
+                                                const fajl = e.target.files?.[0];
+                                                e.target.value = '';
+                                                if (fajl) otpremiPdf(v._tempId, fajl);
+                                              }}
+                                            />
+                                          </label>
+                                          {status && !ucitava && (
+                                            <p className="text-[11px] font-body text-red-600">{status}</p>
+                                          )}
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div>
+                                            <label className="block text-[11px] font-body text-charcoal-500 mb-1">Putanja u Supabase (preporučeno)</label>
+                                            <input type="text" value={v.videoPath} onChange={(e) => updateVideoInEdit(v._tempId, { videoPath: e.target.value })} className={smallInputClasses} placeholder="npr. lekcija-1.mp4 ili course-1/lekcija-1.mp4" />
+                                            <p className="text-[10px] text-charcoal-400 mt-1">Naziv fajla u <span className="font-mono">course-videos</span> bucket-u. Ako nalepite ceo Supabase URL, automatski se skraćuje pri snimanju.</p>
+                                          </div>
+                                          <div>
+                                            <label className="block text-[11px] font-body text-charcoal-500 mb-1">Video URL (alternativa)</label>
+                                            <input type="text" value={v.videoUrl} onChange={(e) => updateVideoInEdit(v._tempId, { videoUrl: e.target.value })} className={smallInputClasses} placeholder="https://rumble.com/embed/..." />
+                                          </div>
+                                        </>
+                                      )}
                                     </div>
-                                  ))}
+                                    );
+                                  })}
+                                  {greskaSadrzaja && (
+                                    <p className="text-[11px] font-body text-red-600">{greskaSadrzaja}</p>
+                                  )}
                                 </div>
                                 <div className="grid grid-cols-2 gap-3">
                                   <div>
@@ -798,13 +938,20 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
                                     {lesson.hasPracticalExercise && <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-green-50 text-green-600 text-[10px] font-semibold"><ClipboardCheck className="w-2.5 h-2.5" />Vežba</span>}
                                     {lesson.hasOnlineTest && <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-purple-50 text-purple-600 text-[10px] font-semibold"><GraduationCap className="w-2.5 h-2.5" />Test</span>}
                                   </div>
-                                  {lesson.videos.length === 0 ? (
-                                    <p className="text-[11px] font-body text-charcoal-400 italic mt-0.5">Bez videa</p>
-                                  ) : (
-                                    <p className="text-[11px] font-body text-navy-500 truncate mt-0.5">
-                                      🎬 {lesson.videos.length} {lesson.videos.length === 1 ? 'video' : 'videa'}
-                                    </p>
-                                  )}
+                                  {(() => {
+                                    const brVidea = lesson.videos.filter((v) => v.kind !== 'document').length;
+                                    const brPdf = lesson.videos.length - brVidea;
+                                    if (lesson.videos.length === 0) {
+                                      return <p className="text-[11px] font-body text-charcoal-400 italic mt-0.5">Bez sadržaja</p>;
+                                    }
+                                    return (
+                                      <p className="text-[11px] font-body text-navy-500 truncate mt-0.5">
+                                        {brVidea > 0 && <>🎬 {brVidea} {brVidea === 1 ? 'video' : 'videa'}</>}
+                                        {brVidea > 0 && brPdf > 0 && ' · '}
+                                        {brPdf > 0 && <>📄 {brPdf} PDF</>}
+                                      </p>
+                                    );
+                                  })()}
                                 </div>
                                 <div className="flex items-center gap-0.5 flex-shrink-0">
                                   <button type="button" onClick={() => startLessonEdit(lesson)} className="p-1.5 rounded-lg text-charcoal-500 hover:bg-sand-200 hover:text-charcoal transition-all" title="Izmeni">

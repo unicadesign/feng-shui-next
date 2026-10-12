@@ -47,6 +47,14 @@ export interface CourseModule {
   isVazaIzobilja?: boolean;
 }
 
+/**
+ * Stavka sadržaja lekcije: video ili PDF dokument (od 13.10.2026.), u
+ * redosledu koji admin izabere. Dokument koristi `videoPath` za putanju
+ * fajla u `course-videos`, da bi ga štitilo isto pravilo pristupa kao video
+ * (vidi `supabase/migrations/0003_lekcija_pdf.sql`).
+ */
+export type LessonItemKind = 'video' | 'document';
+
 export interface LessonVideo {
   id: string;
   lessonId: string;
@@ -54,6 +62,9 @@ export interface LessonVideo {
   title: string;
   videoPath?: string;
   videoUrl: string;
+  kind: LessonItemKind;
+  /** Originalno ime fajla dokumenta (prikaz i preuzimanje). */
+  fileName?: string;
 }
 
 export interface Lesson {
@@ -139,6 +150,8 @@ export interface LessonVideoRow {
   title: string;
   video_path: string | null;
   video_url: string;
+  kind: string;
+  file_name: string | null;
   created_at: string;
 }
 
@@ -239,6 +252,8 @@ export function toLessonVideo(row: LessonVideoRow): LessonVideo {
     title: row.title,
     videoPath: row.video_path ?? undefined,
     videoUrl: row.video_url,
+    kind: row.kind === 'document' ? 'document' : 'video',
+    fileName: row.file_name ?? undefined,
   };
 }
 

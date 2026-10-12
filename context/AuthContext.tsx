@@ -103,6 +103,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .upsert({ id: data.user.id, name, role: 'user' }, { onConflict: 'id' });
       const profile = await fetchProfile(data.user);
       setUser(profile);
+      // Obaveštenje Dragani o novom nalogu (13.10.2026.). Ne čeka se i greška
+      // se ne prikazuje: registracija je uspela bez obzira na mejl.
+      // `keepalive` da zahtev preživi prelaz na /dashboard.
+      fetch('/api/nova-registracija', { method: 'POST', keepalive: true }).catch(() => {});
     }
     return { success: true };
   }, []);

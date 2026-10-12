@@ -11,6 +11,8 @@ import { useCourses } from '@/hooks/useCourses';
 import { useEnrollments } from '@/hooks/useEnrollments';
 import Button from '@/components/Button';
 import VideoPlayer from '@/components/course/VideoPlayer';
+import DokumentLekcije from '@/components/course/DokumentLekcije';
+import { PRIKAZI_PLACANJE_POLAZNICI } from '@/lib/kursCena';
 import LessonList, { isLessonAvailable } from '@/components/course/LessonList';
 import PaymentGate from '@/components/course/PaymentGate';
 import ZoomCallBadge from '@/components/course/ZoomCallBadge';
@@ -69,8 +71,9 @@ const LessonViewerContent: React.FC<LessonViewerContentProps> = ({ courseId, les
     (z) => z.weekNumber === lesson.weekNumber
   );
 
+  // Privremeno sakriveno, vidi `lib/kursCena.ts`.
   const paymentSummary =
-    enrollment?.paymentType === 'installment' ? (
+    PRIKAZI_PLACANJE_POLAZNICI && enrollment?.paymentType === 'installment' ? (
       <div className="mt-6 p-4 bg-cream-100 rounded-xl">
         <div className="flex items-center gap-2 mb-3">
           <CreditCard className="w-4 h-4 text-charcoal-500" />
@@ -167,20 +170,31 @@ const LessonViewerContent: React.FC<LessonViewerContentProps> = ({ courseId, les
                   </>
                 ) : lesson.videos && lesson.videos.length > 0 ? (
                   <div className="space-y-6">
-                    {lesson.videos.map((v, i) => (
-                      <div key={v.id || i}>
-                        {v.title && (
-                          <h3 className="font-heading text-base md:text-lg text-charcoal mb-2">
-                            {v.title}
-                          </h3>
-                        )}
-                        <VideoPlayer
-                          videoPath={v.videoPath}
-                          videoUrl={v.videoUrl}
-                          title={v.title || lesson.title}
+                    {/* Video i PDF redom koji je admin složio; PDF nosi
+                        naslov u svojoj kartici. */}
+                    {lesson.videos.map((v, i) =>
+                      v.kind === 'document' ? (
+                        <DokumentLekcije
+                          key={v.id || i}
+                          path={v.videoPath}
+                          title={v.title}
+                          fileName={v.fileName}
                         />
-                      </div>
-                    ))}
+                      ) : (
+                        <div key={v.id || i}>
+                          {v.title && (
+                            <h3 className="font-heading text-base md:text-lg text-charcoal mb-2">
+                              {v.title}
+                            </h3>
+                          )}
+                          <VideoPlayer
+                            videoPath={v.videoPath}
+                            videoUrl={v.videoUrl}
+                            title={v.title || lesson.title}
+                          />
+                        </div>
+                      )
+                    )}
                   </div>
                 ) : (
                   <VideoPlayer

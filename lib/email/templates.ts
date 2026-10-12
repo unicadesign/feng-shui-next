@@ -668,3 +668,64 @@ export function skolaFormularKopija(f: SkolaFormular): { subject: string; html: 
     ),
   };
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   NOVA REGISTRACIJA (13.10.2026.)
+
+   Dragani javlja da je neko napravio nalog na sajtu. Nalog sam po sebi
+   ne daje pristup kursu: upis i uplatu Dragana potvrđuje u adminu.
+   Tekst je MOJ i traži pregled.
+   ══════════════════════════════════════════════════════════════════ */
+
+export interface NovaRegistracijaData {
+  ime: string;
+  email: string;
+  /** Trenutak pravljenja naloga, ISO. */
+  napravljen: string;
+}
+
+const MESECI_GENITIV = [
+  'januara', 'februara', 'marta', 'aprila', 'maja', 'juna',
+  'jula', 'avgusta', 'septembra', 'oktobra', 'novembra', 'decembra',
+];
+
+/**
+ * ISO trenutak → „13. oktobra 2026. u 08:15", po beogradskom vremenu.
+ * Mesec ručno u genitivu: `Intl` za sr-Latn daje „13. oktobar".
+ */
+function beogradskoVreme(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const delovi = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Belgrade', day: 'numeric', month: 'numeric', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', hour12: false,
+    }).formatToParts(d).map((p) => [p.type, p.value])
+  );
+  const mesec = MESECI_GENITIV[Number(delovi.month) - 1];
+  return `${Number(delovi.day)}. ${mesec} ${delovi.year}. u ${delovi.hour}:${delovi.minute}`;
+}
+
+export function novaRegistracija(data: NovaRegistracijaData): { subject: string; html: string } {
+  const ime = data.ime.trim();
+  const redovi: (RedPodataka | null)[] = [
+    ime ? { naziv: 'Ime', vrednost: esc(ime) } : null,
+    {
+      naziv: 'Email',
+      vrednost: `<a href="mailto:${esc(data.email)}" style="color:${TAMNI_TEKST};">${esc(data.email)}</a>`,
+    },
+    beogradskoVreme(data.napravljen)
+      ? { naziv: 'Registrovan', vrednost: esc(beogradskoVreme(data.napravljen)) }
+      : null,
+  ];
+  return {
+    subject: `Nova registracija na sajtu: ${ime || data.email}`,
+    html: shell(
+      'Nov nalog na sajtu',
+      `<p style="margin:0 0 22px;line-height:1.6;">Neko je upravo napravio nalog na sajtu.</p>
+       ${tabelaPodataka(redovi)}
+       <p style="margin:0;line-height:1.6;font-size:13px;color:${SITAN_TEKST};">Nalog sam po sebi ne otvara kurs: upis i uplatu potvrđujete u adminu, pod „Upisi".</p>`,
+      BREND_ZELENA,
+    ),
+  };
+}
