@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown } from 'lucide-react';
+import { Menu, X, LogOut, LayoutDashboard, Shield, ChevronDown, UserRound } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import WebinarNavbarBar from '@/components/WebinarNavbarBar';
 import { requestEnroll } from '@/components/sajt/enrollTrigger';
@@ -317,13 +317,26 @@ const Header = ({ content, webinar }: HeaderProps) => {
             )}
           </div>
         ) : (
-          /* Gornji poziv na akciju vodi u prijavu za kurs, a ne na /login:
+          <>
+          {/* Ulaz u nalog (/login, a odatle i /signup), vraćen na desktop
+              12.10.2026. na Markov zahtev; do tada su polaznice do njega
+              stizale samo iz mobilnog menija. Namerno tih, kao stavka
+              navigacije sa ikonicom, da ne otima pažnju dugmetu za upis
+              pored njega. Običan <a>: /login ne sme da ponese skripte za
+              merenje sa javne strane (vidi padajući meni iznad). */}
+          <a
+            href="/login"
+            className="text-sm font-body font-medium px-3 py-1.5 rounded-full inline-flex items-center gap-1.5 text-charcoal-500 hover:text-navy-500 transition-all duration-300 ease-out-expo"
+          >
+            <UserRound size={15} aria-hidden="true" />
+            {headerLabels.loginButton}
+          </a>
+          {/* Gornji poziv na akciju vodi u prijavu za kurs, a ne na /login:
              prijava se otvara kao modal, na licu mesta, pa posetilac ne
              napušta prodajnu stranu. Samo desktop — na telefonu tu ulogu ima
              lepljiva traka pri dnu. Natpis je u kodu; u admin ide u admin
-             fazi (PLAN-PRELAZAK.md, faza 11). Polaznice do /login stižu iz
-             mobilnog menija ili kucanjem adrese (odluka 0.3, pravilo 1:1). */
-          imaModalZaPrijavu ? (
+             fazi (PLAN-PRELAZAK.md, faza 11). */}
+          {imaModalZaPrijavu ? (
             <button
               type="button"
               onClick={requestEnroll}
@@ -340,7 +353,8 @@ const Header = ({ content, webinar }: HeaderProps) => {
             >
               Sačuvaj svoje mesto
             </Link>
-          )
+          )}
+          </>
         )}
       </nav>
 
