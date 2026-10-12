@@ -22,7 +22,7 @@ import CmsImage from '@/components/CmsImage';
 import LessonList from '@/components/course/LessonList';
 import ZoomCallBadge from '@/components/course/ZoomCallBadge';
 import type { ZoomOption } from '@/types';
-import { PRIKAZI_CENU_KURSA } from '@/lib/kursCena';
+import { PRIKAZI_CENU_KURSA, PRIKAZI_PLACANJE_POLAZNICI } from '@/lib/kursCena';
 
 const formatRsd = (amount: number) => amount.toLocaleString('sr-Latn-RS');
 
@@ -132,7 +132,7 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+            <div className={`grid grid-cols-1 gap-4 mb-10 ${PRIKAZI_PLACANJE_POLAZNICI ? 'sm:grid-cols-3' : 'sm:grid-cols-2'}`}>
               <div className="bg-white rounded-2xl p-5 shadow-card">
                 <div className="flex items-center gap-3 mb-1">
                   <BookOpen className="w-5 h-5 text-navy-500" />
@@ -143,6 +143,8 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
                 </p>
               </div>
 
+              {/* Privremeno sakriveno, vidi `lib/kursCena.ts`. */}
+              {PRIKAZI_PLACANJE_POLAZNICI && (
               <div className="bg-white rounded-2xl p-5 shadow-card">
                 <div className="flex items-center gap-3 mb-1">
                   <CreditCard className="w-5 h-5 text-navy-500" />
@@ -152,6 +154,7 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
                   {paidCount}/{totalPayments} uplata
                 </p>
               </div>
+              )}
 
               <div className="bg-white rounded-2xl p-5 shadow-card">
                 <div className="flex items-center gap-3 mb-1">

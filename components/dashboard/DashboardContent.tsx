@@ -8,6 +8,7 @@ import { useCourses } from '@/hooks/useCourses';
 import { useEnrollments } from '@/hooks/useEnrollments';
 import CourseCard from '@/components/dashboard/CourseCard';
 import AvailableCourseCard from '@/components/dashboard/AvailableCourseCard';
+import { PRIKAZI_PLACANJE_POLAZNICI } from '@/lib/kursCena';
 
 const DashboardContent: React.FC = () => {
   const { user } = useAuth();
@@ -140,7 +141,8 @@ const DashboardContent: React.FC = () => {
             </motion.section>
           )}
 
-          {/* Payments */}
+          {/* Payments — privremeno sakriveno, vidi `lib/kursCena.ts`. */}
+          {PRIKAZI_PLACANJE_POLAZNICI && (
           <motion.section variants={itemVariants}>
             <div className="flex items-center gap-2.5 mb-6">
               <CreditCard className="w-5 h-5 text-navy-500" />
@@ -198,6 +200,7 @@ const DashboardContent: React.FC = () => {
               </div>
             )}
           </motion.section>
+          )}
         </motion.div>
       </div>
     </div>

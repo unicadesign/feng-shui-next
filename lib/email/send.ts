@@ -11,6 +11,8 @@ import {
   webinarObavestenje,
   skolaFormularObavestenje,
   skolaFormularKopija,
+  novaRegistracija,
+  type NovaRegistracijaData,
   type WebinarConfirmationData,
   type SkolaPrijavaData,
   type SkolaPrijavaObavestenjeData,
@@ -189,4 +191,19 @@ export async function sendSkolaFormularObavestenje(f: SkolaFormular): Promise<Se
 export async function sendSkolaFormularKopija(f: SkolaFormular): Promise<SendResult> {
   const { subject, html } = skolaFormularKopija(f);
   return send(f.email, subject, html);
+}
+
+/**
+ * Dragani: neko je napravio nalog na sajtu (od 13.10.2026.). Ista adresa i
+ * isto pravilo kao ostala obaveštenja: bez `SKOLA_OBAVESTENJA_EMAIL` se
+ * preskače, a registracija je svakako uspela.
+ */
+export async function sendNovaRegistracija(data: NovaRegistracijaData): Promise<SendResult> {
+  const to = (process.env.SKOLA_OBAVESTENJA_EMAIL || '').trim();
+  if (!to) {
+    console.warn('[email] SKOLA_OBAVESTENJA_EMAIL nije postavljen — obaveštenje o registraciji se preskače');
+    return { sent: false, error: 'notify_address_not_configured' };
+  }
+  const { subject, html } = novaRegistracija(data);
+  return send(to, subject, html, data.email);
 }
