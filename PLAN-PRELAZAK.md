@@ -572,9 +572,12 @@ Polaznice ujutru 13.10. kreću da se registruju i loguju.
 - [x] 14.6 PDF „feng-shui-pitanja.pdf" podignut u
       `course-videos/dokumenti/1791843233000-feng-shui-pitanja.pdf`
 - [x] 14.7 komit `0c8eb11` (14.1 do 14.5), spojeno na main (PR #25)
-- [ ] 14.8 POSLE spajanja: red za PDF u nedelji 1 („Osnovne postavke 1"),
-      ispod šestog videa. Ne pre: stara verzija bi ga prikazala kao video,
-      a snimanje kursa u starom adminu bi ga pretvorilo u video
+- [x] 14.8 posle spajanja i deploy-a: PDF „Feng Shui pitanja" upisan u
+      nedelju 1 („Osnovne postavke 1") kao 7. stavka, ispod „Yin/Yung
+      Princip"; potpisan link vraća 200 application/pdf, preuzimanje nosi
+      originalno ime. Napomena: admin pri svakom snimanju kursa briše i
+      ponovo pravi lekcije sa novim ID-jevima (lekcija nedelje 1 je
+      promenila ID u 00:21), pa se lekcija traži po kursu i nedelji
 
 ## Redosled komitova na grani `feat/prelazak`
 
