@@ -10,7 +10,9 @@ import {
   Video,
   Phone,
   PhoneOff,
+  ChevronLeft,
 } from 'lucide-react';
+import Link from 'next/link';
 import { scrollReveal, viewportOnce } from '@/lib/animations';
 import { useAuth } from '@/hooks/useAuth';
 import { useCourses } from '@/hooks/useCourses';
@@ -20,6 +22,7 @@ import CmsImage from '@/components/CmsImage';
 import LessonList from '@/components/course/LessonList';
 import ZoomCallBadge from '@/components/course/ZoomCallBadge';
 import type { ZoomOption } from '@/types';
+import { PRIKAZI_CENU_KURSA } from '@/lib/kursCena';
 
 const formatRsd = (amount: number) => amount.toLocaleString('sr-Latn-RS');
 
@@ -110,6 +113,16 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
             whileInView="visible"
             viewport={viewportOnce}
           >
+            {/* Nazad na listu kurseva, isti obrazac kao „‹ naziv kursa" na
+                strani lekcije (Marko 12.10.2026.: nije bilo puta nazad). */}
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center gap-1 text-sm text-charcoal-500 hover:text-navy-500 transition-colors mb-6"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Moji kursevi
+            </Link>
+
             <div className="mb-10">
               <h1 className="font-heading text-3xl md:text-4xl text-charcoal mb-3">
                 {course.title}
@@ -227,6 +240,15 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+          {/* Nazad na listu kurseva, isti obrazac kao „‹ naziv kursa" na
+              strani lekcije (Marko 12.10.2026.: nije bilo puta nazad). */}
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1 text-sm text-charcoal-500 hover:text-navy-500 transition-colors mb-6"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Moji kursevi
+          </Link>
           <motion.div
             variants={scrollReveal}
             initial="hidden"
@@ -265,7 +287,8 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
         </div>
       </section>
 
-      {/* Pricing */}
+      {/* Pricing — privremeno sakriveno, vidi `lib/kursCena.ts`. */}
+      {PRIKAZI_CENU_KURSA && (
       <section className="bg-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -457,6 +480,7 @@ const CourseOverviewContent: React.FC<CourseOverviewContentProps> = ({ courseId 
           </motion.div>
         </div>
       </section>
+      )}
 
       {/* Curriculum preview */}
       <section className="py-16">

@@ -7,6 +7,7 @@ import { ArrowRight } from 'lucide-react';
 import { Course } from '@/types';
 import Button from '@/components/Button';
 import CmsImage from '@/components/CmsImage';
+import { PRIKAZI_CENU_KURSA } from '@/lib/kursCena';
 
 interface AvailableCourseCardProps {
   course: Course;
@@ -56,6 +57,8 @@ const AvailableCourseCard: React.FC<AvailableCourseCardProps> = ({ course }) => 
           {truncatedDescription}
         </p>
 
+        {/* Cena privremeno sakrivena, vidi `lib/kursCena.ts`. */}
+        {PRIKAZI_CENU_KURSA && (
         <div className="mb-4">
           {course.type === 'standard' && course.installmentPrice ? (
             <div>
@@ -84,6 +87,7 @@ const AvailableCourseCard: React.FC<AvailableCourseCardProps> = ({ course }) => 
             </div>
           )}
         </div>
+        )}
 
         <Link href={`/course/${course.id}`}>
           <Button
