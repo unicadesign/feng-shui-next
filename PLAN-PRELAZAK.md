@@ -455,8 +455,18 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
   postoje. Ostaju samo `Podešavanja` (navigacija, podnožje, kontakt) i
   prekidač vebinara. Do tada: upozorenje u tim uređivačima (Z10) ili
   njihovo sklanjanje.
-- Ulaz u `/login` za polaznice na desktopu (Z5): link u podnožju ili u
-  zaglavlju, kad se zaglavlje bude prevezivalo na admin.
+- [x] Ulaz u `/login` za polaznice na desktopu (Z5): urađeno 12.10.2026.
+  na Markov zahtev, stavka „Prijava" sa ikonicom u zaglavlju, pored
+  „Sačuvaj svoje mesto" (natpis iz `global.header.loginButton`). Na
+  telefonu je već bila u meniju.
+- [x] `/login` i `/signup` usklađeni sa sajtom 12.10.2026. (Marko: „uradi
+  sve promene koje si predložio"): zlatni znak umesto „ptPLAN", brend
+  paleta (omotač `.nalog-strana` u bloku `body:has(...)` u `fs-c.css`),
+  bez neaktivnih dugmadi „Google/Facebook ... uskoro" i bez mrtvog
+  „Zaboravili ste lozinku?", link „Nazad na sajt" ispod kartice.
+- Ostaje: oporavak lozinke ne postoji (dugme je bilo bez radnje);
+  „uslovi korišćenja" na `/signup` nisu link i strana sa uslovima ne
+  postoji.
 - `heardFromLabels` u [AdminInquiriesContent.tsx:40-47](components/admin/AdminInquiriesContent.tsx#L40-L47):
   dodati „Početna", „Škola", „O meni" i stare „(verzija C)" varijante.
 - `service_type` iz modala je slobodan srpski tekst u sedam varijanti
@@ -469,7 +479,7 @@ Ništa od ovoga se ne radi sada. Popis stoji da se ne zaboravi.
   (`global.header`, `global.navigation`).
 - Mrtva polja u adminu: `footer.tagline`, `home.newsletter.*`.
 - Vebinar traka, popup i modal u novom dizajnu.
-- `/login` i `/signup` nose natpis „ptPLAN"; `not-found` u starom dizajnu.
+- `not-found` u starom dizajnu (`/login` i `/signup` sređeni 12.10.).
 - **RLS u bazi, zatvoreno 07.09.** Nađeno pri proveri kontakt upitnika:
   javni anon ključ je čitao sve prijave (31 red sa ličnim podacima) i sve
   profile, a mogao je i da bilo kom profilu upiše `role = 'admin'`
@@ -549,6 +559,8 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K12 | `31505f7` | 28.09. | termin iz admina se poredi kao beogradsko vreme (server na Vercelu je UTC; bez ovoga bi 5.10. od 19 do 21h vebinar bio „živ" na serveru) | isti trenutak pod četiri vremenske zone i u noćima promene sata |
 | K13 | `90bee70` | 28.09. | sekcija vebinara na tamnozelenoj traci (varijanta C, Marko 28.09., izabrana od tri uporedjene u kontekstu strane jer je M uživo ispadao siv): nacrtan izmišljen tlocrt kao SVG umesto fotografije, datum krem, dugme belo; fotografija `vebinar-tlocrti.*` obrisana. Fotografisani tlocrt iz baze slika odbačen: tuđi dom sa imenom investitora, pečatima i potpisima | tsc i eslint čisti; 390, 768, 1024, 1280 i 1440 px bez prelivanja i bez 404; prijava iz sekcije na 390 i 1280 px šalje tačan zahtev uz presretnuto slanje, poruka o uspehu i ključ „već se prijavio" upisani; spojeno na main (PR #21), na produkciji potvrđeno istim testom, u bazi nijedan probni red |
 | K14 | `f495843` | 29.09. | 12.1 do 12.4: prijavni formular škole na tajnom linku, odgovori mejlom Dragani i kopija polaznici, bez baze | tsc čist, eslint čist za nove fajlove (dve zatečene greške u WebinarPopup ostaju); pravi i pogrešan ključ 200 i 404, API bez ključa 404, nepotpun formular 400; ceo tok na 390 i 1280 px uz presretnuto slanje (greške po koraku, nacrt posle osvežavanja, 13 oblasti, tačan zahtev, zahvalnica); popup na početnoj i školi da, na formularu ne (privremeno uključen samo lokalno); pravo slanje kroz rutu samo na Resend probnu adresu delivered@resend.dev: oba mejla isporučena, replyTo na Draganinom; spojeno na main (PR #22), na produkciji proveren pravi i pogrešan ključ i API |
+| K15 | `41664a1` | 12.10. | „Prijava" u desktop zaglavlju (Z5); `/login` i `/signup` u brend ruhu: znak umesto „ptPLAN", zelena paleta, bez neaktivnih dugmadi, „Nazad na sajt" | tsc čist; eslint bez novih grešaka (zatečena u Header-u, red 91); zaglavlje na 768, 1024 i 1280 px u jednom redu; /login i /signup na 1280 i 390 px bez prelivanja, greška prijave i „Lozinke se ne poklapaju" prikazane uz presretnut Supabase (nijedan pokušaj nije stigao do baze) |
+| videi | (bez komita) | 12.10. | šest videa (lekcije 1 do 6) podignuto u `course-videos` preko Supabase CLI na Markov zahtev; upis u lekcije radi Marko u adminu | MP4 H.264 + AAC, moov na početku; veličine u bucket-u jednake lokalnim; potpisan link vraća 206 video/mp4 za svih šest; postojećih 13 netaknuto |
 | baza | (bez komita) | 26.09. | `site_content.home.webinarSection`: termin 05.10.2026 19:00, naslov „Feng Shui bez mistike", podnaslov „Kako da praktično primenite principe u svom domu"; stari junski Zoom link obrisan, prekidač ostavljen ISKLJUČEN dok Marko ne upiše nov link | rezervna kopija stare vrednosti u scratchpad-u; ostalih 13 ključeva strane `home` netaknuto |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
 
