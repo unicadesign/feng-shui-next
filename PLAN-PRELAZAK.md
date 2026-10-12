@@ -551,6 +551,31 @@ Polaznice ujutru 13.10. kreću da se registruju i loguju.
       neupisan), isti obrazac kao link nazad na strani lekcije
 - [x] 13.6 komit `29c79c0` (13.4 i 13.5), spojeno na main (PR #24)
 
+## 14. PDF u lekciji, plaćanje sakriveno, mejl o registraciji (13.10.2026.)
+
+- [x] 14.1 baza: `lesson_videos.kind` ('video' | 'document') i `file_name`
+      (`supabase/migrations/0003_lekcija_pdf.sql`, primenjeno; postojeći
+      redovi ostali 'video'). PDF je u `course-videos/dokumenti/`, putanja u
+      `video_path`, pa ga štiti isto pravilo pristupa kao video
+- [x] 14.2 admin: „+ Dodaj PDF" pored „+ Dodaj video", jedna lista u
+      redosledu prikaza, upload PDF-a sa računara (do 50 MB); PDF bez fajla
+      ne može da se sačuva; uklonjen PDF se pri snimanju kursa briše iz
+      bucket-a (samo pod `dokumenti/`)
+- [x] 14.3 polaznica: kartica PDF-a na svom mestu u lekciji, „Otvori" i
+      „Preuzmi" preko potpisanih linkova
+- [x] 14.4 plaćanje sakriveno polaznici (kartica „Plaćanje" na stranici
+      kursa, „Vaša plaćanja" na „Moji kursevi", „Status uplata" pored
+      lekcije), prekidač `PRIKAZI_PLACANJE_POLAZNICI` u `lib/kursCena.ts`
+- [x] 14.5 mejl Dragani na ptplan pri novoj registraciji
+      (`/api/nova-registracija`; korisnik iz proverene sesije, samo za nalog
+      mlađi od 15 minuta; odgovor ide korisniku)
+- [x] 14.6 PDF „feng-shui-pitanja.pdf" podignut u
+      `course-videos/dokumenti/1791843233000-feng-shui-pitanja.pdf`
+- [x] 14.7 komit `0c8eb11` (14.1 do 14.5), spojeno na main (PR #25)
+- [ ] 14.8 POSLE spajanja: red za PDF u nedelji 1 („Osnovne postavke 1"),
+      ispod šestog videa. Ne pre: stara verzija bi ga prikazala kao video,
+      a snimanje kursa u starom adminu bi ga pretvorilo u video
+
 ## Redosled komitova na grani `feat/prelazak`
 
 Prvi komit na grani je ovaj fajl (K0), da plan i rad idu zajedno.
@@ -578,6 +603,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K14 | `f495843` | 29.09. | 12.1 do 12.4: prijavni formular škole na tajnom linku, odgovori mejlom Dragani i kopija polaznici, bez baze | tsc čist, eslint čist za nove fajlove (dve zatečene greške u WebinarPopup ostaju); pravi i pogrešan ključ 200 i 404, API bez ključa 404, nepotpun formular 400; ceo tok na 390 i 1280 px uz presretnuto slanje (greške po koraku, nacrt posle osvežavanja, 13 oblasti, tačan zahtev, zahvalnica); popup na početnoj i školi da, na formularu ne (privremeno uključen samo lokalno); pravo slanje kroz rutu samo na Resend probnu adresu delivered@resend.dev: oba mejla isporučena, replyTo na Draganinom; spojeno na main (PR #22), na produkciji proveren pravi i pogrešan ključ i API |
 | K15 | `41664a1` | 12.10. | „Prijava" u desktop zaglavlju (Z5); `/login` i `/signup` u brend ruhu: znak umesto „ptPLAN", zelena paleta, bez neaktivnih dugmadi, „Nazad na sajt" | tsc čist; eslint bez novih grešaka (zatečena u Header-u, red 91); zaglavlje na 768, 1024 i 1280 px u jednom redu; /login i /signup na 1280 i 390 px bez prelivanja, greška prijave i „Lozinke se ne poklapaju" prikazane uz presretnut Supabase (nijedan pokušaj nije stigao do baze) |
 | K16 | `29c79c0` | 12.10. | 13.4 cena kursa privremeno sakrivena (`lib/kursCena.ts`), 13.5 „‹ Moji kursevi" na stranici kursa | tsc čist; eslint čist za izmenjene fajlove; strane traže prijavljen nalog pa nisu gledane u pregledaču |
+| K17 | `0c8eb11` | 13.10. | 14.1 do 14.5: PDF uz video u lekciji, plaćanje sakriveno polaznici, mejl o registraciji | tsc čist; `next build` čist; eslint bez novih grešaka; migracija primenjena (6 postojećih redova 'video'); PDF red i provera vrste u transakcijama sa rollback; API registracije bez prijave 401; mejl o registraciji na Resend probnu adresu isporučen, datum u genitivu i oko letnjeg vremena tačan; admin i lekcija nisu gledani u pregledaču (traže prijavu) |
 | slika | (bez komita) | 12.10. | 13.3 slika kursa „Feng Shui" u `images` i `courses.image_url` | javni link 200 image/jpeg; red u bazi vraćen posle upisa |
 | videi | (bez komita) | 12.10. | šest videa (lekcije 1 do 6) podignuto u `course-videos` preko Supabase CLI na Markov zahtev; upis u lekcije radi Marko u adminu | MP4 H.264 + AAC, moov na početku; veličine u bucket-u jednake lokalnim; potpisan link vraća 206 video/mp4 za svih šest; postojećih 13 netaknuto |
 | baza | (bez komita) | 26.09. | `site_content.home.webinarSection`: termin 05.10.2026 19:00, naslov „Feng Shui bez mistike", podnaslov „Kako da praktično primenite principe u svom domu"; stari junski Zoom link obrisan, prekidač ostavljen ISKLJUČEN dok Marko ne upiše nov link | rezervna kopija stare vrednosti u scratchpad-u; ostalih 13 ključeva strane `home` netaknuto |
