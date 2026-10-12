@@ -1020,8 +1020,9 @@
    plave ikonice u footeru.
 
    `body:has(.fs-c)` pogađa svih šest javnih strana, jer samo one renderuju
-   `.fs-c` omotač; login, dashboard i admin ostaju na staroj paleti iz
-   globals.css. Redefinišu se Tailwind-ove promenljive
+   `.fs-c` omotač. Od 12.10.2026. tu su i `/login` i `/signup` (omotač
+   `.nalog-strana`), jer se do njih sada stiže iz zaglavlja; dashboard i
+   admin ostaju na staroj paleti iz globals.css. Redefinišu se Tailwind-ove promenljive
    (`--color-*`), a njegove klase (`.bg-navy-500` i slične) su
    definisane kao `var(--color-navy-500)` pa se povlače za njima.
    Te strane ne osećaju ništa: promenljive se nigde drugde ne menjaju.
@@ -1029,7 +1030,8 @@
    Blok se briše tek kad i login, dashboard i admin pređu na novu paletu
    (admin faza, PLAN-PRELAZAK.md).
    ================================================================== */
-body:has(.fs-c) {
+body:has(.fs-c),
+body:has(.nalog-strana) {
   /* svetle površine zaglavlja */
   --color-cream-50:  #FAF4ED;
   --color-cream-100: #F5EBDD;
