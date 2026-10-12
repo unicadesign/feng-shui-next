@@ -534,6 +534,23 @@ Dragani. Kopiju smo vam poslali na e-mail."
       pogrešan 404, API aktivan. Link Dragani šalje Marko (ključ je u
       `.env.local`; na Vercelu je „sensitive" i ne može da se pročita)
 
+## 13. Nalog polaznice pred upis (12.10.2026.)
+
+Polaznice ujutru 13.10. kreću da se registruju i loguju.
+
+- [x] 13.1 „Prijava" u desktop zaglavlju; `/login` i `/signup` u brend
+      ruhu (K15, PR #23, na produkciji potvrđeno)
+- [x] 13.2 šest videa za lekcije 1 do 6 u `course-videos` (upis u lekcije
+      radi Marko u adminu)
+- [x] 13.3 slika kursa „Feng Shui": podignuta u `images`
+      (`1791840697000-feng-shui-kurs.jpg`) i upisana u `courses.image_url`
+      direktno u bazi, na Markov zahtev; ranije je bila prazna
+- [x] 13.4 cena kursa privremeno sakrivena na stranici kursa i na kartici
+      dostupnog kursa, jednim prekidačem `lib/kursCena.ts`
+- [x] 13.5 „‹ Moji kursevi" na stranici kursa (oba prikaza: upisan i
+      neupisan), isti obrazac kao link nazad na strani lekcije
+- [x] 13.6 komit `29c79c0` (13.4 i 13.5), spojeno na main (PR #24)
+
 ## Redosled komitova na grani `feat/prelazak`
 
 Prvi komit na grani je ovaj fajl (K0), da plan i rad idu zajedno.
@@ -560,6 +577,8 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K13 | `90bee70` | 28.09. | sekcija vebinara na tamnozelenoj traci (varijanta C, Marko 28.09., izabrana od tri uporedjene u kontekstu strane jer je M uživo ispadao siv): nacrtan izmišljen tlocrt kao SVG umesto fotografije, datum krem, dugme belo; fotografija `vebinar-tlocrti.*` obrisana. Fotografisani tlocrt iz baze slika odbačen: tuđi dom sa imenom investitora, pečatima i potpisima | tsc i eslint čisti; 390, 768, 1024, 1280 i 1440 px bez prelivanja i bez 404; prijava iz sekcije na 390 i 1280 px šalje tačan zahtev uz presretnuto slanje, poruka o uspehu i ključ „već se prijavio" upisani; spojeno na main (PR #21), na produkciji potvrđeno istim testom, u bazi nijedan probni red |
 | K14 | `f495843` | 29.09. | 12.1 do 12.4: prijavni formular škole na tajnom linku, odgovori mejlom Dragani i kopija polaznici, bez baze | tsc čist, eslint čist za nove fajlove (dve zatečene greške u WebinarPopup ostaju); pravi i pogrešan ključ 200 i 404, API bez ključa 404, nepotpun formular 400; ceo tok na 390 i 1280 px uz presretnuto slanje (greške po koraku, nacrt posle osvežavanja, 13 oblasti, tačan zahtev, zahvalnica); popup na početnoj i školi da, na formularu ne (privremeno uključen samo lokalno); pravo slanje kroz rutu samo na Resend probnu adresu delivered@resend.dev: oba mejla isporučena, replyTo na Draganinom; spojeno na main (PR #22), na produkciji proveren pravi i pogrešan ključ i API |
 | K15 | `41664a1` | 12.10. | „Prijava" u desktop zaglavlju (Z5); `/login` i `/signup` u brend ruhu: znak umesto „ptPLAN", zelena paleta, bez neaktivnih dugmadi, „Nazad na sajt" | tsc čist; eslint bez novih grešaka (zatečena u Header-u, red 91); zaglavlje na 768, 1024 i 1280 px u jednom redu; /login i /signup na 1280 i 390 px bez prelivanja, greška prijave i „Lozinke se ne poklapaju" prikazane uz presretnut Supabase (nijedan pokušaj nije stigao do baze) |
+| K16 | `29c79c0` | 12.10. | 13.4 cena kursa privremeno sakrivena (`lib/kursCena.ts`), 13.5 „‹ Moji kursevi" na stranici kursa | tsc čist; eslint čist za izmenjene fajlove; strane traže prijavljen nalog pa nisu gledane u pregledaču |
+| slika | (bez komita) | 12.10. | 13.3 slika kursa „Feng Shui" u `images` i `courses.image_url` | javni link 200 image/jpeg; red u bazi vraćen posle upisa |
 | videi | (bez komita) | 12.10. | šest videa (lekcije 1 do 6) podignuto u `course-videos` preko Supabase CLI na Markov zahtev; upis u lekcije radi Marko u adminu | MP4 H.264 + AAC, moov na početku; veličine u bucket-u jednake lokalnim; potpisan link vraća 206 video/mp4 za svih šest; postojećih 13 netaknuto |
 | baza | (bez komita) | 26.09. | `site_content.home.webinarSection`: termin 05.10.2026 19:00, naslov „Feng Shui bez mistike", podnaslov „Kako da praktično primenite principe u svom domu"; stari junski Zoom link obrisan, prekidač ostavljen ISKLJUČEN dok Marko ne upiše nov link | rezervna kopija stare vrednosti u scratchpad-u; ostalih 13 ključeva strane `home` netaknuto |
 | K6 | samo ako klijent nešto promeni ili potvrdi (1.2 SWIFT pre spajanja; ostalo kad i ako stigne) | 1.x → 5.4, 5.7, 6.3, 6.4 |
