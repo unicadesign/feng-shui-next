@@ -54,3 +54,10 @@ public/logo/Logo bez linija*
 public/logo/Paleta*
 public/logo/prvenc*
 public/logo/simbol-*
+
+# Videi i PDF-ovi lekcija koji se spuste u koren projekta da bi se podigli
+# u Supabase (`course-videos`). Kurs ih čita iz Supabase-a, ne iz repoa, a
+# repo je javan i GitHub odbija fajlove veće od 100 MB. Samo koren: PDF ili
+# video u public/ bi i dalje išao u repo.
+/*.mp4
+/*.pdf
