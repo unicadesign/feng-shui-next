@@ -13,6 +13,21 @@ interface LessonListProps {
   modules?: CourseModule[];
 }
 
+/**
+ * Trenutak kad se lekcija otvara (od 19.10.2026.): nedelje idu po kalendaru,
+ * od ponedeljka do nedelje, po UTC vremenu. Nedelja u kojoj je polaznica
+ * upisana je njena nedelja 1; lekcija sa `availableAfterWeeks = N` otvara se
+ * N ponedeljaka kasnije u 00:00 UTC. Isto računa i pravilo pristupa u bazi
+ * (`supabase/migrations/0004_nedelje_od_ponedeljka.sql`), koje pušta video.
+ */
+export function otvaranjeLekcije(lesson: Lesson, courseStartDate: string): Date {
+  // `start_date` je datum („2026-10-13"); čita se kao UTC ponoć tog dana.
+  const d = new Date(`${courseStartDate.slice(0, 10)}T00:00:00Z`);
+  const odPonedeljka = (d.getUTCDay() + 6) % 7; // ponedeljak 0 … nedelja 6
+  d.setUTCDate(d.getUTCDate() - odPonedeljka + lesson.availableAfterWeeks * 7);
+  return d;
+}
+
 export function isLessonAvailable(
   lesson: Lesson,
   enrollment?: Enrollment,
@@ -22,9 +37,7 @@ export function isLessonAvailable(
     return { available: false, reason: 'payment' };
   }
 
-  const start = new Date(courseStartDate);
-  const availableAfter = new Date(start);
-  availableAfter.setDate(availableAfter.getDate() + lesson.availableAfterWeeks * 7);
+  const availableAfter = otvaranjeLekcije(lesson, courseStartDate);
   const now = new Date();
 
   if (now < availableAfter) {
@@ -35,6 +48,7 @@ export function isLessonAvailable(
         day: 'numeric',
         month: 'long',
         year: 'numeric',
+        timeZone: 'Europe/Belgrade',
       }),
     };
   }
@@ -58,9 +72,9 @@ export function isLessonAvailable(
 function isLessonCompleted(lesson: Lesson, enrollment?: Enrollment): boolean {
   if (!enrollment || !enrollment.startDate) return false;
 
-  const start = new Date(enrollment.startDate);
-  const nextWeekDate = new Date(start);
-  nextWeekDate.setDate(nextWeekDate.getDate() + (lesson.availableAfterWeeks + 1) * 7);
+  // Lekcija je „prošla" kad se otvori sledeća nedelja.
+  const nextWeekDate = otvaranjeLekcije(lesson, enrollment.startDate);
+  nextWeekDate.setUTCDate(nextWeekDate.getUTCDate() + 7);
   return new Date() > nextWeekDate;
 }
 
