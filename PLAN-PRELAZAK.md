@@ -579,6 +579,23 @@ Polaznice ujutru 13.10. kreću da se registruju i loguju.
       ponovo pravi lekcije sa novim ID-jevima (lekcija nedelje 1 je
       promenila ID u 00:21), pa se lekcija traži po kursu i nedelji
 
+## 15. Nedelje kursa po kalendaru (19.10.2026.)
+
+Marko: „ko je upisan ove nedelje dobija odmah tu nedelju dostupnu". Do sada
+je svaka polaznica imala svoj dan: lekcija se otvarala 7 × N dana posle
+datuma upisa, pa je nedelja 2 za većinu (upis 13. do 16.10.) stizala tek
+20. do 23.10.
+
+- [x] 15.1 baza: pravilo pristupa videu i PDF-u računa od ponedeljka nedelje
+      upisa, otvaranje u ponedeljak 00:00 UTC
+      (`supabase/migrations/0004_nedelje_od_ponedeljka.sql`, primenjeno);
+      uslovi uplate nepromenjeni
+- [x] 15.2 sajt: isto računanje u `components/course/LessonList.tsx`
+      (`otvaranjeLekcije`)
+- [x] 15.3 komit `5da7676`, spojeno na main (PR #26)
+- [ ] 15.4 Dragana: polaznici upisanoj 11.10. (nedelja) postaviti početak na
+      12.10. i proveriti uplatu; po kalendaru bi inače bila nedelju ispred
+
 ## Redosled komitova na grani `feat/prelazak`
 
 Prvi komit na grani je ovaj fajl (K0), da plan i rad idu zajedno.
@@ -607,6 +624,7 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K15 | `41664a1` | 12.10. | „Prijava" u desktop zaglavlju (Z5); `/login` i `/signup` u brend ruhu: znak umesto „ptPLAN", zelena paleta, bez neaktivnih dugmadi, „Nazad na sajt" | tsc čist; eslint bez novih grešaka (zatečena u Header-u, red 91); zaglavlje na 768, 1024 i 1280 px u jednom redu; /login i /signup na 1280 i 390 px bez prelivanja, greška prijave i „Lozinke se ne poklapaju" prikazane uz presretnut Supabase (nijedan pokušaj nije stigao do baze) |
 | K16 | `29c79c0` | 12.10. | 13.4 cena kursa privremeno sakrivena (`lib/kursCena.ts`), 13.5 „‹ Moji kursevi" na stranici kursa | tsc čist; eslint čist za izmenjene fajlove; strane traže prijavljen nalog pa nisu gledane u pregledaču |
 | K17 | `0c8eb11` | 13.10. | 14.1 do 14.5: PDF uz video u lekciji, plaćanje sakriveno polaznici, mejl o registraciji | tsc čist; `next build` čist; eslint bez novih grešaka; migracija primenjena (6 postojećih redova 'video'); PDF red i provera vrste u transakcijama sa rollback; API registracije bez prijave 401; mejl o registraciji na Resend probnu adresu isporučen, datum u genitivu i oko letnjeg vremena tačan; admin i lekcija nisu gledani u pregledaču (traže prijavu) |
+| K18 | `5da7676` | 19.10. | 15.1 i 15.2: nedelje po kalendaru, otvaranje u ponedeljak 00:00 UTC (baza i sajt) | tsc i eslint čisti; formula u bazi i na sajtu daje iste datume za upise od 11. do 25.10.; simulacija prave polaznice (upis 13.10., plaćeno) u transakciji sa rollback: pre izmene samo nedelja 1, posle i video i PDF nedelje 2; polaznica bez označene uplate i dalje bez pristupa |
 | nedelja 2 | (bez komita) | 19.10. | materijal za nedelju 2 („Osnovne postavke 2"): video „Nacrt stana", video „Korišćenje kompasa", PDF „Ekstenzije i nedostajući delovi" (10 strana), slika „Primer očitavanja kompasa" pretvorena u PDF od jedne strane (lekcija prima samo video i PDF); imena u bucket-u bez razmaka i dijakritike, originalno ime PDF-a sačuvano za preuzimanje | veličine u bucket-u jednake lokalnim; sva četiri potpisana linka 206 sa tačnim tipom |
 | yin/yang | (bez komita) | 18.10. | video „Yin/Yang Princip" se nije video: putanja u adminu ispravljena u `6-yin-yang-princip.mp4`, fajl se zvao `...yung...`; fajl preimenovan u bucket-u, baza netaknuta | svih 8 stavki nedelje 1 pokazuje na postojeći fajl; potpisan link 206 |
 | vebinar | (bez komita) | 16.10. | `week-1-webinar.mp4` (488 MB, 1:07:20, 1920×1030 H.264 ~1 Mbit/s, moov na početku) podignut u `course-videos` preko CLI (oko 10 min) i dodat u nedelju 1 kao 8. stavka, naslov „Vebinar" | veličina u bucket-u jednaka lokalnoj; potpisan link vraća 206 i za početak i za sredinu fajla (premotavanje radi); limit veličine fajla u Supabase-u primio 488 MB |
