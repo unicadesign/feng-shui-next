@@ -620,9 +620,9 @@ uz to i zaštita od zastarele admin strane.
 - [x] 16.5 zaštita od zastarele strane: pre snimanja se poredi otisak kursa
       (ID-jevi modula, lekcija i stavki) sa onim kad je strana otvorena;
       ako se razlikuje, snimanje se zaustavlja sa porukom da se osveži
-- [ ] 16.6 Marko proba na preview-u: upload jednog videa, prekid i nastavak,
-      zaštita sa dve kartice
-- [ ] 16.7 spajanje na main
+- [x] 16.6 Marko probao na preview-u: upload, prekid i nastavak, zaštita sa
+      dve kartice; „Sve radi kako treba"
+- [x] 16.7 spojeno na main (PR #27)
 
 ## Redosled komitova na grani `feat/prelazak`
 
