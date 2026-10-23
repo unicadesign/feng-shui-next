@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
@@ -14,6 +14,7 @@ import { useCourses } from '@/hooks/useCourses';
 import type { CourseType, LessonItemKind } from '@/types';
 import { normalizeStoragePath } from '@/lib/storagePath';
 import { supabase } from '@/lib/supabase/client';
+import { proveriVideo, putanjaVidea, imeZaPutanju } from '@/lib/proveraVidea';
 
 // ─── Local state shapes ──────────────────────────────────────
 
@@ -43,21 +44,58 @@ interface VideoForm {
 
 const MAX_PDF_MB = 50;
 
-/** „Radni list – Nedelja 1 (č).pdf" → „radni-list-nedelja-1-c". */
-const imeZaPutanju = (ime: string) =>
-  ime
-    .replace(/\.pdf$/i, '')
-    .replace(/đ/g, 'dj')
-    .replace(/Đ/g, 'Dj')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 60) || 'dokument';
-
 /** Putanja novog PDF-a u `course-videos`; vreme sprečava da se dva fajla istog imena pregaze. */
 const novaPutanjaPdf = (ime: string) => `dokumenti/${Date.now()}-${imeZaPutanju(ime)}.pdf`;
+
+/**
+ * Upload videa u delovima (tus), direktno na Supabase Storage. Direktan
+ * host `<projekat>.storage.supabase.co` je Supabase-ova preporuka za velike
+ * fajlove. Delovi moraju biti tačno 6 MB.
+ */
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const TUS_ENDPOINT = `${SUPABASE_URL.replace('.supabase.co', '.storage.supabase.co')}/storage/v1/upload/resumable`;
+const DEO_UPLOADA = 6 * 1024 * 1024;
+
+/** Stanje uploada jednog videa u formi. */
+interface StanjeVidea {
+  poslato: number;
+  ukupno: number;
+  pocetak: number;
+  aktivan: boolean;
+  greska?: string;
+  upozorenja: string[];
+}
+
+const mb = (b: number) => (b / 1024 / 1024).toFixed(0);
+
+/** Početno stanje uploada; vreme početka služi za procenu preostalog. */
+const novoStanjeVidea = (ukupno: number, greska: string | undefined, upozorenja: string[]): StanjeVidea => ({
+  poslato: 0,
+  ukupno,
+  pocetak: Date.now(),
+  aktivan: !greska,
+  greska,
+  upozorenja,
+});
+
+/** „još oko 6 min" iz dosadašnje brzine. */
+function preostalo(st: StanjeVidea): string {
+  const proteklo = (Date.now() - st.pocetak) / 1000;
+  if (st.poslato < DEO_UPLOADA || proteklo < 3) return '';
+  const sekundi = ((st.ukupno - st.poslato) / st.poslato) * proteklo;
+  if (sekundi < 60) return ' · još manje od minuta';
+  return ` · još oko ${Math.round(sekundi / 60)} min`;
+}
+
+/**
+ * „Otisak" sadržaja kursa: ID-jevi modula, lekcija i stavki lekcija. Admin
+ * pri snimanju briše i ponovo pravi sve lekcije, pa se svaka izmena sa
+ * druge strane (druga kartica, upis spolja) vidi kao drugačiji otisak.
+ */
+function otisak(moduli: string[], lekcije: { id: string; stavke: string[] }[]): string {
+  const l = lekcije.map((x) => `${x.id}:${[...x.stavke].sort().join(',')}`).sort();
+  return `${[...moduli].sort().join(',')}|${l.join(';')}`;
+}
 
 interface LessonForm {
   _tempId: string;
@@ -123,6 +161,24 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   /** Stanje učitavanja PDF-a po stavci: 'u toku' ili poruka o grešci. */
   const [otpremanje, setOtpremanje] = useState<Record<string, string>>({});
   const [greskaSadrzaja, setGreskaSadrzaja] = useState<string | null>(null);
+  /** Upload videa po stavci (napredak, upozorenja, greška). */
+  const [videoUpload, setVideoUpload] = useState<Record<string, StanjeVidea>>({});
+  const uploadi = useRef<Record<string, { abort: (prekiniNaServeru?: boolean) => Promise<void> }>>({});
+  /** Otisak kursa kakav je bio kad je forma popunjena; vidi `otisak`. */
+  const ucitaniOtisak = useRef<string | null>(null);
+  const imaAktivnihUploada =
+    Object.values(otpremanje).includes('u toku') || Object.values(videoUpload).some((v) => v.aktivan);
+
+  // Zatvaranje kartice usred uploada traži potvrdu pretraživača.
+  useEffect(() => {
+    if (!imaAktivnihUploada) return;
+    const upozori = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = '';
+    };
+    window.addEventListener('beforeunload', upozori);
+    return () => window.removeEventListener('beforeunload', upozori);
+  }, [imaAktivnihUploada]);
   const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
 
   // ── Load existing data ──
@@ -203,6 +259,12 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
             };
           });
         setFormLessons(courseLessons);
+        ucitaniOtisak.current = otisak(
+          courseModules.map((m) => m._tempId),
+          allLessons
+            .filter((l) => l.courseId === id)
+            .map((l) => ({ id: l.id, stavke: l.videos.map((v) => v.id) }))
+        );
 
         // Expand all modules by default when editing
         setExpandedModules(new Set(courseModules.map((m) => m._tempId)));
@@ -339,6 +401,10 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   };
 
   const startLessonEdit = (lesson: LessonForm) => {
+    if (imaAktivnihUploada) {
+      setGreskaSadrzaja('Sačekajte da se upload završi ili ga otkažite.');
+      return;
+    }
     setEditingLessonId(lesson._tempId);
     setLessonEditForm({ ...lesson });
   };
@@ -396,6 +462,96 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
     });
   };
 
+  /**
+   * Video ide iz pretraživača pravo u Supabase, u delovima od 6 MB. Ako
+   * veza pukne, tus sam pokušava ponovo; ako se kartica zatvori, ponovni izbor
+   * ISTOG fajla nastavlja odakle je stao (putanja je ista za isti fajl, a tus
+   * pamti započet upload u pretraživaču). Pre slanja se proverava format.
+   */
+  const otpremiVideo = async (tempId: string, fajl: File) => {
+    const citaj = async (od: number, doBajta: number) =>
+      new Uint8Array(await fajl.slice(od, doBajta).arrayBuffer());
+    let provera: { greska?: string; upozorenja: string[] };
+    try {
+      provera = await proveriVideo(fajl.name, fajl.size, fajl.type, citaj);
+    } catch {
+      provera = { upozorenja: [], greska: 'Fajl nije moguće pročitati. Izvezite ga ponovo kao MP4.' };
+    }
+    const novo = novoStanjeVidea(fajl.size, provera.greska, provera.upozorenja);
+    setVideoUpload((p) => ({ ...p, [tempId]: novo }));
+    if (provera.greska) return;
+
+    const putanja = putanjaVidea(fajl.name, fajl.size, fajl.lastModified);
+    const zavrsi = () => {
+      delete uploadi.current[tempId];
+      updateVideoInEdit(tempId, { videoPath: putanja, fileName: fajl.name, videoUrl: '' });
+      setVideoUpload((p) => ({
+        ...p,
+        [tempId]: { ...p[tempId], aktivan: false, poslato: fajl.size, greska: undefined },
+      }));
+    };
+
+    const { Upload } = await import('tus-js-client');
+    const upload = new Upload(fajl, {
+      endpoint: TUS_ENDPOINT,
+      chunkSize: DEO_UPLOADA,
+      retryDelays: [0, 3000, 5000, 10000, 20000, 60000],
+      uploadDataDuringCreation: true,
+      removeFingerprintOnSuccess: true,
+      headers: { 'x-upsert': 'false' },
+      metadata: {
+        bucketName: 'course-videos',
+        objectName: putanja,
+        contentType: 'video/mp4',
+        cacheControl: '3600',
+      },
+      // Token se uzima pred svaki deo: Supabase prijava traje sat vremena i
+      // sama se obnavlja, pa i upload duži od sata šalje važeći token.
+      onBeforeRequest: async (req) => {
+        const { data } = await supabase.auth.getSession();
+        req.setHeader('authorization', `Bearer ${data.session?.access_token ?? ''}`);
+        req.setHeader('apikey', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '');
+      },
+      onProgress: (poslato, ukupno) => {
+        setVideoUpload((p) => (p[tempId] ? { ...p, [tempId]: { ...p[tempId], poslato, ukupno } } : p));
+      },
+      onSuccess: zavrsi,
+      onError: (err) => {
+        const status = (err as { originalResponse?: { getStatus: () => number } | null })
+          .originalResponse?.getStatus();
+        // 409: isti fajl je već ceo u Supabase-u (ista putanja za isti fajl).
+        if (status === 409) {
+          zavrsi();
+          return;
+        }
+        delete uploadi.current[tempId];
+        setVideoUpload((p) => ({
+          ...p,
+          [tempId]: {
+            ...p[tempId],
+            aktivan: false,
+            greska: 'Upload je prekinut. Izaberite isti fajl ponovo: nastaviće se tamo gde je stao.',
+          },
+        }));
+      },
+    });
+    uploadi.current[tempId] = upload;
+    const zapoceti = await upload.findPreviousUploads();
+    if (zapoceti.length > 0) upload.resumeFromPreviousUpload(zapoceti[0]);
+    upload.start();
+  };
+
+  const otkaziVideo = (tempId: string) => {
+    // `true` briše i započeti deo na serveru.
+    uploadi.current[tempId]?.abort(true).catch(() => {});
+    delete uploadi.current[tempId];
+    setVideoUpload((p) => {
+      const novo = { ...p };
+      delete novo[tempId];
+      return novo;
+    });
+  };
+
   const updateVideoInEdit = (videoTempId: string, patch: Partial<VideoForm>) => {
     setLessonEditForm((f) => ({
       ...f,
@@ -423,11 +579,17 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
     });
   };
 
-  const cancelLessonEdit = () => setEditingLessonId(null);
+  const cancelLessonEdit = () => {
+    if (imaAktivnihUploada) {
+      setGreskaSadrzaja('Sačekajte da se upload završi ili ga otkažite.');
+      return;
+    }
+    setEditingLessonId(null);
+  };
 
   const saveLessonEdit = (tempId: string) => {
-    if (Object.values(otpremanje).includes('u toku')) {
-      setGreskaSadrzaja('Sačekajte da se PDF učita.');
+    if (imaAktivnihUploada) {
+      setGreskaSadrzaja('Sačekajte da se upload završi ili ga otkažite.');
       return;
     }
     const bezFajla = (lessonEditForm.videos ?? []).findIndex(
@@ -455,12 +617,42 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
   // ── Submit ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (Object.values(otpremanje).includes('u toku')) {
-      setError('Sačekajte da se PDF učita, pa sačuvajte kurs.');
+    if (imaAktivnihUploada) {
+      setError('Sačekajte da se upload završi, pa sačuvajte kurs.');
       return;
     }
     setSaving(true);
     setError(null);
+
+    // Snimanje briše i ponovo pravi sve lekcije iz ove forme. Ako je kurs u
+    // međuvremenu menjan (druga kartica, materijal dodat spolja), snimanje
+    // bi te izmene obrisalo, pa se prvo proverava da li je baza ista kao
+    // kad je strana otvorena.
+    if (isEditing && id && ucitaniOtisak.current !== null) {
+      const [lekcijeRes, moduliRes] = await Promise.all([
+        supabase.from('lessons').select('id, lesson_videos(id)').eq('course_id', id),
+        supabase.from('course_modules').select('id').eq('course_id', id),
+      ]);
+      if (lekcijeRes.error || moduliRes.error) {
+        setSaving(false);
+        setError('Nije moguće proveriti kurs pre snimanja. Proverite internet i pokušajte ponovo.');
+        return;
+      }
+      const svez = otisak(
+        (moduliRes.data ?? []).map((m: { id: string }) => m.id),
+        (lekcijeRes.data ?? []).map((l: { id: string; lesson_videos: { id: string }[] | null }) => ({
+          id: l.id,
+          stavke: (l.lesson_videos ?? []).map((v) => v.id),
+        }))
+      );
+      if (svez !== ucitaniOtisak.current) {
+        setSaving(false);
+        setError(
+          'Kurs je u međuvremenu izmenjen (u drugoj kartici ili spolja). Snimanje bi obrisalo te izmene, pa je zaustavljeno. Osvežite stranu i ponovite svoje izmene.'
+        );
+        return;
+      }
+    }
 
     const courseData = {
       id: isEditing ? id : undefined,
@@ -823,7 +1015,8 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
                                   )}
                                   {(lessonEditForm.videos ?? []).map((v, vi) => {
                                     const status = otpremanje[v._tempId];
-                                    const ucitava = status === 'u toku';
+                                    const vStanje = videoUpload[v._tempId];
+                                    const ucitava = status === 'u toku' || !!vStanje?.aktivan;
                                     return (
                                     <div key={v._tempId} className="rounded-lg bg-white border border-sand-200 p-3 space-y-2">
                                       <div className="flex items-center justify-between">
@@ -871,17 +1064,66 @@ const AdminCourseForm: React.FC<AdminCourseFormProps> = ({ id }) => {
                                           )}
                                         </div>
                                       ) : (
-                                        <>
-                                          <div>
-                                            <label className="block text-[11px] font-body text-charcoal-500 mb-1">Putanja u Supabase (preporučeno)</label>
-                                            <input type="text" value={v.videoPath} onChange={(e) => updateVideoInEdit(v._tempId, { videoPath: e.target.value })} className={smallInputClasses} placeholder="npr. lekcija-1.mp4 ili course-1/lekcija-1.mp4" />
-                                            <p className="text-[10px] text-charcoal-400 mt-1">Naziv fajla u <span className="font-mono">course-videos</span> bucket-u. Ako nalepite ceo Supabase URL, automatski se skraćuje pri snimanju.</p>
-                                          </div>
-                                          <div>
-                                            <label className="block text-[11px] font-body text-charcoal-500 mb-1">Video URL (alternativa)</label>
-                                            <input type="text" value={v.videoUrl} onChange={(e) => updateVideoInEdit(v._tempId, { videoUrl: e.target.value })} className={smallInputClasses} placeholder="https://rumble.com/embed/..." />
-                                          </div>
-                                        </>
+                                        <div className="space-y-1.5">
+                                          {v.videoPath && !vStanje?.aktivan && (
+                                            <p className="flex items-center gap-1.5 text-[11px] font-body text-charcoal break-all">
+                                              <span aria-hidden="true">🎬</span>
+                                              {v.fileName || v.videoPath}
+                                            </p>
+                                          )}
+                                          {vStanje?.aktivan ? (
+                                            <div className="space-y-1">
+                                              <div className="h-2 w-full rounded-full bg-sand-200 overflow-hidden" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round((vStanje.poslato / vStanje.ukupno) * 100)}>
+                                                <div className="h-full bg-navy-500 transition-[width] duration-300" style={{ width: `${(vStanje.poslato / vStanje.ukupno) * 100}%` }} />
+                                              </div>
+                                              <div className="flex items-center justify-between gap-2">
+                                                <span className="text-[11px] font-body text-charcoal-500">
+                                                  Učitavam {mb(vStanje.poslato)} / {mb(vStanje.ukupno)} MB · {Math.round((vStanje.poslato / vStanje.ukupno) * 100)}%{preostalo(vStanje)}
+                                                </span>
+                                                <button type="button" onClick={() => otkaziVideo(v._tempId)} className="text-[11px] font-body text-red-600 hover:underline">
+                                                  Otkaži
+                                                </button>
+                                              </div>
+                                              <p className="text-[10px] text-charcoal-400">Ne zatvarajte ovu karticu dok upload traje. Ako veza pukne, nastaviće se sam.</p>
+                                            </div>
+                                          ) : (
+                                            <label className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-sand-300 bg-sand-50 text-[11px] font-body text-charcoal cursor-pointer hover:bg-sand-100 transition-colors">
+                                              <Upload className="w-3 h-3" />
+                                              {v.videoPath || v.videoUrl ? 'Zameni video' : 'Izaberi video sa računara'}
+                                              <input
+                                                type="file"
+                                                accept="video/mp4,.mp4,video/quicktime,.mov"
+                                                className="sr-only"
+                                                onChange={(e) => {
+                                                  const fajl = e.target.files?.[0];
+                                                  e.target.value = '';
+                                                  if (fajl) otpremiVideo(v._tempId, fajl);
+                                                }}
+                                              />
+                                            </label>
+                                          )}
+                                          {vStanje?.greska && (
+                                            <p className="text-[11px] font-body text-red-600">{vStanje.greska}</p>
+                                          )}
+                                          {vStanje?.upozorenja.map((u) => (
+                                            <p key={u} className="text-[11px] font-body text-amber-700 bg-amber-50 rounded px-2 py-1">⚠ {u}</p>
+                                          ))}
+                                          {/* Ručni unos ostaje za stare videe i Rumble (Marko 23.10.2026.). */}
+                                          <details className="pt-1">
+                                            <summary className="text-[11px] font-body text-charcoal-500 cursor-pointer select-none">Napredno: ručna putanja ili Rumble link</summary>
+                                            <div className="space-y-2 pt-2">
+                                              <div>
+                                                <label className="block text-[11px] font-body text-charcoal-500 mb-1">Putanja u Supabase</label>
+                                                <input type="text" value={v.videoPath} disabled={ucitava} onChange={(e) => updateVideoInEdit(v._tempId, { videoPath: e.target.value, fileName: '' })} className={smallInputClasses} placeholder="npr. lekcija-1.mp4 ili course-1/lekcija-1.mp4" />
+                                                <p className="text-[10px] text-charcoal-400 mt-1">Naziv fajla u <span className="font-mono">course-videos</span> bucket-u, slovo po slovo. Ako nalepite ceo Supabase URL, automatski se skraćuje pri snimanju.</p>
+                                              </div>
+                                              <div>
+                                                <label className="block text-[11px] font-body text-charcoal-500 mb-1">Video URL (alternativa)</label>
+                                                <input type="text" value={v.videoUrl} disabled={ucitava} onChange={(e) => updateVideoInEdit(v._tempId, { videoUrl: e.target.value })} className={smallInputClasses} placeholder="https://rumble.com/embed/..." />
+                                              </div>
+                                            </div>
+                                          </details>
+                                        </div>
                                       )}
                                     </div>
                                     );

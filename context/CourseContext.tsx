@@ -19,8 +19,13 @@ export interface LessonVideoSaveData {
   file_name: string | null;
 }
 
-/** PDF dokumenti lekcija žive u `course-videos` pod ovim prefiksom. */
-const PREFIKS_DOKUMENATA = 'dokumenti/';
+/**
+ * Fajlovi koje admin podiže sa računara žive u `course-videos` pod ovim
+ * prefiksima (PDF od 13.10., video od 23.10.2026.). Samo oni se automatski
+ * brišu kad ih nijedna lekcija više ne koristi; videi podignuti ručno u
+ * koren bucket-a se nikad ne diraju.
+ */
+const PREFIKSI_ZA_CISCENJE = ['dokumenti/', 'videi/'];
 
 interface CourseContextType {
   courses: Course[];
@@ -198,25 +203,31 @@ export const CourseProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
       }
 
-      // PDF-ovi koji su postojali pre snimanja a sada ih nema ni u jednoj
-      // lekciji kursa brišu se iz bucket-a, da se ne gomilaju fajlovi koji se
-      // plaćaju. Samo pod `dokumenti/`: videi se odavde nikad ne brišu.
-      const ostaju = new Set(
-        lessonsData.flatMap((l) =>
-          (l.videos ?? [])
-            .filter((v) => v.kind === 'document' && v.video_path)
-            .map((v) => v.video_path as string)
-        )
-      );
-      const zaBrisanje = lessons
-        .filter((l) => l.courseId === courseId)
-        .flatMap((l) => l.videos)
-        .filter((v) => v.kind === 'document' && v.videoPath?.startsWith(PREFIKS_DOKUMENATA))
-        .map((v) => v.videoPath as string)
-        .filter((put) => !ostaju.has(put));
+      // Fajlovi podignuti iz admina (vidi PREFIKSI_ZA_CISCENJE) koji su
+      // postojali pre snimanja, a sada ih ne koristi nijedna lekcija ni ovog
+      // ni drugog kursa, brišu se iz bucket-a, da se ne gomilaju fajlovi koji
+      // se plaćaju.
+      const ostaju = new Set([
+        ...lessonsData.flatMap((l) =>
+          (l.videos ?? []).filter((v) => v.video_path).map((v) => v.video_path as string)
+        ),
+        ...lessons
+          .filter((l) => l.courseId !== courseId)
+          .flatMap((l) => l.videos.map((v) => v.videoPath).filter((p): p is string => !!p)),
+      ]);
+      const zaBrisanje = [
+        ...new Set(
+          lessons
+            .filter((l) => l.courseId === courseId)
+            .flatMap((l) => l.videos)
+            .map((v) => v.videoPath)
+            .filter((p): p is string => !!p && PREFIKSI_ZA_CISCENJE.some((pr) => p.startsWith(pr)))
+            .filter((put) => !ostaju.has(put))
+        ),
+      ];
       if (zaBrisanje.length > 0) {
         const { error: brisErr } = await supabase.storage.from('course-videos').remove(zaBrisanje);
-        if (brisErr) console.warn('[kurs] uklonjeni PDF-ovi nisu obrisani iz bucket-a:', brisErr.message);
+        if (brisErr) console.warn('[kurs] uklonjeni fajlovi nisu obrisani iz bucket-a:', brisErr.message);
       }
 
       await refreshCourses();
