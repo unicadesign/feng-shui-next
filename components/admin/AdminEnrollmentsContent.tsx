@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronRight, Plus, Video, CreditCard, Loader2 } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Video, CreditCard, Loader2, Pencil } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { useCourses } from '@/hooks/useCourses';
 import { useEnrollments } from '@/hooks/useEnrollments';
 import type { Enrollment } from '@/types';
+import IzmenaUpisa from './IzmenaUpisa';
 
 type StatusFilter = 'all' | 'active' | 'completed';
 
@@ -19,7 +20,10 @@ const AdminEnrollmentsContent: React.FC = () => {
     addZoomLink: addZoomLinkCtx,
     addEnrollment,
     updatePaymentStatus,
+    saveEnrollmentEdit,
   } = useEnrollments();
+  /** Upis koji je otvoren za izmenu (11.11.2026.). */
+  const [izmenaId, setIzmenaId] = useState<string | null>(null);
 
   const [zoomForms, setZoomForms] = useState<
     Record<string, { weekNumber: number; url: string; scheduledAt: string }>
@@ -456,7 +460,24 @@ const AdminEnrollmentsContent: React.FC = () => {
                               <div className="flex items-center gap-2 mb-3">
                                 <CreditCard className="w-4 h-4 text-charcoal-500" />
                                 <h3 className="text-sm font-body font-semibold text-charcoal">Plaćanja</h3>
+                                {izmenaId !== enrollment.id && (
+                                  <button
+                                    onClick={() => setIzmenaId(enrollment.id)}
+                                    className="ml-auto inline-flex items-center gap-1.5 text-xs font-body px-3 py-1.5 rounded-lg border border-navy-500 text-navy-600 hover:bg-navy-50 transition-colors"
+                                  >
+                                    <Pencil className="w-3.5 h-3.5" />
+                                    Izmeni upis
+                                  </button>
+                                )}
                               </div>
+                              {izmenaId === enrollment.id ? (
+                                <IzmenaUpisa
+                                  enrollment={enrollment}
+                                  onSave={(params) => saveEnrollmentEdit(enrollment.id, params)}
+                                  onClose={() => setIzmenaId(null)}
+                                />
+                              ) : (
+                              <>
                               <div className="space-y-2">
                                 {enrollment.payments.map((payment) => (
                                   <div
@@ -465,7 +486,9 @@ const AdminEnrollmentsContent: React.FC = () => {
                                   >
                                     <div>
                                       <span className="text-sm font-body text-charcoal">
-                                        Mesec {payment.month}
+                                        {enrollment.paymentType === 'installment'
+                                          ? `Rata ${payment.month}`
+                                          : `Mesec ${payment.month}`}
                                       </span>
                                       <span className="text-sm font-body text-charcoal-500 ml-2">
                                         — {payment.amount}€
@@ -499,6 +522,8 @@ const AdminEnrollmentsContent: React.FC = () => {
                                   {enrollmentStatusBadge(enrollment.status)}
                                 </div>
                               </div>
+                              </>
+                              )}
                             </div>
 
                             <div>

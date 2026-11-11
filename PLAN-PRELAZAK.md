@@ -624,6 +624,32 @@ uz to i zaštita od zastarele admin strane.
       dve kartice; „Sve radi kako treba"
 - [x] 16.7 spojeno na main (PR #27)
 
+## 17. Izmena upisa i dodavanje rate (11.11.2026.)
+
+Klijent javio da neke polaznice ne vide nedelju 5. Pravila rade kako treba
+(rata 1 otključava nedelje 1–4, rata 2 nedelje 5–8), ali kurs ima podešenu
+1 ratu, pa su tri upisa na rate napravljena sa samo jednom ratom: rata 2 nije
+postojala i nije mogla da se označi kao plaćena. Admin je mogao samo da
+napravi upis, ne i da ga menja. Marko: „da moze da se edituje".
+
+- [x] 17.1 „Izmeni upis" u Upisima (`components/admin/IzmenaUpisa.tsx`):
+      datum početka, tip plaćanja, Zoom, status upisa, iznos i status svake
+      rate, „+ Dodaj ratu" (sledeći broj, iznos prethodne), brisanje rate
+      (poslednja ne može); u bazu tek na „Sačuvaj izmene", samo ono što se
+      promenilo; „Otkaži" vraća sve; ispod rata objašnjenje koja rata
+      otključava koje nedelje
+- [x] 17.2 u prikazu „Rata N" umesto „Mesec N" za upise na rate
+- [x] 17.3 Marko lokalno (localhost:3013, 11.11. 10:44 do 10:48) dodao
+      ratu 2 kao plaćenu za tri upisa sa jednom ratom; provereno kao svaka
+      od njih (pravilo u bazi, transakcija sa rollback): sva 3 materijala
+      nedelje 5 dostupna
+- [x] 17.4 komit `42f256f`
+- [ ] 17.5 Dragana: upis sa ratom 2 „na čekanju" (rate po 100, liči na
+      probni) i jednokratni upis sa neoznačenom uplatom (ne vidi ni nedelju 1)
+- [ ] 17.6 broj rata na kursu je 1, pa novi upisi na rate i dalje dobijaju
+      jednu ratu dok se ne promeni pri pravljenju; čeka se koliko rata ima
+      škola
+
 ## Redosled komitova na grani `feat/prelazak`
 
 Prvi komit na grani je ovaj fajl (K0), da plan i rad idu zajedno.
@@ -654,6 +680,9 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K17 | `0c8eb11` | 13.10. | 14.1 do 14.5: PDF uz video u lekciji, plaćanje sakriveno polaznici, mejl o registraciji | tsc čist; `next build` čist; eslint bez novih grešaka; migracija primenjena (6 postojećih redova 'video'); PDF red i provera vrste u transakcijama sa rollback; API registracije bez prijave 401; mejl o registraciji na Resend probnu adresu isporučen, datum u genitivu i oko letnjeg vremena tačan; admin i lekcija nisu gledani u pregledaču (traže prijavu) |
 | K18 | `5da7676` | 19.10. | 15.1 i 15.2: nedelje po kalendaru, otvaranje u ponedeljak 00:00 UTC (baza i sajt) | tsc i eslint čisti; formula u bazi i na sajtu daje iste datume za upise od 11. do 25.10.; simulacija prave polaznice (upis 13.10., plaćeno) u transakciji sa rollback: pre izmene samo nedelja 1, posle i video i PDF nedelje 2; polaznica bez označene uplate i dalje bez pristupa |
 | K19 | `ab9f8ba` | 23.10. | 16.1 do 16.5: upload videa iz admina, provera fajla, čišćenje `videi/`, zaštita od zastarele strane | tsc čist; `next build` čist; eslint bez novih grešaka; provera fajla na 5 probnih i 2 prava videa (uklj. 488 MB): brz/spor/HEVC/.mov/lažni tačno prepoznati; tus prema pravom Supabase-u: prekid na 12/30 MB, nastavak od 12 MB, ceo fajl stigao, isti put ponovo 409, proba obrisana; upit za otisak vraća 8 lekcija sa stavkama; admin ekran nije gledan (traži prijavu) |
+| K20 | `42f256f` | 11.11. | 17.1 i 17.2: izmena upisa i dodavanje rate u adminu | tsc čist; `next build` čist; eslint bez novih grešaka (dve zatečene set-state-in-effect); ceo tok u pregledaču na privremenoj strani sa svim Supabase zahtevima presretnutim (lažna baza u memoriji, nijedan zahtev nije stigao do prave): 21 od 21 provera, uklj. Otkaži i čuvanje bez promena bez ijednog upisa, nova rata month=2 sa paid_at, stari datum uplate sačuvan, pending briše paid_at, iznos 0 odbijen, brisanje samo izabrane rate; bez grešaka u konzoli; privremena strana obrisana |
+| rate | (bez komita) | 11.11. | 17.3 rata 2 za tri upisa sa jednom ratom, dodao Marko kroz novu izmenu upisa lokalno | Supabase dnevnik: zahtevi sa localhost:3013, svi 2xx; pristup nedelji 5 proveren kao svaka polaznica (3 od 3 materijala); ostalih 19 upisa i dalje otvoreno |
+| nedelja 3 | (bez komita) | 27.10. | četiri videa za nedelju 3 („Dijagnostika prostora 1"): Sever i Jug, Jugoistok i Istok, Severoistok i Jugozapad, Zapad i Severozapad; podignuti pod `videi/` sa istim imenovanjem kao upload iz admina (`putanjaVidea`), originalno ime fajla sačuvano | provera iz `lib/proveraVidea.ts`: sva četiri MP4, kreću odmah, H.264; veličine u bucket-u jednake lokalnim; potpisani linkovi 206 video/mp4 |
 | nedelja 2 | (bez komita) | 19.10. | materijal za nedelju 2 („Osnovne postavke 2"): video „Nacrt stana", video „Korišćenje kompasa", PDF „Ekstenzije i nedostajući delovi" (10 strana), slika „Primer očitavanja kompasa" pretvorena u PDF od jedne strane (lekcija prima samo video i PDF); imena u bucket-u bez razmaka i dijakritike, originalno ime PDF-a sačuvano za preuzimanje | veličine u bucket-u jednake lokalnim; sva četiri potpisana linka 206 sa tačnim tipom |
 | yin/yang | (bez komita) | 18.10. | video „Yin/Yang Princip" se nije video: putanja u adminu ispravljena u `6-yin-yang-princip.mp4`, fajl se zvao `...yung...`; fajl preimenovan u bucket-u, baza netaknuta | svih 8 stavki nedelje 1 pokazuje na postojeći fajl; potpisan link 206 |
 | vebinar | (bez komita) | 16.10. | `week-1-webinar.mp4` (488 MB, 1:07:20, 1920×1030 H.264 ~1 Mbit/s, moov na početku) podignut u `course-videos` preko CLI (oko 10 min) i dodat u nedelju 1 kao 8. stavka, naslov „Vebinar" | veličina u bucket-u jednaka lokalnoj; potpisan link vraća 206 i za početak i za sredinu fajla (premotavanje radi); limit veličine fajla u Supabase-u primio 488 MB |
