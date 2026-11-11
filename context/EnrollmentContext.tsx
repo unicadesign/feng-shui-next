@@ -4,7 +4,7 @@ import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import type {
   Enrollment, EnrollmentRow, PaymentRow, ZoomLinkRow,
-  PaymentStatus, EnrollmentStatus,
+  PaymentStatus, EnrollmentStatus, PaymentType, ZoomOption,
 } from '@/types';
 import { toEnrollment, toZoomLink } from '@/types';
 
@@ -19,6 +19,22 @@ export interface AddEnrollmentParams {
   markAsPaid: boolean;
 }
 
+/**
+ * Izmena postojećeg upisa iz admina (11.11.2026.): podaci upisa i rate.
+ * Šalje se samo ono što se promenilo; `upis` je null ako se upis ne menja.
+ */
+export interface IzmenaUpisaParams {
+  upis: {
+    start_date: string;
+    payment_type: PaymentType;
+    zoom_option: ZoomOption;
+    status: EnrollmentStatus;
+  } | null;
+  izmenjeneRate: { id: string; amount: number; status: PaymentStatus; paid_at: string | null }[];
+  noveRate: { month: number; amount: number; status: PaymentStatus; paid_at: string | null }[];
+  obrisaneRate: string[];
+}
+
 interface EnrollmentContextType {
   enrollments: Enrollment[];
   loading: boolean;
@@ -27,6 +43,7 @@ interface EnrollmentContextType {
   addZoomLink: (enrollmentId: string, link: { week_number: number; url: string; scheduled_at: string }) => Promise<void>;
   updateEnrollmentStatus: (enrollmentId: string, status: EnrollmentStatus) => Promise<void>;
   addEnrollment: (params: AddEnrollmentParams) => Promise<{ success: boolean; error?: string }>;
+  saveEnrollmentEdit: (enrollmentId: string, params: IzmenaUpisaParams) => Promise<{ success: boolean; error?: string }>;
 }
 
 export const EnrollmentContext = createContext<EnrollmentContextType | undefined>(undefined);
@@ -151,13 +168,42 @@ export const EnrollmentProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     [refreshEnrollments]
   );
 
+  const saveEnrollmentEdit = useCallback(
+    async (enrollmentId: string, p: IzmenaUpisaParams): Promise<{ success: boolean; error?: string }> => {
+      // Koraci idu jedan za drugim; ako neki ne uspe, ostali se ipak pokušaju,
+      // a lista se na kraju ponovo učita da admin vidi stvarno stanje u bazi.
+      const greske: string[] = [];
+      if (p.upis) {
+        const { error } = await supabase.from('enrollments').update(p.upis).eq('id', enrollmentId);
+        if (error) greske.push(error.message);
+      }
+      if (p.noveRate.length > 0) {
+        const { error } = await supabase
+          .from('payments')
+          .insert(p.noveRate.map((r) => ({ enrollment_id: enrollmentId, ...r })));
+        if (error) greske.push(error.message);
+      }
+      for (const { id, ...izmena } of p.izmenjeneRate) {
+        const { error } = await supabase.from('payments').update(izmena).eq('id', id);
+        if (error) greske.push(error.message);
+      }
+      if (p.obrisaneRate.length > 0) {
+        const { error } = await supabase.from('payments').delete().in('id', p.obrisaneRate);
+        if (error) greske.push(error.message);
+      }
+      await refreshEnrollments();
+      return greske.length > 0 ? { success: false, error: greske[0] } : { success: true };
+    },
+    [refreshEnrollments]
+  );
+
   useEffect(() => {
     refreshEnrollments();
   }, [refreshEnrollments]);
 
   return (
     <EnrollmentContext.Provider
-      value={{ enrollments, loading, refreshEnrollments, updatePaymentStatus, addZoomLink, updateEnrollmentStatus, addEnrollment }}
+      value={{ enrollments, loading, refreshEnrollments, updatePaymentStatus, addZoomLink, updateEnrollmentStatus, addEnrollment, saveEnrollmentEdit }}
     >
       {children}
     </EnrollmentContext.Provider>
