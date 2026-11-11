@@ -643,7 +643,8 @@ napravi upis, ne i da ga menja. Marko: „da moze da se edituje".
       ratu 2 kao plaćenu za tri upisa sa jednom ratom; provereno kao svaka
       od njih (pravilo u bazi, transakcija sa rollback): sva 3 materijala
       nedelje 5 dostupna
-- [x] 17.4 komit `42f256f`
+- [x] 17.4 komit `42f256f`, spojeno na main (PR #28), produkcija READY i
+      draganajovic.com odgovara
 - [ ] 17.5 Dragana: upis sa ratom 2 „na čekanju" (rate po 100, liči na
       probni) i jednokratni upis sa neoznačenom uplatom (ne vidi ni nedelju 1)
 - [ ] 17.6 broj rata na kursu je 1, pa novi upisi na rate i dalje dobijaju
