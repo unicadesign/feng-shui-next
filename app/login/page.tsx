@@ -100,9 +100,17 @@ function LoginForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-charcoal-500 mb-1.5">
-              Lozinka
-            </label>
+            <div className="flex items-baseline justify-between mb-1.5">
+              <label htmlFor="password" className="block text-sm font-medium text-charcoal-500">
+                Lozinka
+              </label>
+              <Link
+                href="/zaboravljena-lozinka"
+                className="text-sm font-medium text-navy-600 hover:text-navy-700 transition-colors"
+              >
+                Zaboravili ste lozinku?
+              </Link>
+            </div>
             <div className="relative">
               <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-charcoal-500/50" />
               <input
