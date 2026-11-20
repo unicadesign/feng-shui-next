@@ -674,10 +674,14 @@ stiže samo članovima tima, najviše 2 na sat), šabloni na engleskom.
       disallow
 - [x] 18.4 srpski šabloni u `supabase/email/` (nova lozinka, lozinka
       promenjena), u brend izgledu kao ostali mejlovi
-- [ ] 18.5 Supabase, posle spajanja: `site_url` →
-      `https://www.draganajovic.com`; SMTP preko Resend-a (pošiljalac
-      fengshui@draganajovic.com, „Dragana Jović"); šabloni i naslovi iz
-      18.4; stare vrednosti sačuvati
+- [x] 18.5 spojeno na main (PR #29), produkcija READY; zatim u Supabase-u
+      (Management API, 20.11.): `site_url` → `https://www.draganajovic.com`;
+      SMTP `smtp.resend.com:465`, korisnik `resend`, ključ isti kao
+      `RESEND_API_KEY` sajta, pošiljalac fengshui@draganajovic.com,
+      „Dragana Jović"; limit mejlova 2 → 30 na sat; šabloni i naslovi iz
+      18.4 („Nova lozinka za vaš nalog", „Lozinka je promenjena"). Stare
+      vrednosti: `site_url` localhost:3000, bez SMTP-a, limit 2, engleski
+      šabloni Supabase-a. Provereno čitanjem: šabloni jednaki fajlovima
 - [ ] 18.6 pravi prolaz na produkciji sa Markovim nalogom: mejl stiže, link
       otvara stranu, nova lozinka radi, stiže „Lozinka je promenjena"
 
