@@ -645,11 +645,41 @@ napravi upis, ne i da ga menja. Marko: „da moze da se edituje".
       nedelje 5 dostupna
 - [x] 17.4 komit `42f256f`, spojeno na main (PR #28), produkcija READY i
       draganajovic.com odgovara
+- [x] 17.7 upis 3417c4 (upisana 21.10., obe rate plaćene) bio nedelju iza
+      grupe, nedelja 5 tek 16.11.; na Markov zahtev početak pomeren na
+      13.10. da bude sa grupom
 - [ ] 17.5 Dragana: upis sa ratom 2 „na čekanju" (rate po 100, liči na
       probni) i jednokratni upis sa neoznačenom uplatom (ne vidi ni nedelju 1)
 - [ ] 17.6 broj rata na kursu je 1, pa novi upisi na rate i dalje dobijaju
       jednu ratu dok se ne promeni pri pravljenju; čeka se koliko rata ima
       škola
+
+## 18. Zaboravljena lozinka (20.11.2026.)
+
+Polaznica zaboravila lozinku, a sajt nije imao „zaboravljena lozinka".
+Marko: implementirati na sajtu i prevesti mejl u Supabase-u.
+
+Zatečeno u Supabase-u: `site_url` je `http://localhost:3000` (link iz mejla
+bi vodio na localhost), nema sopstvenog SMTP-a (ugrađeni Supabase mejl
+stiže samo članovima tima, najviše 2 na sat), šabloni na engleskom.
+
+- [x] 18.1 `/zaboravljena-lozinka`: email → `resetPasswordForEmail`; ista
+      poruka i kad nalog ne postoji; 429 sa porukom da se sačeka
+- [x] 18.2 `/nova-lozinka?token_hash=…&type=recovery`: link se troši tek na
+      „Sačuvaj lozinku" (`verifyOtp` pa `updateUser`), ne pri otvaranju
+      (programi za poštu otvaraju linkove sami); radi i na drugom uređaju;
+      dužina i poklapanje pre trošenja linka; istekao link i nepotpun link
+      sa dugmetom za novi; posle uspeha prijavljena, „Moji kursevi"
+- [x] 18.3 „Zaboravili ste lozinku?" na `/login`; `/nova-lozinka` u robots
+      disallow
+- [x] 18.4 srpski šabloni u `supabase/email/` (nova lozinka, lozinka
+      promenjena), u brend izgledu kao ostali mejlovi
+- [ ] 18.5 Supabase, posle spajanja: `site_url` →
+      `https://www.draganajovic.com`; SMTP preko Resend-a (pošiljalac
+      fengshui@draganajovic.com, „Dragana Jović"); šabloni i naslovi iz
+      18.4; stare vrednosti sačuvati
+- [ ] 18.6 pravi prolaz na produkciji sa Markovim nalogom: mejl stiže, link
+      otvara stranu, nova lozinka radi, stiže „Lozinka je promenjena"
 
 ## Redosled komitova na grani `feat/prelazak`
 
@@ -681,7 +711,9 @@ Svaki komit prolazi `tsc`, `build` i 9.2 pre nego što se gurne.
 | K17 | `0c8eb11` | 13.10. | 14.1 do 14.5: PDF uz video u lekciji, plaćanje sakriveno polaznici, mejl o registraciji | tsc čist; `next build` čist; eslint bez novih grešaka; migracija primenjena (6 postojećih redova 'video'); PDF red i provera vrste u transakcijama sa rollback; API registracije bez prijave 401; mejl o registraciji na Resend probnu adresu isporučen, datum u genitivu i oko letnjeg vremena tačan; admin i lekcija nisu gledani u pregledaču (traže prijavu) |
 | K18 | `5da7676` | 19.10. | 15.1 i 15.2: nedelje po kalendaru, otvaranje u ponedeljak 00:00 UTC (baza i sajt) | tsc i eslint čisti; formula u bazi i na sajtu daje iste datume za upise od 11. do 25.10.; simulacija prave polaznice (upis 13.10., plaćeno) u transakciji sa rollback: pre izmene samo nedelja 1, posle i video i PDF nedelje 2; polaznica bez označene uplate i dalje bez pristupa |
 | K19 | `ab9f8ba` | 23.10. | 16.1 do 16.5: upload videa iz admina, provera fajla, čišćenje `videi/`, zaštita od zastarele strane | tsc čist; `next build` čist; eslint bez novih grešaka; provera fajla na 5 probnih i 2 prava videa (uklj. 488 MB): brz/spor/HEVC/.mov/lažni tačno prepoznati; tus prema pravom Supabase-u: prekid na 12/30 MB, nastavak od 12 MB, ceo fajl stigao, isti put ponovo 409, proba obrisana; upit za otisak vraća 8 lekcija sa stavkama; admin ekran nije gledan (traži prijavu) |
+| K21 | `4310d42` | 20.11. | 18.1 do 18.4: zaboravljena lozinka (`/zaboravljena-lozinka`, `/nova-lozinka`, link na loginu), srpski šabloni u `supabase/email/` | tsc i eslint čisti; `next build` čist; ceo tok u pregledaču sa svim Supabase zahtevima presretnutim (nijedan mejl poslat, ništa menjano): 16 od 16, uklj. očišćena adresa u /recover, 429, nepotpun link bez zahteva, kratka i nepoklopljena lozinka ne troše link, verify sa token_hash pa PUT user, posle same_password ponovni pokušaj bez ponovnog verify, istekao link ne šalje lozinku; 390 px bez prelivanja; bez grešaka u konzoli |
 | K20 | `42f256f` | 11.11. | 17.1 i 17.2: izmena upisa i dodavanje rate u adminu | tsc čist; `next build` čist; eslint bez novih grešaka (dve zatečene set-state-in-effect); ceo tok u pregledaču na privremenoj strani sa svim Supabase zahtevima presretnutim (lažna baza u memoriji, nijedan zahtev nije stigao do prave): 21 od 21 provera, uklj. Otkaži i čuvanje bez promena bez ijednog upisa, nova rata month=2 sa paid_at, stari datum uplate sačuvan, pending briše paid_at, iznos 0 odbijen, brisanje samo izabrane rate; bez grešaka u konzoli; privremena strana obrisana |
+| početak | (bez komita) | 11.11. | 17.7 upis 3417c4: `start_date` 2026-10-21 → 2026-10-13 (stara vrednost zapisana ovde), samo taj red | proveren kao polaznica (transakcija sa rollback): nedelje 1 do 5 sve stavke dostupne (8, 6, 5, 6, 3) |
 | rate | (bez komita) | 11.11. | 17.3 rata 2 za tri upisa sa jednom ratom, dodao Marko kroz novu izmenu upisa lokalno | Supabase dnevnik: zahtevi sa localhost:3013, svi 2xx; pristup nedelji 5 proveren kao svaka polaznica (3 od 3 materijala); ostalih 19 upisa i dalje otvoreno |
 | nedelja 3 | (bez komita) | 27.10. | četiri videa za nedelju 3 („Dijagnostika prostora 1"): Sever i Jug, Jugoistok i Istok, Severoistok i Jugozapad, Zapad i Severozapad; podignuti pod `videi/` sa istim imenovanjem kao upload iz admina (`putanjaVidea`), originalno ime fajla sačuvano | provera iz `lib/proveraVidea.ts`: sva četiri MP4, kreću odmah, H.264; veličine u bucket-u jednake lokalnim; potpisani linkovi 206 video/mp4 |
 | nedelja 2 | (bez komita) | 19.10. | materijal za nedelju 2 („Osnovne postavke 2"): video „Nacrt stana", video „Korišćenje kompasa", PDF „Ekstenzije i nedostajući delovi" (10 strana), slika „Primer očitavanja kompasa" pretvorena u PDF od jedne strane (lekcija prima samo video i PDF); imena u bucket-u bez razmaka i dijakritike, originalno ime PDF-a sačuvano za preuzimanje | veličine u bucket-u jednake lokalnim; sva četiri potpisana linka 206 sa tačnim tipom |
