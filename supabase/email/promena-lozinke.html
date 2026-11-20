@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;background:#f6f1ea;font-family:Helvetica,Arial,sans-serif;color:#2b2b2b;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:32px 0;">
+    <tr><td align="center">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#fffdf9;border-radius:16px;overflow:hidden;border:1px solid #e8ddcc;">
+        <tr><td style="padding:28px 36px;border-bottom:1px solid #efe6d6;">
+          <span style="font-size:20px;font-weight:700;color:#12403C;">Dragana Jović</span>
+        </td></tr>
+        <tr><td style="padding:32px 36px;">
+          <h1 style="margin:0 0 16px;font-size:22px;line-height:1.25;color:#2b2b2b;">Nova lozinka</h1>
+          <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">Dobili smo zahtev za novu lozinku za nalog <strong>{{ .Email }}</strong> na sajtu draganajovic.com.</p>
+          <p style="margin:0 0 24px;font-size:15px;line-height:1.6;">Kliknite na dugme i upišite novu lozinku:</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;"><tr><td style="background:#12403C;border-radius:9999px;">
+            <a href="{{ .SiteURL }}/nova-lozinka?token_hash={{ .TokenHash }}&amp;type=recovery" target="_blank" rel="noopener" style="display:inline-block;padding:12px 28px;color:#fffdf9;text-decoration:none;font-weight:600;font-size:14px;border-radius:9999px;">Postavite novu lozinku</a>
+          </td></tr></table>
+          <p style="margin:0 0 16px;font-size:14px;line-height:1.6;color:#5c554b;">Link važi sat vremena i može da se iskoristi samo jednom.</p>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:#5c554b;">Ako niste vi tražili novu lozinku, slobodno zanemarite ovaj mejl. Vaša lozinka ostaje ista.</p>
+        </td></tr>
+        <tr><td style="padding:20px 36px;border-top:1px solid #efe6d6;font-size:12px;color:#8a8175;">
+          Dragana Jović · Feng Shui konsalting i edukacija
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>
