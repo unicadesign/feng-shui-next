@@ -682,8 +682,9 @@ stiže samo članovima tima, najviše 2 na sat), šabloni na engleskom.
       18.4 („Nova lozinka za vaš nalog", „Lozinka je promenjena"). Stare
       vrednosti: `site_url` localhost:3000, bez SMTP-a, limit 2, engleski
       šabloni Supabase-a. Provereno čitanjem: šabloni jednaki fajlovima
-- [ ] 18.6 pravi prolaz na produkciji sa Markovim nalogom: mejl stiže, link
+- [x] 18.6 pravi prolaz na produkciji sa Markovim nalogom: mejl stiže, link
       otvara stranu, nova lozinka radi, stiže „Lozinka je promenjena"
+      (Marko 20.11.: „radi")
 
 ## Redosled komitova na grani `feat/prelazak`
 
